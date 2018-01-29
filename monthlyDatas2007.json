@@ -4,7 +4,6 @@ var monthlyDatas = [
     "Polluant": "Particules PM10",
     "Mesure": "Particules PM10",
     "Unité": "microg/m3",
-    "color": "rgba(0,191,51,0.6)", 
     "data": {
     "01/2007": 33,
     "02/2007": 34,
@@ -146,7 +145,6 @@ var monthlyDatas = [
     "Polluant": "Particules PM10",
     "Mesure": "Particules PM10",
     "Unité": "microg/m3",
-    "color": "rgba(28,93,127,0.6)",
     "data": {
     "01/2007": 39,
     "02/2007": 43,
@@ -288,7 +286,6 @@ var monthlyDatas = [
     "Polluant": "Particules PM10",
     "Mesure": "Particules PM10",
     "Unité": "microg/m3",
-    "color": "rgba(255,63,49,0.6)",
     "data": {
     "01/2007": 48,
     "02/2007": 47,
@@ -430,7 +427,6 @@ var monthlyDatas = [
     "Polluant": "Particules PM10",
     "Mesure": "Particules PM10",
     "Unité": "microg/m3",
-    "color": "rgba(222,75,255,0.6)",
     "data": {
     "01/2007": 37,
     "02/2007": 37,
@@ -572,7 +568,6 @@ var monthlyDatas = [
     "Polluant": "Particules PM10",
     "Mesure": "Particules PM10",
     "Unité": "microg/m3",
-    "color": "rgba(141,128,88,0.6)",
     "data": {
     "01/2007": "-",
     "02/2007": 59,
@@ -714,7 +709,6 @@ var monthlyDatas = [
     "Polluant": "Particules PM10",
     "Mesure": "Particules PM10",
     "Unité": "microg/m3",
-    "color": "rgba(209,229,18,0.6)",
     "data": {
     "01/2007": "-",
     "02/2007": "-",
