@@ -4,39 +4,39 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script type="text/javascript" src="data.json"></script>
     <script type="text/javascript" src="dataMonth.json"></script>
     <script type="text/javascript" src="monthlyDatas2007.json"></script>
     <script type="text/javascript" src="Classes.js"></script>
+    <script type="text/javascript" src="Functions.js"></script>
   </head>
 
   <body>
     <div style="width:1200px">
       <canvas id="multiradar"></canvas>
-      <input type="number" name="year" id="year" value="2010" min="2010" max="2017">
-      <canvas id="radar"></canvas>
-      <canvas id="lignes"></canvas>
+      <input type="number" name="year" id="year" value="2007" min="2007" max="2017">
+      <div class="alert alert-info" id="notifications"></div>
       <canvas id="multilignes"></canvas>
     </div>
       <script>
-      var lignesCanvas = document.getElementById('lignes').getContext('2d');
-      var radarCanvas = document.getElementById('radar').getContext('2d');
+      //var lignesCanvas = document.getElementById('lignes').getContext('2d');
+      //var radarCanvas = document.getElementById('radar').getContext('2d');
       var multiLignesCanvas = document.getElementById('multilignes').getContext('2d');
       var multiRadarCanvas = document.getElementById('multiradar').getContext('2d');
 
-      var lignesChart = new Lignes(lignesCanvas).generateChart();
-      var radarChart = new Radar(2011, radarCanvas).generateChart();
+      //var lignesChart = new Lignes(lignesCanvas).generateChart();
+      //var radarChart = new Radar(2011, radarCanvas).generateChart();
       var multiLignesChart = new MultiLignes(multiLignesCanvas).generateChart();
       var multiRadarChart = new MultiRadar(2011, multiRadarCanvas).generateChart();
-
+      showErrorsRadar(multiRadarChart);
 
       $("#year").bind("change paste keyup", function() {
-          radarCanvas.clearRect(0, 0, 1200, 600);
-          radarChart = new Radar(this.value, radarCanvas).generateChart();
           multiRadarCanvas.clearRect(0, 0, 1200, 600);
           multiRadarChart.destroyChart()
           //multiRadarChart = new MultiRadar(this.value, multiRadarCanvas).generateChart();
           multiRadarChart.setYear(this.value);
+          showErrorsRadar(multiRadarChart);
       });
 
       </script>
