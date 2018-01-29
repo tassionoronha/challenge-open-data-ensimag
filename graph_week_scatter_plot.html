@@ -68,24 +68,6 @@
 			var d = new Date(myDate.split("/")[2], myDate.split("/")[1]-1, myDate.split("/")[0]);
 			return d.getDay();
 		}
-
-		function echelleTeintes(nbElem) {
-			var avancement = 255/nbElem;
-			var colorTab = [];
-
-			for (var i = 0; i < nbElem; i++) {
-				colorTab[i] = "#" + "FF" + componentToHex(i*avancement) + "00";
-				//colorTab[i] = "#" + "00" + componentToHex(i*avancement) + "FF";
-			}
-
-			console.log(colorTab);
-			return colorTab;
-		}
-
-		function componentToHex(c) {
-			var hex = c.toString(16);
-			return hex.length == 1 ? "0" + hex : hex;
-		}
 	</script>	
 </body>
 </html>
