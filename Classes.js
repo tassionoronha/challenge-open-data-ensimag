@@ -69,3 +69,34 @@ class Lignes{
 
 
 }
+
+class MultiLignes{
+  constructor(objHTML){
+    this.objHTML = objHTML;
+    this.keys = Object.keys(monthlyDatas[0].data);
+    this.values = Object.values(monthlyDatas);
+    this.datasets = [];
+    for (let i = 0; i < this.values.length; ++i) {
+      let current = {
+        label: this.values[i].Station,
+        data: Object.values(this.values[i].data),
+        backgroundColor: this.values[i].color
+      };
+      this.datasets[i] = current;
+    }
+    console.log(this.datasets);
+    this.chart = null;
+  }
+
+  generateChart(){
+    this.chart = new Chart(this.objHTML, {
+      type: 'line',
+      data: {
+        labels: this.keys,
+        datasets: this.datasets
+      }
+    });
+  }
+
+
+}
