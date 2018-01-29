@@ -11,6 +11,7 @@
   <body>
     <div style="width:1200px">
       <canvas id="lignes"></canvas>
+      <input type="number" name="year" id="year" value="2010" min="2010" max="2017">
       <canvas id="radar"></canvas>
       <input type="text" name="year" value="2010">
     </div>
@@ -20,6 +21,12 @@
 
       var lignesChart = new Lignes(lignesCanvas).generateChart();
       var radarChart = new Radar(2010, radarCanvas).generateChart();
+
+
+      $("#year").bind("change paste keyup", function() {
+          radarCanvas.clearRect(0, 0, 1200, 600);
+          radarChart = new Radar(this.value, radarCanvas).generateChart();
+      });
 
       </script>
   </body>

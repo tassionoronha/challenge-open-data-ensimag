@@ -15,8 +15,17 @@ class Radar{
     }
   }
 
-  generateChart(){
+  setYear(year){
+    this.year = year;
+    return this;
+  }
+
+  destroyChart(){
     this.values = [];
+    return this;
+  }
+
+  generateChart(){
     this.generateDynamicArrayMonth();
     this.chart = new Chart(this.objHTML, {
       type: 'radar',
@@ -30,6 +39,8 @@ class Radar{
         }]
       }
     });
+
+    return this;
   }
 }
 
