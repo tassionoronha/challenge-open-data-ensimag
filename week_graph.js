@@ -1,15 +1,38 @@
+/* TODO :
+- Choisir la durée d'une période (pour l'instant, c'est 7 jour)
+- Choisir la date de début et la date de fin
+- Faire en sorte d'afficher toutes les données dans l'interval (et pas juste les semaines complètes)
+- Faire la même chose pour les années ?
+*/
+
 function draw_linear_week_graph(jsonData) {
+	var dureePeriode = 7;
+
+	draw_linear_week_graph_choice(jsonData, "01/09/2016", "31/10/2016", dureePeriode);
+}
+
+function draw_linear_week_graph_choice(jsonData, dateDebut, dateFin, dureePeriode) {
 	var allDatas = JSON.parse(jsonData);
 	console.log(allDatas);
 
 	tab = [];
-	var dureePeriode = 7;
+	
 	var decalage = 0;
 	var nbTour = 0;
 
 	datas = allDatas[0].data;
 	var keysJour = Object.keys(datas);
 	var valuesJour = Object.values(datas);
+
+	console.log(keysJour[0]);
+	console.log(dateDebut);
+
+	var dateDebut = getDateFromFrenchFormat(dateDebut);
+	var dateFin = getDateFromFrenchFormat(dateFin);
+
+	while(getDateFromFrenchFormat(keysJour[decalage]) < dateDebut){
+		decalage++;
+	}	
 
 	while(getDayInWeek(keysJour[decalage]) != 1){
 		decalage++;
@@ -18,7 +41,7 @@ function draw_linear_week_graph(jsonData) {
 	console.log("debutPeriode: "+debutPeriode);
 
 	var finPeriode = debutPeriode+dureePeriode;
-	while(finPeriode<keysJour.length){
+	while(finPeriode<keysJour.length && getDateFromFrenchFormat(keysJour[finPeriode]) <= dateFin){
 		nbTour++;
 
 		arrayJourValues = [];
@@ -106,6 +129,11 @@ function draw_scatter_plot_week_graph(jsonData) {
 	});
 }
 
+function getDateFromFrenchFormat(myDate) {
+	// Format : dd/mm/YYYY
+	return new Date(myDate.split("/")[2], myDate.split("/")[1]-1, myDate.split("/")[0]);
+}
+
 function getDayInWeek(myDate) {
 	// Format : dd/mm/YYYY
 	var d = new Date(myDate.split("/")[2], myDate.split("/")[1]-1, myDate.split("/")[0]);
@@ -113,7 +141,7 @@ function getDayInWeek(myDate) {
 }
 
 function echelleTeintes(nbElem) {
-	var avancement = 255/nbElem;
+	var avancement = Math.floor(255/nbElem);
 	var colorTab = [];
 
 	for (var i = 0; i < nbElem; i++) {
