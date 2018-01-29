@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<title>Challenge Open Datas</title>
+	<!--<link rel="stylesheet" href="style.css">
+	<script src="script.js"></script>-->
+	<link href="js/c3/c3.css" rel="stylesheet">
+	<script src="https://d3js.org/d3.v3.min.js"></script>
+	<script src="js/c3/c3.js"></script>
+</head>
+<body>
+	<h1>Affiche semaines</h1>
+	<div id="chart"></div>
+	<script>
+		d3.text("datas/data_boulevard_all_2016.json", "text/plain", function(data) {
+			var datas = JSON.parse(data);
+			console.log(datas);
+
+			tab = [];
+			var init = 1;
+			var end = init + 6;
+			var nbTour = 0;
+
+			dataJour = datas[0].data;
+			var keysJour = Object.keys(dataJour);
+			var valuesJour = Object.values(dataJour);
+
+			var tab = [];
+
+			console.log(keysJour.length);
+			while(end<keysJour.length){
+				nbTour++;
+
+				arrayJourValues = [];
+
+				arrayJourValues[0] = "semaine "+nbTour;
+
+				for (var i = 1; i <= 7; i++) {
+					arrayJourValues[i] = valuesJour[init+i];
+				}
+
+				console.log(arrayJourValues);
+
+				tab[nbTour-1] = arrayJourValues;
+
+				init = (nbTour-1)*7+1;
+				end = init+7;
+			}
+
+			console.log("init: "+init+", nbTour: "+nbTour);
+
+			console.log(tab);
+			
+
+			var chart = c3.generate({
+				bindto: '#chart',
+				data: {
+					columns:tab
+				}
+			});
+		});
+	</script>	
+</body>
+</html>
