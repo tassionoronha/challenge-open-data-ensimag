@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<title>Challenge Open Datas</title>
+	<!--<link rel="stylesheet" href="style.css">
+	<script src="script.js"></script>-->
+	<link href="js/c3/c3.css" rel="stylesheet">
+	<script src="https://d3js.org/d3.v3.min.js"></script>
+	<script src="js/c3/c3.js"></script>
+</head>
+<body>
+	<h1>Affiche semaines</h1>
+	<div id="chart"></div>
+	<script>
+		d3.text("datas/data_boulevard_all_2016.json", "text/plain", function(jsonData) {
+			var allDatas = JSON.parse(jsonData);
+			console.log(allDatas);
+
+			tab = [];
+			var dureePeriode = 7;
+
+			datas = allDatas[0].data;
+			var keysJour = Object.keys(datas);
+			var valuesJour = Object.values(datas);
+
+			arrayJourPeriode = [];
+			arrayJourValues = [];
+
+			arrayJourPeriode[0] = "periode_x";
+			arrayJourValues[0] = "periode";
+
+			for (var i = 1; i < valuesJour.length; i++) {
+				arrayJourPeriode[i] = getDayInWeek(keysJour[i-1]);
+				arrayJourValues[i] = valuesJour[i-1];
+			}
+
+			tab[0] = arrayJourPeriode;
+			tab[1] = arrayJourValues;
+
+			console.log(tab);
+			
+			var chart = c3.generate({
+				data: {
+					xs: {
+						periode: 'periode_x',
+					},
+					columns: tab,
+					type: 'scatter'
+				},
+				axis: {
+					x: {
+						label: 'Jour de la période',
+						tick: {
+							fit: true
+						}
+					},
+					y: {
+						label: 'Quantité de PM10 en microg/m3',
+					}
+				}
+			});
+			
+		});
+
+		function getDayInWeek(myDate) {
+			// Format : dd/mm/YYYY
+			var d = new Date(myDate.split("/")[2], myDate.split("/")[1]-1, myDate.split("/")[0]);
+			return d.getDay();
+		}
+
+		function echelleTeintes(nbElem) {
+			var avancement = 255/nbElem;
+			var colorTab = [];
+
+			for (var i = 0; i < nbElem; i++) {
+				colorTab[i] = "#" + "FF" + componentToHex(i*avancement) + "00";
+				//colorTab[i] = "#" + "00" + componentToHex(i*avancement) + "FF";
+			}
+
+			console.log(colorTab);
+			return colorTab;
+		}
+
+		function componentToHex(c) {
+			var hex = c.toString(16);
+			return hex.length == 1 ? "0" + hex : hex;
+		}
+	</script>	
+</body>
+</html>
