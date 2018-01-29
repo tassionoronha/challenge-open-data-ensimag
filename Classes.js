@@ -11,7 +11,7 @@ class Radar{
 
   generateDynamicArrayMonth(){
     for (var i = this.init; i <= this.end; i++) {
-      this.values[i] = this.data[i];
+      this.values[this.values.length] = this.data[i];
     }
   }
 
@@ -136,7 +136,7 @@ class MultiRadar extends Graphique {
       let values = [];
       let currentValues = Object.values(this.data[j].data);
       for (var i = this.init; i <= this.end; i++) {
-        values[i] = currentValues[i];
+        values[values.length] = currentValues[i];
       }
       let current = {
         label: this.data[j].Station,
