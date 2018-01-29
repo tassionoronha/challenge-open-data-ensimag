@@ -82,7 +82,8 @@
 			var colorTab = [];
 
 			for (var i = 0; i < nbElem; i++) {
-				colorTab[i] = "#" + "FF" + componentToHex(i*avancement) + "00";
+				colorTab[i] = "#" + "FF" + componentToHex(255-i*avancement) + "00";
+				//colorTab[i] = "#" + "FF" + componentToHex(i*avancement) + "00";
 				//colorTab[i] = "#" + "00" + componentToHex(i*avancement) + "FF";
 			}
 
