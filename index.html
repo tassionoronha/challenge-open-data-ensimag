@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="data.json"></script>
+    <script type="text/javascript" src="dataMonth.json"></script>
+    <script type="text/javascript" src="Classes.js"></script>
+  </head>
+
+  <body>
+    <div style="width:1200px">
+      <canvas id="lignes"></canvas>
+      <canvas id="radar"></canvas>
+      <input type="text" name="year" value="2010">
+    </div>
+      <script>
+      var lignesCanvas = document.getElementById('lignes').getContext('2d');
+      var radarCanvas = document.getElementById('radar').getContext('2d');
+
+      var lignesChart = new Lignes(lignesCanvas).generateChart();
+      var radarChart = new Radar(2010, radarCanvas).generateChart();
+
+      </script>
+  </body>
+</html>
