@@ -13,44 +13,43 @@
 	<h1>Affiche semaines</h1>
 	<div id="chart"></div>
 	<script>
-		d3.text("datas/data_boulevard_all_2016.json", "text/plain", function(data) {
-			var datas = JSON.parse(data);
-			console.log(datas);
+		d3.text("datas/data_boulevard_all_2016.json", "text/plain", function(jsonData) {
+			var allDatas = JSON.parse(jsonData);
+			console.log(allDatas);
 
 			tab = [];
 			var dureePeriode = 7;
 			var decalage = 0;
-			var end = dureePeriode;
 			var nbTour = 0;
 
-			dataJour = datas[0].data;
-			var keysJour = Object.keys(dataJour);
-			var valuesJour = Object.values(dataJour);
+			datas = allDatas[0].data;
+			var keysJour = Object.keys(datas);
+			var valuesJour = Object.values(datas);
 
 			while(getDayInWeek(keysJour[decalage]) != 1){
 				decalage++;
 			}
-			var init = decalage;
-			console.log("init: "+init);
+			var debutPeriode = decalage;
+			console.log("debutPeriode: "+debutPeriode);
 
-			end = init+dureePeriode;
-			while(end<keysJour.length){
+			var finPeriode = debutPeriode+dureePeriode;
+			while(finPeriode<keysJour.length){
 				nbTour++;
 
 				arrayJourValues = [];
 				arrayJourValues[0] = "semaine "+nbTour;
 
 				for (var i = 1; i <= dureePeriode; i++) {
-					arrayJourValues[i] = valuesJour[init+i-1];
+					arrayJourValues[i] = valuesJour[debutPeriode+i-1];
 				}
 
 				tab[nbTour-1] = arrayJourValues;
 
-				init = nbTour*dureePeriode+decalage;
-				end = init+dureePeriode;
+				debutPeriode = nbTour*dureePeriode+decalage;
+				finPeriode = debutPeriode+dureePeriode;
 			}
 
-			console.log("init: "+init+", nbTour: "+nbTour);
+			console.log("debutPeriode: "+debutPeriode+", nbTour: "+nbTour);
 
 			console.log(tab);
 
