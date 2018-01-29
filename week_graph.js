@@ -4,14 +4,47 @@
 - Faire en sorte d'afficher toutes les données dans l'interval (et pas juste les semaines complètes)
 - Faire la même chose pour les années ?
 */
+var dureePeriode = 7;
+var dateDebutSelected = "2016-01-01";
+var dateFinSelected = "2016-12-31";
 
-function draw_linear_week_graph(jsonData) {
-	var dureePeriode = 7;
+window.onload = initData;
 
-	draw_linear_week_graph_choice(jsonData, "01/09/2016", "31/10/2016", dureePeriode);
+function initData() {
+	document.getElementById("dateDebut").value = dateDebutSelected;
+	document.getElementById("dateFin").value = dateFinSelected;
+
+	d3.text("datas/data_boulevard_all_2016.json", "text/plain", draw_linear_week_graph);
 }
 
-function draw_linear_week_graph_choice(jsonData, dateDebut, dateFin, dureePeriode) {
+function changePlot() {
+	console.log("hello")
+	var myButton = document.getElementById("switchButton");
+
+	if (myButton.getAttribute("currentPlot")=="1") {
+		d3.text("datas/data_boulevard_all_2016.json", "text/plain", draw_scatter_plot_week_graph);
+		myButton.setAttribute("currentPlot", "0");
+	}else{
+		d3.text("datas/data_boulevard_all_2016.json", "text/plain", draw_linear_week_graph);
+		myButton.setAttribute("currentPlot", "1");
+	}
+}
+
+function changeDates() {
+	console.log("blop");
+	dateDebutSelected = document.getElementById("dateDebut").value;
+	dateFinSelected = document.getElementById("dateFin").value;
+	var myButton = document.getElementById("switchButton");
+	
+	console.log(myButton.getAttribute("currentPlot")=="1")
+	if (myButton.getAttribute("currentPlot")=="1") {
+		d3.text("datas/data_boulevard_all_2016.json", "text/plain", draw_linear_week_graph);
+	}else{
+		d3.text("datas/data_boulevard_all_2016.json", "text/plain", draw_scatter_plot_week_graph);
+	}
+}
+
+function draw_linear_week_graph(jsonData) {
 	var allDatas = JSON.parse(jsonData);
 	console.log(allDatas);
 
@@ -24,11 +57,8 @@ function draw_linear_week_graph_choice(jsonData, dateDebut, dateFin, dureePeriod
 	var keysJour = Object.keys(datas);
 	var valuesJour = Object.values(datas);
 
-	console.log(keysJour[0]);
-	console.log(dateDebut);
-
-	var dateDebut = getDateFromFrenchFormat(dateDebut);
-	var dateFin = getDateFromFrenchFormat(dateFin);
+	var dateDebut = getDateFromUniversalFormat(dateDebutSelected);
+	var dateFin = getDateFromUniversalFormat(dateFinSelected);
 
 	while(getDateFromFrenchFormat(keysJour[decalage]) < dateDebut){
 		decalage++;
@@ -132,6 +162,11 @@ function draw_scatter_plot_week_graph(jsonData) {
 function getDateFromFrenchFormat(myDate) {
 	// Format : dd/mm/YYYY
 	return new Date(myDate.split("/")[2], myDate.split("/")[1]-1, myDate.split("/")[0]);
+}
+
+function getDateFromUniversalFormat(myDate) {
+	// Format : YYYY-mm-dd
+	return new Date(myDate.split("-")[0], myDate.split("-")[1]-1, myDate.split("-")[2]);
 }
 
 function getDayInWeek(myDate) {

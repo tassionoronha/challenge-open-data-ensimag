@@ -12,24 +12,12 @@
 </head>
 <body>
 	<h1>Affiche semaines</h1>
-	<button id="switchButton" type="button" onclick="changePlot(1)">Changer l'affichage</button>
-	
+	<button id="switchButton" type="button" onclick="changePlot()" currentPlot="1">Changer l'affichage</button>
+	<br/>
+	<input type="date" name="dateDebut" id="dateDebut">
+	<input type="date" name="dateFin" id="dateFin">
+	<button type="button" onclick="changeDates()">Changer l'intervale</button>
+
 	<div id="chart"></div>
-	<script>
-		d3.text("datas/data_boulevard_all_2016.json", "text/plain", draw_linear_week_graph);
-		//d3.text("datas/data_boulevard_all_2016.json", "text/plain", draw_scatter_plot_week_graph);
-
-		function changePlot(val) {
-			var myButton = document.getElementById("switchButton");
-
-			if (val==1) {
-				d3.text("datas/data_boulevard_all_2016.json", "text/plain", draw_scatter_plot_week_graph);
-				myButton.setAttribute("onclick", "changePlot(0)");
-			}else{
-				d3.text("datas/data_boulevard_all_2016.json", "text/plain", draw_linear_week_graph);
-				myButton.setAttribute("onclick", "changePlot(1)");
-			}
-		}
-	</script>	
 </body>
 </html>
