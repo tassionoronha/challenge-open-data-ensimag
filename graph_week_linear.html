@@ -18,48 +18,61 @@
 			console.log(datas);
 
 			tab = [];
-			var init = 1;
-			var end = init + 6;
+			var dureePeriode = 7;
+			var decalage = 0;
+			var end = dureePeriode;
 			var nbTour = 0;
 
 			dataJour = datas[0].data;
 			var keysJour = Object.keys(dataJour);
 			var valuesJour = Object.values(dataJour);
 
-			var tab = [];
+			while(getDayInWeek(keysJour[decalage]) != 1){
+				decalage++;
+			}
+			var init = decalage;
+			console.log("init: "+init);
 
-			console.log(keysJour.length);
+			end = init+dureePeriode;
 			while(end<keysJour.length){
 				nbTour++;
 
 				arrayJourValues = [];
-
 				arrayJourValues[0] = "semaine "+nbTour;
 
-				for (var i = 1; i <= 7; i++) {
-					arrayJourValues[i] = valuesJour[init+i];
+				for (var i = 1; i <= dureePeriode; i++) {
+					arrayJourValues[i] = valuesJour[init+i-1];
 				}
-
-				console.log(arrayJourValues);
 
 				tab[nbTour-1] = arrayJourValues;
 
-				init = (nbTour-1)*7+1;
-				end = init+7;
+				init = nbTour*dureePeriode+decalage;
+				end = init+dureePeriode;
 			}
 
 			console.log("init: "+init+", nbTour: "+nbTour);
 
 			console.log(tab);
-			
 
 			var chart = c3.generate({
 				bindto: '#chart',
 				data: {
 					columns:tab
+				},
+				axis: {
+					x: {
+						type: 'category',
+						categories: ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche']
+					}
 				}
 			});
 		});
+
+		function getDayInWeek(myDate) {
+			// Format : dd/mm/YYYY
+			var d = new Date(myDate.split("/")[2], myDate.split("/")[1]-1, myDate.split("/")[0]);
+			return d.getDay();
+		}
 	</script>	
 </body>
 </html>
