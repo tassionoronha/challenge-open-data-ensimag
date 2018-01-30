@@ -15,6 +15,8 @@
 	<h1>Affiche semaines</h1>
 	<button id="switchButton" type="button" onclick="changePlot()" currentPlot="1">Changer l'affichage</button>
 	<br/>
+	<select name="station" id="station" onchange="changeStation()" size="1"></select>
+	<br/>
 	<input type="date" name="dateDebut" id="dateDebut">
 	<input type="date" name="dateFin" id="dateFin">
 	<input type="number" name="dureePeriode" id="dureePeriode" min="2">

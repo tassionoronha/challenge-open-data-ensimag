@@ -4,12 +4,13 @@
 - Faire en sorte d'afficher toutes les données dans l'interval (et pas juste les semaines complètes)
 - Faire la même chose pour les années ?
 - Faire la courbe moyenne pour le scatter plot 
+- Régler la taille de l'affichage
+- indiquer la date au survol
 */
 var dureePeriode = 7;
 var dateDebutSelected = "2016-01-01";
 var dateFinSelected = "2016-12-31";
-var allDatas;
-//var dataFile = "datas/data_boulevard_all_2016.json";
+var datas;
 
 window.onload = initData;
 
@@ -18,7 +19,19 @@ function initData() {
 	document.getElementById("dateFin").value = dateFinSelected;
 	document.getElementById("dureePeriode").value = dureePeriode;
 
-	allDatas = dailyDatas;
+	console.log(dailyDatas);
+
+	var stationSelector = document.getElementById("station");
+
+	for (var i = 0; i < dailyDatas.length; i++) {
+		var newOption = document.createElement("option");
+		newOption.text = dailyDatas[i].Station;
+		newOption.value = i;
+		stationSelector.add(newOption);
+		console.log(dailyDatas[i].Station);
+	}
+
+	datas = dailyDatas[0].data;
 	draw_linear_week_graph();
 }
 
@@ -26,21 +39,29 @@ function changePlot() {
 	var myButton = document.getElementById("switchButton");
 
 	if (myButton.getAttribute("currentPlot")=="1") {
-		draw_scatter_plot_week_graph();
 		myButton.setAttribute("currentPlot", "0");
 	}else{
-		draw_linear_week_graph();
 		myButton.setAttribute("currentPlot", "1");
 	}
+
+	runGraph();
+}
+
+function changeStation() {
+	var indice = document.getElementById("station").value;
+	datas = dailyDatas[indice].data;
+	runGraph();
 }
 
 function changeDates() {
 	dateDebutSelected = document.getElementById("dateDebut").value;
 	dateFinSelected = document.getElementById("dateFin").value;
-	dureePeriode = document.getElementById("dureePeriode").value;
+	dureePeriode = document.getElementById("dureePeriode").value;	
+	runGraph();
+}
+
+function runGraph() {
 	var myButton = document.getElementById("switchButton");
-	
-	console.log(myButton.getAttribute("currentPlot")=="1")
 	if (myButton.getAttribute("currentPlot")=="1") {
 		draw_linear_week_graph();
 	}else{
@@ -49,8 +70,6 @@ function changeDates() {
 }
 
 function draw_linear_week_graph() {
-	console.log(allDatas);
-
 	tab = [];
 	tab[0] = [];
 	tab[0][0] = 'x';
@@ -61,7 +80,6 @@ function draw_linear_week_graph() {
 
 	var decalage = 0;
 
-	datas = allDatas[0].data;
 	var keysJour = Object.keys(datas);
 	var valuesJour = Object.values(datas);
 
@@ -111,13 +129,9 @@ function draw_linear_week_graph() {
 
 
 function draw_scatter_plot_week_graph() {
-	//var allDatas = JSON.parse(jsonData);
-	console.log(allDatas);
-
 	tab = [];
 	var dureePeriode = 7;
 
-	datas = allDatas[0].data;
 	var keysJour = Object.keys(datas);
 	var valuesJour = Object.values(datas);
 
