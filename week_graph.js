@@ -2,8 +2,6 @@
 - Régler la taille de l'affichage
 - indiquer la date au survol
 - faire un décalage du scatter plot pour que le 0 et la légende ne fussionnent pas
-- Faire courbe moyenne line graph
-- Faire un "nuage" par periode pour le scatter plot ?
 */
 var dureePeriode = 7;
 var dateDebutSelected = "2016-01-01";
@@ -38,10 +36,8 @@ function changePlot() {
 	var myButton = document.getElementById("switchButton");
 
 	if (myButton.getAttribute("currentPlot")=="1") {
-		document.getElementById("legendButton").setAttribute("style","display:none;");
 		myButton.setAttribute("currentPlot", "0");
 	}else{
-		document.getElementById("legendButton").setAttribute("style","display:inline;");
 		myButton.setAttribute("currentPlot", "1");
 	}
 
@@ -108,13 +104,13 @@ function draw_linear_week_graph() {
 
 	var debutPeriode = decalage;
 	var nbTour = 0;
-  let periods = [];
+	let periods = [];
 	while(debutPeriode<keysJour.length && getDateFromFrenchFormat(keysJour[debutPeriode]) <= dateFin) {
 		nbTour++;
 
 		tab[nbTour] = [];
 		tab[nbTour][0] = "Periode "+ nbTour;
-    periods[nbTour] = tab[nbTour][0];
+		periods[nbTour] = tab[nbTour][0];
 		
 		var possitionDansPeriode = 0;
 		while(possitionDansPeriode < dureePeriode) {
@@ -154,7 +150,6 @@ function draw_linear_week_graph() {
 	});
 }
 
-
 function draw_scatter_plot_week_graph() {
 	tab = [];
 
@@ -171,16 +166,14 @@ function draw_scatter_plot_week_graph() {
 		decalage++;
 	}
 
+	var nbPeriode = {moyenne: "moyenne_x"};	
+
 	// init all tab
-	arrayJourPeriode = [];
-	arrayJourValues = [];
 	arrayMeanValuesX = [];
 	arrayMeanValues = [];
 
 	arrayNbDataMean = [];
 
-	arrayJourPeriode[0] = "periode_x";
-	arrayJourValues[0] = "periode";
 	arrayMeanValuesX[0] = "moyenne_x";
 	arrayMeanValues[0] = "moyenne";
 
@@ -191,45 +184,73 @@ function draw_scatter_plot_week_graph() {
 		arrayNbDataMean[i-1] = 0;
 	}
 
-	var positionAbsolue = decalage;
-	var positionTableau = 1;
-	while(positionAbsolue<keysJour.length && getDateFromFrenchFormat(keysJour[positionAbsolue]) <= dateFin){
-		var dayInPeriode = (positionTableau-1)%dureePeriode;
-		arrayJourPeriode[positionTableau] = dayInPeriode;
-		arrayJourValues[positionTableau] = valuesJour[positionAbsolue];
+	var debutPeriode = decalage;
+	var nbTour = 0;
+	let periods = [];
 
-		if (valuesJour[positionAbsolue] != '-') {
-			arrayMeanValues[dayInPeriode+1] = arrayMeanValues[dayInPeriode+1] + valuesJour[positionAbsolue];
-			arrayNbDataMean[dayInPeriode] = arrayNbDataMean[dayInPeriode]+1;
+	while(debutPeriode<keysJour.length && getDateFromFrenchFormat(keysJour[debutPeriode]) <= dateFin) {
+		nbTour++;
+
+		nbPeriode["periode"+nbTour] = "periode"+nbTour+"_x";
+
+		arrayJourPeriode = [];
+		arrayJourValues = [];
+		arrayJourPeriode[0] = "periode"+nbTour+"_x";;
+		arrayJourValues[0] = "periode"+nbTour;
+		//periods[nbTour] = arrayJourPeriode[0];
+		
+		var possitionDansPeriode = 0;
+		while(possitionDansPeriode < dureePeriode) {
+			arrayJourPeriode[possitionDansPeriode+1] = possitionDansPeriode;
+
+			if (debutPeriode+possitionDansPeriode<keysJour.length && getDateFromFrenchFormat(keysJour[debutPeriode+possitionDansPeriode]) <= dateFin) {
+				arrayJourValues[possitionDansPeriode+1] = valuesJour[debutPeriode+possitionDansPeriode];
+			}else{
+				arrayJourValues[possitionDansPeriode+1] = '-';
+			}
+
+			if (valuesJour[debutPeriode+possitionDansPeriode] != '-') {
+				arrayMeanValues[possitionDansPeriode+1] = arrayMeanValues[possitionDansPeriode+1] + valuesJour[debutPeriode+possitionDansPeriode];
+				arrayNbDataMean[possitionDansPeriode] = arrayNbDataMean[possitionDansPeriode]+1;
+			}
+
+			possitionDansPeriode++;
 		}
 
-		positionTableau++;
-		positionAbsolue++;
+		tab[(nbTour-1)*2] = arrayJourPeriode;
+		tab[(nbTour-1)*2+1] = arrayJourValues;
+		
+		debutPeriode = debutPeriode + possitionDansPeriode;
 	}
 
 	for (var i = 1; i < arrayMeanValues.length; i++) {
 		arrayMeanValues[i] = arrayMeanValues[i]/arrayNbDataMean[i-1];
 	}
 
-	tab[0] = arrayJourPeriode;
-	tab[1] = arrayJourValues;
-	tab[2] = arrayMeanValuesX;
-	tab[3] = arrayMeanValues;
+	tab[nbTour*2] = arrayMeanValuesX;
+	tab[nbTour*2+1] = arrayMeanValues;
 
 	console.log(tab);
+	
+	colors = echelleTeintes(nbTour);
+	colors[colors.length] = "#000000";
+	console.log(colors);
 	
 	// draw chart
 	var chart = c3.generate({
 		data: {
-			xs: {
-				periode: 'periode_x',
-				moyenne: 'moyenne_x',
-			},
+			xs: nbPeriode,
 			columns: tab,
 			type: 'scatter',
 			types: {
 				moyenne: 'spline',
 			}
+		},
+		color: {
+			pattern: colors
+		},
+		legend: {
+			show: showLegende
 		},
 		axis: {
 			x: {
@@ -271,7 +292,6 @@ function echelleTeintes(nbElem) {
 		//colorTab[i] = "#" + "00" + componentToHex(i*avancement) + "FF";
 	}
 
-	console.log(colorTab);
 	return colorTab;
 }
 
