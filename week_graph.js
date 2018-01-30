@@ -1,11 +1,9 @@
 /* TODO :
-- Choisir la durée d'une période (pour l'instant, c'est 7 jour)
-- Choisir la date de début et la date de fin
-- Faire en sorte d'afficher toutes les données dans l'interval (et pas juste les semaines complètes)
 - Faire la même chose pour les années ?
 - Faire la courbe moyenne pour le scatter plot 
 - Régler la taille de l'affichage
 - indiquer la date au survol
+- faire un décalage du scatter plot pour que le 0 et la légende ne fussionnent pas
 */
 var dureePeriode = 7;
 var dateDebutSelected = "2016-01-01";
@@ -130,10 +128,18 @@ function draw_linear_week_graph() {
 
 function draw_scatter_plot_week_graph() {
 	tab = [];
-	var dureePeriode = 7;
+
+	var decalage = 0;
 
 	var keysJour = Object.keys(datas);
 	var valuesJour = Object.values(datas);
+
+	var dateDebut = getDateFromUniversalFormat(dateDebutSelected);
+	var dateFin = getDateFromUniversalFormat(dateFinSelected);
+
+	while(getDateFromFrenchFormat(keysJour[decalage]) < dateDebut){
+		decalage++;
+	}
 
 	arrayJourPeriode = [];
 	arrayJourValues = [];
@@ -141,9 +147,14 @@ function draw_scatter_plot_week_graph() {
 	arrayJourPeriode[0] = "periode_x";
 	arrayJourValues[0] = "periode";
 
-	for (var i = 1; i < valuesJour.length; i++) {
-		arrayJourPeriode[i] = getDayInWeek(keysJour[i-1]);
-		arrayJourValues[i] = valuesJour[i-1];
+	var positionAbsolue = decalage;
+	var positionTableau = 1;
+	while(positionAbsolue<keysJour.length && getDateFromFrenchFormat(keysJour[positionAbsolue]) <= dateFin){
+		arrayJourPeriode[positionTableau] = (positionTableau-1)%dureePeriode;
+		arrayJourValues[positionTableau] = valuesJour[positionAbsolue];
+
+		positionTableau++;
+		positionAbsolue++;
 	}
 
 	tab[0] = arrayJourPeriode;
