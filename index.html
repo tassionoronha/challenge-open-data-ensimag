@@ -75,14 +75,15 @@
         chart.setType(this.value);
         if (this.value == 1) {
           $("#year").hide();
-          chart.setStation($("#stations").find(":selected").val());
           $("#stations").show();
-        } else {
-          // Type 0 and 2
+        } else if (this.value == 0) {
           $("#stations").hide();
-          chart.setYear($("#year").val());
+          $("#year").show();
+        } else {
+          $("#stations").show();
           $("#year").show();
         }
+        chart.redraw();
         showErrorsRadar(chart);
       });
       $("#stations").change(function() {

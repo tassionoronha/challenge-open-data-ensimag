@@ -135,6 +135,10 @@ class MultiGraph extends Graphique {
     this.generateChart();
     return this;
   }
+  redraw(){
+    this.generateChart();
+    return this;
+  }
 
   destroyChart(){
     this.state = [];
