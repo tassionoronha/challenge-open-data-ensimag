@@ -4,56 +4,82 @@
 - Faire en sorte d'afficher toutes les données dans l'interval (et pas juste les semaines complètes)
 - Faire la même chose pour les années ?
 - Faire la courbe moyenne pour le scatter plot 
+- Régler la taille de l'affichage
+- indiquer la date au survol
 */
 var dureePeriode = 7;
 var dateDebutSelected = "2016-01-01";
 var dateFinSelected = "2016-12-31";
-var dataFile = "datas/data_boulevard_all_2016.json";
+var datas;
 
 window.onload = initData;
 
 function initData() {
 	document.getElementById("dateDebut").value = dateDebutSelected;
 	document.getElementById("dateFin").value = dateFinSelected;
+	document.getElementById("dureePeriode").value = dureePeriode;
 
-	d3.text(dataFile, "text/plain", draw_linear_week_graph);
+	console.log(dailyDatas);
+
+	var stationSelector = document.getElementById("station");
+
+	for (var i = 0; i < dailyDatas.length; i++) {
+		var newOption = document.createElement("option");
+		newOption.text = dailyDatas[i].Station;
+		newOption.value = i;
+		stationSelector.add(newOption);
+		console.log(dailyDatas[i].Station);
+	}
+
+	datas = dailyDatas[0].data;
+	draw_linear_week_graph();
 }
 
 function changePlot() {
 	var myButton = document.getElementById("switchButton");
 
 	if (myButton.getAttribute("currentPlot")=="1") {
-		d3.text(dataFile, "text/plain", draw_scatter_plot_week_graph);
 		myButton.setAttribute("currentPlot", "0");
 	}else{
-		d3.text(dataFile, "text/plain", draw_linear_week_graph);
 		myButton.setAttribute("currentPlot", "1");
 	}
+
+	runGraph();
+}
+
+function changeStation() {
+	var indice = document.getElementById("station").value;
+	datas = dailyDatas[indice].data;
+	runGraph();
 }
 
 function changeDates() {
 	dateDebutSelected = document.getElementById("dateDebut").value;
 	dateFinSelected = document.getElementById("dateFin").value;
+	dureePeriode = document.getElementById("dureePeriode").value;	
+	runGraph();
+}
+
+function runGraph() {
 	var myButton = document.getElementById("switchButton");
-	
-	console.log(myButton.getAttribute("currentPlot")=="1")
 	if (myButton.getAttribute("currentPlot")=="1") {
-		d3.text(dataFile, "text/plain", draw_linear_week_graph);
+		draw_linear_week_graph();
 	}else{
-		d3.text(dataFile, "text/plain", draw_scatter_plot_week_graph);
+		draw_scatter_plot_week_graph();
 	}
 }
 
-function draw_linear_week_graph(jsonData) {
-	var allDatas = JSON.parse(jsonData);
-	console.log(allDatas);
-
+function draw_linear_week_graph() {
 	tab = [];
-	
-	var decalage = 0;
-	var nbTour = 0;
+	tab[0] = [];
+	tab[0][0] = 'x';
 
-	datas = allDatas[0].data;
+	for (var i = 0; i < dureePeriode; i++) {
+		tab[0][i+1] = i;
+	}
+
+	var decalage = 0;
+
 	var keysJour = Object.keys(datas);
 	var valuesJour = Object.values(datas);
 
@@ -62,46 +88,38 @@ function draw_linear_week_graph(jsonData) {
 
 	while(getDateFromFrenchFormat(keysJour[decalage]) < dateDebut){
 		decalage++;
-	}	
-
-	while(getDayInWeek(keysJour[decalage]) != 1){
-		decalage++;
 	}
-	var debutPeriode = decalage;
-	console.log("debutPeriode: "+debutPeriode);
 
-	var finPeriode = debutPeriode+dureePeriode;
-	while(finPeriode<keysJour.length && getDateFromFrenchFormat(keysJour[finPeriode]) <= dateFin){
+	var debutPeriode = decalage;
+	var nbTour = 0;
+	while(debutPeriode<keysJour.length && getDateFromFrenchFormat(keysJour[debutPeriode]) <= dateFin) {
 		nbTour++;
 
-		arrayJourValues = [];
-		arrayJourValues[0] = "semaine "+nbTour;
+		tab[nbTour] = [];
+		tab[nbTour][0] = "periode "+nbTour;
+		
+		var possitionDansPeriode = 0;
+		while(possitionDansPeriode < dureePeriode) {
+			if (debutPeriode+possitionDansPeriode<keysJour.length && getDateFromFrenchFormat(keysJour[debutPeriode+possitionDansPeriode]) <= dateFin) {
+				tab[nbTour][possitionDansPeriode+1] = valuesJour[debutPeriode+possitionDansPeriode];
+			}else{
+				tab[nbTour][possitionDansPeriode+1] = '-';
+			}
 
-		for (var i = 1; i <= dureePeriode; i++) {
-			arrayJourValues[i] = valuesJour[debutPeriode+i-1];
+			possitionDansPeriode++;
 		}
-
-		tab[nbTour-1] = arrayJourValues;
-
-		debutPeriode = nbTour*dureePeriode+decalage;
-		finPeriode = debutPeriode+dureePeriode;
+		
+		debutPeriode = debutPeriode + possitionDansPeriode;
 	}
 
-	console.log("debutPeriode: "+debutPeriode+", nbTour: "+nbTour);
+	console.log("nbTour: "+nbTour);
 
 	console.log(tab);
 
-	colorTab = echelleTeintes(nbTour);
 	var chart = c3.generate({
-		bindto: '#chart',
 		data: {
-			columns:tab
-		},
-		axis: {
-			x: {
-				type: 'category',
-				categories: ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche']
-			}
+			x: 'x',
+			columns: tab
 		},
 		color: {
 			pattern: echelleTeintes(nbTour)
@@ -110,14 +128,10 @@ function draw_linear_week_graph(jsonData) {
 }
 
 
-function draw_scatter_plot_week_graph(jsonData) {
-	var allDatas = JSON.parse(jsonData);
-	console.log(allDatas);
-
+function draw_scatter_plot_week_graph() {
 	tab = [];
 	var dureePeriode = 7;
 
-	datas = allDatas[0].data;
 	var keysJour = Object.keys(datas);
 	var valuesJour = Object.values(datas);
 

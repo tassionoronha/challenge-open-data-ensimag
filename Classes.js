@@ -6,14 +6,20 @@ class Graphique {
       {r:172,g:168,b:26},
       {r:251,g:29,b:45},
       {r:27,g:59,b:114},
-      {r:172,g:89,b:26}
+      {r:172,g:89,b:26},
+      {r:221,g:27,b:122},
+      {r:255,g:139,b:31},
+      {r:57,g:174,b:190},
+      {r:176,g:242,b:70},
+      {r:255,g:244,b:0},
+      {r:29,g:230,b:110},
     ];
     this.beginYear = 2007;
     this.endYear = 2018;
   }
 
   getRGBColor(i) {
-    let color = this.colors[i];
+    let color = this.colors[i%this.colors.length];
     return color.r + "," + color.g + "," + color.b;
   }
 }
@@ -148,7 +154,7 @@ class MultiRadar extends Graphique {
 
   generateDynamicArrayStation(){
     this.datasets = [];
-    for (let j = 0; j < his.endYear-this.beginYear; ++j) {
+    for (let j = 0; j < this.endYear-this.beginYear; ++j) {
       let values = [];
       let currentValues = Object.values(this.data[this.station].data);
       for (var i = j*12; i <= (j+1)*12-1; ++i) {
@@ -157,8 +163,8 @@ class MultiRadar extends Graphique {
       let current = {
         label: this.beginYear+j,
         data: values,
-        borderColor: "rgb(" + super.getRGBColor(j%6) + ")",
-        backgroundColor: "rgba(" + super.getRGBColor(j%6) + ",0)",
+        borderColor: "rgb(" + super.getRGBColor(j) + ")",
+        backgroundColor: "rgba(" + super.getRGBColor(j) + ",0)",
       };
       this.datasets[j] = current;
     }
@@ -170,6 +176,7 @@ class MultiRadar extends Graphique {
 
   setType(type){
     this.type = type;
+    this.state = [];
   }
   setStation(station){
     this.station = station;
@@ -214,10 +221,17 @@ class MultiRadar extends Graphique {
         datasets: this.datasets
       },
       options: {
+        maintainAspectRatio: false,
         scale: {
-            ticks: {
-                beginAtZero: true
-            }
+          ticks: {
+              beginAtZero: true
+          }
+        },
+        legend: {
+          position: 'bottom',
+          labels: {
+            boxWidth: 40
+          }
         }
       }
     });

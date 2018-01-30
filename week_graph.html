@@ -9,13 +9,17 @@
 	<script src="https://d3js.org/d3.v3.min.js"></script>
 	<script src="js/c3/c3.js"></script>
 	<script src="week_graph.js"></script>
+	<script type="text/javascript" src="dailyDatas2007.json"></script>
 </head>
 <body>
 	<h1>Affiche semaines</h1>
 	<button id="switchButton" type="button" onclick="changePlot()" currentPlot="1">Changer l'affichage</button>
 	<br/>
+	<select name="station" id="station" onchange="changeStation()" size="1"></select>
+	<br/>
 	<input type="date" name="dateDebut" id="dateDebut">
 	<input type="date" name="dateFin" id="dateFin">
+	<input type="number" name="dureePeriode" id="dureePeriode" min="2">
 	<button type="button" onclick="changeDates()">Changer l'intervale</button>
 
 	<div id="chart"></div>
