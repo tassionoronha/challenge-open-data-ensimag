@@ -3,36 +3,60 @@
     "Station": "Fontaine les Balmes",
     "latitude": 45.19050,
 	"longitude": 5.68697,
-	"altitude": 210
+	"altitude": 210,
+	"miseEnService": "29-12-1999",
+	"influence": "Fond",
+	"typologie": "Urbaine",
+	"adresse": "31 bis Avenue Lénine 38600 FONTAINE"
   },
   {
     "Station": "Saint-Martin d'Heres",
     "latitude": 45.18303,
 	"longitude": 5.75325,
-	"altitude": 219
+	"altitude": 219,
+	"miseEnService": "25-08-1998",
+	"influence": "Fond",
+	"typologie": "Urbaine",
+	"adresse": "Parc Daniel Casanova Avenue Benoît Frachon 38400 SAINT-MARTIN-D'HERES"
   },
   {
     "Station": "Grenoble Rocade Sud",
     "latitude": 45.15843,
 	"longitude": 5.70376,
-	"altitude": 219
+	"altitude": 219,
+	"miseEnService": "05-10-1999",
+	"influence": "Trafic",
+	"typologie": "Périurbaine",
+	"adresse": "Face au 23 - Chemin du Tremblay 38130 ECHIROLLES"
   },
   {
     "Station": "Grenoble les Frenes",
     "latitude": 45.16223,
 	"longitude": 5.73567,
-	"altitude": 214
+	"altitude": 214,
+	"miseEnService": "30-01-2001",
+	"influence": "Fond",
+	"typologie": "Urbaine",
+	"adresse": "Ecole Maternelle Les Frênes 1 allée de la Pelouse 38100 GRENOBLE"
   },
   {
     "Station": "Grenoble Grands Boulevards",
     "latitude": 45.18075,
 	"longitude": 5.72006,
-	"altitude": 214
+	"altitude": 214,
+	"miseEnService": "01-12-2006",
+	"influence": "Trafic",
+	"typologie": "Urbaine",
+	"adresse": "48-50 Boulevard Foch 38000 GRENOBLE"
   },
   {
     "Station": "Grenoble Caserne de Bonne",
     "latitude": 45.18334,
 	"longitude": 5.72518,
-	"altitude": 212
+	"altitude": 212,
+	"miseEnService": "08-03-2016",
+	"influence": "Fond",
+	"typologie": "Urbaine",
+	"adresse": "14 Allée Henri Frenay - 38000 GRENOBLE"
   }
 ]
