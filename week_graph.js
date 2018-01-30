@@ -5,7 +5,7 @@
 - Faire la même chose pour les années ?
 - Faire la courbe moyenne pour le scatter plot 
 */
-var dureePeriode = 10;
+var dureePeriode = 7;
 var dateDebutSelected = "2016-01-01";
 var dateFinSelected = "2016-12-31";
 var allDatas;
@@ -16,6 +16,7 @@ window.onload = initData;
 function initData() {
 	document.getElementById("dateDebut").value = dateDebutSelected;
 	document.getElementById("dateFin").value = dateFinSelected;
+	document.getElementById("dureePeriode").value = dureePeriode;
 
 	allDatas = dailyDatas;
 	draw_linear_week_graph();
@@ -36,6 +37,7 @@ function changePlot() {
 function changeDates() {
 	dateDebutSelected = document.getElementById("dateDebut").value;
 	dateFinSelected = document.getElementById("dateFin").value;
+	dureePeriode = document.getElementById("dureePeriode").value;
 	var myButton = document.getElementById("switchButton");
 	
 	console.log(myButton.getAttribute("currentPlot")=="1")
