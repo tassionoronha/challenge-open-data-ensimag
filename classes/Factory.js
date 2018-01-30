@@ -19,7 +19,7 @@ class Factory{
       throw "Bad type";
       return false;
     }
-    if (args.type == 0) {
+    if (args.type == 0 || args.type == 2) {
       if(args.year < 2007 || args.year > 2017){
         throw "Bad year!";
         return false;

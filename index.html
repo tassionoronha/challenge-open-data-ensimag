@@ -3,11 +3,13 @@
     <meta charset="utf8"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
     <script type="text/javascript" src="data.json"></script>
     <script type="text/javascript" src="dataMonth.json"></script>
     <script type="text/javascript" src="monthlyDatas2007.json"></script>
+    <script type="text/javascript" src="dailyDatas2007.json"></script>
     <script src="./classes/Factory.js" type="module"></script>
     <script type="text/javascript" src="Functions.js"></script>
   </head>
@@ -24,6 +26,7 @@
         <select id="type" class="">
           <option value="0">Année par stations</option>
           <option value="1">Station par années</option>
+          <option value="2">Mois par stations</option>
         </select>
       </div>
       <div class="panel-body">
@@ -75,6 +78,7 @@
           chart.setStation($("#stations").find(":selected").val());
           $("#stations").show();
         } else {
+          // Type 0 and 2
           $("#stations").hide();
           chart.setYear($("#year").val());
           $("#year").show();

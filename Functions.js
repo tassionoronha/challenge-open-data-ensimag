@@ -15,8 +15,8 @@ function showErrorsRadar(radar){
 
 function getStations(radar){
   let select = $("#stations");
-  for(let i = 0; i < radar.data.length; ++i) {
-    let opt = '<option value="' + i + '">' + radar.data[i].Station + '</option>';
+  for(let i = 0; i < radar.monthData.length; ++i) {
+    let opt = '<option value="' + i + '">' + radar.monthData[i].Station + '</option>';
     select.append(opt);
   }
 }
