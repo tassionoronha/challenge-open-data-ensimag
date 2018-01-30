@@ -43,7 +43,7 @@ class MultiGraph extends Graphique {
         break;
       }
     }
-    if (end == -1) {
+    if (end == -1) { // we are on the last year of datas
       end = dates.length;
     }
 
@@ -59,14 +59,16 @@ class MultiGraph extends Graphique {
         values[values.length] = currentValues[init + currentDay];
       }
       let color = super.getRGBColor(colors[i]);
-      let current = {
-        label: labels[i],
-        data: values,
-        borderColor: "rgb(" + color + ")",
-        backgroundColor: "rgba(" + color + ",0)",
-      };
-      this.datasets[i] = current;
+      this.datasets[i] = this.createDataset(labels[i],values,color,0);
     }
+  }
+  createDataset(label, values, color, opacity) {
+    return {
+      label: label,
+      data: values,
+      borderColor: "rgb(" + color + ")",
+      backgroundColor: "rgba(" + color + "," + opacity + ")",
+    };
   }
   generateDynamicArrayMonth(){
     this.labels = this.getMonthLabels();
@@ -83,13 +85,7 @@ class MultiGraph extends Graphique {
         values[values.length] = currentValues[i];
       }
       let color = super.getRGBColor(colors[j]);
-      let current = {
-        label: this.monthData[j].Station,
-        data: values,
-        borderColor: "rgb(" + color + ")",
-        backgroundColor: "rgba(" + color + ",0.1)",
-      };
-      this.datasets[j] = current;
+      this.datasets[j] = this.createDataset(this.monthData[j].Station,values,color,0.1);
     }
   }
 
@@ -104,13 +100,7 @@ class MultiGraph extends Graphique {
         values[values.length] = currentValues[i];
       }
       let color = super.getRGBColor(colors[j]);
-      let current = {
-        label: this.beginYear+j,
-        data: values,
-        borderColor: "rgb(" + color + ")",
-        backgroundColor: "rgba(" + color + ",0)",
-      };
-      this.datasets[j] = current;
+      this.datasets[j] = this.createDataset(this.beginYear+j,values,color,0);
     }
   }
 
