@@ -19,7 +19,6 @@
     </div>
     <div id="charts" class="col-md-10">
       <canvas id="multiradar"></canvas>
-    </div>
     <div id="filters" class="col-md-2 panel panel-info" style="border: 3px solid blue">
       <div class="panel-heading">
         <select id="type" class="">
@@ -61,6 +60,7 @@
       var multiRadarChart = new Factory('radar', argsRadar).chart.generateChart();
 
       showErrorsRadar(multiRadarChart);
+      getStations(multiRadarChart);
 
       $("#year").bind("change paste keyup", function() {
         clearChart(multiRadarCanvas, multiRadarChart);

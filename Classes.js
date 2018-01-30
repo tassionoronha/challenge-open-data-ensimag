@@ -114,12 +114,6 @@ class MultiRadar extends Graphique {
     this.faults = [];
     this.type = 0;
     this.station = 0;
-
-    let select = $("#stations");
-    for(let i = 0; i < this.data.length; ++i) {
-      let opt = '<option value="' + i + '">' + this.data[i].Station + '</option>';
-      select.append(opt);
-    }
   }
 
   addFault(fault){

@@ -12,3 +12,11 @@ function showErrorsRadar(radar){
     $("#notifications").hide();
   }
 }
+
+function getStations(radar){
+  let select = $("#stations");
+  for(let i = 0; i < radar.data.length; ++i) {
+    let opt = '<option value="' + i + '">' + radar.data[i].Station + '</option>';
+    select.append(opt);
+  }
+}
