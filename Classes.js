@@ -55,7 +55,7 @@ class MultiRadar extends Graphique {
     super();
     this.year = year;
     this.objHTML = objHTML;
-    this.init = (this.year - super.beginYear) * 12;
+    this.init = (this.year - this.beginYear) * 12;
     this.end = this.init + 11;
     this.data = Object.values(monthlyDatas);
     this.datasets = [];
@@ -95,14 +95,14 @@ class MultiRadar extends Graphique {
 
   generateDynamicArrayStation(){
     this.datasets = [];
-    for (let j = 0; j < super.endYear-super.beginYear; ++j) {
+    for (let j = 0; j < his.endYear-this.beginYear; ++j) {
       let values = [];
       let currentValues = Object.values(this.data[this.station].data);
       for (var i = j*12; i <= (j+1)*12-1; ++i) {
         values[values.length] = currentValues[i];
       }
       let current = {
-        label: super.beginYear+j,
+        label: this.beginYear+j,
         data: values,
         borderColor: "rgb(" + super.getRGBColor(j%6) + ")",
         backgroundColor: "rgba(" + super.getRGBColor(j%6) + ",0)",
@@ -126,7 +126,7 @@ class MultiRadar extends Graphique {
 
   setYear(year){
     this.year = year;
-    this.init = (this.year - super.beginYear) * 12;
+    this.init = (this.year - this.beginYear) * 12;
     this.end = this.init + 11;
     this.generateChart();
     return this;
