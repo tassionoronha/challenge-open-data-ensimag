@@ -108,11 +108,13 @@ function draw_linear_week_graph() {
 
 	var debutPeriode = decalage;
 	var nbTour = 0;
+  let periods = [];
 	while(debutPeriode<keysJour.length && getDateFromFrenchFormat(keysJour[debutPeriode]) <= dateFin) {
 		nbTour++;
 
 		tab[nbTour] = [];
-		tab[nbTour][0] = "periode "+nbTour;
+		tab[nbTour][0] = "Periode "+ nbTour;
+    periods[nbTour] = tab[nbTour][0];
 		
 		var possitionDansPeriode = 0;
 		while(possitionDansPeriode < dureePeriode) {
@@ -128,10 +130,6 @@ function draw_linear_week_graph() {
 		debutPeriode = debutPeriode + possitionDansPeriode;
 	}
 
-	console.log("nbTour: "+nbTour);
-
-	console.log(tab);
-
 	var chart = c3.generate({
 		data: {
 			x: 'x',
@@ -143,7 +141,16 @@ function draw_linear_week_graph() {
 		},
 		legend: {
 			show: showLegende
-		}
+		},
+    tooltip: {
+      format: {
+        title: function(d) { return 'Jour ' + d},
+        name: function(value, ratio, id, index) {
+          let idx = periods.indexOf(id);
+          return idx + " - " + keysJour[decalage+idx*dureePeriode+index];
+        }
+      }
+    }
 	});
 }
 
