@@ -41,17 +41,15 @@
       });
 
       $("#type").bind("change", function() {
+        multiRadarCanvas.clearRect(0, 0, 1200, 600);
+        multiRadarChart.destroyChart()
         multiRadarChart.setType(this.value);
         if (this.value == 1) {
           $("#year").hide();
-          multiRadarCanvas.clearRect(0, 0, 1200, 600);
-          multiRadarChart.destroyChart()
           multiRadarChart.setStation($("#stations").find(":selected").val());
           $("#stations").show();
         } else {
           $("#stations").hide();
-          multiRadarCanvas.clearRect(0, 0, 1200, 600);
-          multiRadarChart.destroyChart();
           $("#year").show();
           multiRadarChart.setYear($("#year").val());
         }
