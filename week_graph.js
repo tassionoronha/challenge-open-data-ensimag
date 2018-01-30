@@ -1,9 +1,9 @@
 /* TODO :
-- Faire la même chose pour les années ?
-- Faire la courbe moyenne pour le scatter plot 
 - Régler la taille de l'affichage
 - indiquer la date au survol
 - faire un décalage du scatter plot pour que le 0 et la légende ne fussionnent pas
+- Faire courbe moyenne line graph
+- Faire un "nuage" par periode pour le scatter plot ?
 */
 var dureePeriode = 7;
 var dateDebutSelected = "2016-01-01";
@@ -135,7 +135,8 @@ function draw_linear_week_graph() {
 	var chart = c3.generate({
 		data: {
 			x: 'x',
-			columns: tab
+			columns: tab,
+			type: 'spline'
 		},
 		color: {
 			pattern: echelleTeintes(nbTour)
@@ -193,9 +194,7 @@ function draw_scatter_plot_week_graph() {
 		if (valuesJour[positionAbsolue] != '-') {
 			arrayMeanValues[dayInPeriode+1] = arrayMeanValues[dayInPeriode+1] + valuesJour[positionAbsolue];
 			arrayNbDataMean[dayInPeriode] = arrayNbDataMean[dayInPeriode]+1;
-		}		
-
-		console.log(arrayMeanValues[dayInPeriode+1] + valuesJour[positionAbsolue]);
+		}
 
 		positionTableau++;
 		positionAbsolue++;
@@ -222,7 +221,7 @@ function draw_scatter_plot_week_graph() {
 			columns: tab,
 			type: 'scatter',
 			types: {
-				moyenne: 'line',
+				moyenne: 'spline',
 			}
 		},
 		axis: {
