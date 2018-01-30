@@ -8,7 +8,8 @@
 var dureePeriode = 7;
 var dateDebutSelected = "2016-01-01";
 var dateFinSelected = "2016-12-31";
-var dataFile = "datas/data_boulevard_all_2016.json";
+var allDatas;
+//var dataFile = "datas/data_boulevard_all_2016.json";
 
 window.onload = initData;
 
@@ -16,17 +17,18 @@ function initData() {
 	document.getElementById("dateDebut").value = dateDebutSelected;
 	document.getElementById("dateFin").value = dateFinSelected;
 
-	d3.text(dataFile, "text/plain", draw_linear_week_graph);
+	allDatas = dailyDatas;
+	draw_linear_week_graph();
 }
 
 function changePlot() {
 	var myButton = document.getElementById("switchButton");
 
 	if (myButton.getAttribute("currentPlot")=="1") {
-		d3.text(dataFile, "text/plain", draw_scatter_plot_week_graph);
+		draw_scatter_plot_week_graph();
 		myButton.setAttribute("currentPlot", "0");
 	}else{
-		d3.text(dataFile, "text/plain", draw_linear_week_graph);
+		draw_linear_week_graph();
 		myButton.setAttribute("currentPlot", "1");
 	}
 }
@@ -38,14 +40,13 @@ function changeDates() {
 	
 	console.log(myButton.getAttribute("currentPlot")=="1")
 	if (myButton.getAttribute("currentPlot")=="1") {
-		d3.text(dataFile, "text/plain", draw_linear_week_graph);
+		draw_linear_week_graph();
 	}else{
-		d3.text(dataFile, "text/plain", draw_scatter_plot_week_graph);
+		draw_scatter_plot_week_graph();
 	}
 }
 
-function draw_linear_week_graph(jsonData) {
-	var allDatas = JSON.parse(jsonData);
+function draw_linear_week_graph() {
 	console.log(allDatas);
 
 	tab = [];
@@ -110,8 +111,8 @@ function draw_linear_week_graph(jsonData) {
 }
 
 
-function draw_scatter_plot_week_graph(jsonData) {
-	var allDatas = JSON.parse(jsonData);
+function draw_scatter_plot_week_graph() {
+	//var allDatas = JSON.parse(jsonData);
 	console.log(allDatas);
 
 	tab = [];
