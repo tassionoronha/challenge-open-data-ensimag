@@ -8,6 +8,8 @@ class Graphique {
       {r:27,g:59,b:114},
       {r:172,g:89,b:26}
     ];
+    this.beginYear = 2007;
+    this.endYear = 2018;
   }
 
   getRGBColor(i) {
@@ -53,13 +55,21 @@ class MultiRadar extends Graphique {
     super();
     this.year = year;
     this.objHTML = objHTML;
-    this.init = (this.year - 2007) * 12;
+    this.init = (this.year - super.beginYear) * 12;
     this.end = this.init + 11;
     this.data = Object.values(monthlyDatas);
     this.datasets = [];
     this.state = [];
     this.chart = null;
     this.faults = [];
+    this.type = 0;
+    this.station = 0;
+
+    let select = $("#stations");
+    for(let i = 0; i < this.data.length; ++i) {
+      let opt = '<option value="' + i + '">' + this.data[i].Station + '</option>';
+      select.append(opt);
+    }
   }
 
   generateDynamicArrayMonth(){
@@ -83,13 +93,40 @@ class MultiRadar extends Graphique {
     }
   }
 
+  generateDynamicArrayStation(){
+    this.datasets = [];
+    for (let j = 0; j < super.endYear-super.beginYear; ++j) {
+      let values = [];
+      let currentValues = Object.values(this.data[this.station].data);
+      for (var i = j*12; i <= (j+1)*12-1; ++i) {
+        values[values.length] = currentValues[i];
+      }
+      let current = {
+        label: super.beginYear+j,
+        data: values,
+        borderColor: "rgb(" + super.getRGBColor(j%6) + ")",
+        backgroundColor: "rgba(" + super.getRGBColor(j%6) + ",0)",
+      };
+      this.datasets[j] = current;
+    }
+  }
+
   getFaults(){
     return this.faults;
   }
 
+  setType(type){
+    this.type = type;
+  }
+  setStation(station){
+    this.station = station;
+    this.generateChart();
+    return this;
+  }
+
   setYear(year){
     this.year = year;
-    this.init = (this.year - 2007) * 12;
+    this.init = (this.year - super.beginYear) * 12;
     this.end = this.init + 11;
     this.generateChart();
     return this;
@@ -97,7 +134,12 @@ class MultiRadar extends Graphique {
 
   destroyChart(){
     this.state = [];
-    for (let i = 0; i < this.chart.data.datasets.length; ++i) {
+    let max;
+    if (this.type == 0)
+      max = this.chart.data.datasets.length;
+    else
+      max = this.endYear - this.beginYear;
+    for (let i = 0; i < max; ++i) {
       this.state[i] = this.chart.getDatasetMeta(i).hidden;
     }
     this.chart.destroy();
@@ -107,7 +149,11 @@ class MultiRadar extends Graphique {
   }
 
   generateChart(){
-    this.generateDynamicArrayMonth();
+    if (this.type == 0) {
+      this.generateDynamicArrayMonth();
+    } else {
+      this.generateDynamicArrayStation();
+    }
     this.chart = new Chart(this.objHTML, {
       type: 'radar',
       data: {
@@ -122,7 +168,7 @@ class MultiRadar extends Graphique {
         }
       }
     });
-    if (this.state.length == this.data.length) {
+    if (this.state.length > 0) {
       for(let i = 0; i < this.state.length; ++i) {
         this.chart.getDatasetMeta(i).hidden = this.state[i];
       }
