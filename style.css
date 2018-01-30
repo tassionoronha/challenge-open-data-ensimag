@@ -1,0 +1,52 @@
+#charts {
+  height: 80%;
+  margin-top: 5px;
+}
+
+@media (min-width: 990px) {
+  #filters {
+    height: 80%;
+  }
+
+  #filters input,
+  #filters select {
+    width: 98%;
+  }
+}
+
+@media (max-width: 990px) {
+  .page-header {
+    padding-bottom: 4px;
+  }
+  .page-header h1 {
+    font-size: 1.7em;
+    margin: 5px 0 0 0;
+  }
+}
+
+#filters.panel {
+  padding: 0;
+  border-radius: 0;
+}
+
+.panel-heading,
+.panel-body {
+  padding: 5px;
+}
+
+#filters input,
+#filters select {
+  margin: 3px;
+  color: black;
+}
+
+.page-header {
+  margin: 0;
+  margin-left: 10px;
+}
+
+.page-header h1 {
+  font-size: 2.2em;
+  margin: 10px 0 0 0;
+}
+

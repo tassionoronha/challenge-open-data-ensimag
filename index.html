@@ -5,6 +5,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
     <script type="text/javascript" src="data.json"></script>
     <script type="text/javascript" src="dataMonth.json"></script>
     <script type="text/javascript" src="monthlyDatas2007.json"></script>
@@ -13,19 +14,27 @@
   </head>
 
   <body>
-    <div style="width:1200px">
-      <canvas id="multiradar"></canvas>
-      <select id="type">
-        <option value="0">Année par stations</option>
-        <option value="1">Station par années</option>
-      </select>
-      <input type="number" name="year" id="year" value="2007" min="2007" max="2017">
-      <select id="stations" style="display: none;">
-      </select>
-      <div class="alert alert-info" id="notifications"></div>
-      <canvas id="multilignes"></canvas>
+    <div class="page-header">
+      <h1>Pollution à Grenoble</h1>
     </div>
-      <script>
+    <div id="charts" class="col-md-10">
+      <canvas id="multiradar"></canvas>
+    </div>
+    <div id="filters" class="col-md-2 panel panel-info" style="border: 3px solid blue">
+      <div class="panel-heading">
+        <select id="type" class="">
+          <option value="0">Année par stations</option>
+          <option value="1">Station par années</option>
+        </select>
+      </div>
+      <div class="panel-body">
+        <input type="number" name="year" id="year" value="2007" min="2007" max="2017">
+        <select id="stations" style="display: none;"></select>
+      </div>
+    </div>
+    <div class="alert alert-info col-md-12" id="notifications"></div>
+    <canvas id="multilignes"></canvas>
+    <script>
       var multiLignesCanvas = document.getElementById('multilignes').getContext('2d');
       var multiRadarCanvas = document.getElementById('multiradar').getContext('2d');
 
@@ -34,15 +43,13 @@
       showErrorsRadar(multiRadarChart);
 
       $("#year").bind("change paste keyup", function() {
-          multiRadarCanvas.clearRect(0, 0, 1200, 600);
-          multiRadarChart.destroyChart()
-          multiRadarChart.setYear(this.value);
-          showErrorsRadar(multiRadarChart);
+        clearChart(multiRadarCanvas, multiRadarChart);
+        multiRadarChart.setYear(this.value);
+        showErrorsRadar(multiRadarChart);
       });
 
       $("#type").bind("change", function() {
-        multiRadarCanvas.clearRect(0, 0, 1200, 600);
-        multiRadarChart.destroyChart()
+        clearChart(multiRadarCanvas, multiRadarChart);
         multiRadarChart.setType(this.value);
         if (this.value == 1) {
           $("#year").hide();
@@ -50,16 +57,21 @@
           $("#stations").show();
         } else {
           $("#stations").hide();
-          $("#year").show();
           multiRadarChart.setYear($("#year").val());
+          $("#year").show();
         }
+        showErrorsRadar(multiRadarChart);
       });
       $("#stations").change(function() {
-        multiRadarCanvas.clearRect(0, 0, 1200, 600);
-        multiRadarChart.destroyChart()
+        clearChart(multiRadarCanvas, multiRadarChart);
         multiRadarChart.setStation($("#stations").find(":selected").val());
       });
 
-      </script>
+      function clearChart(canvas, chart) {
+        canvas.clearRect(0, 0, 1200, 600);
+        chart.destroyChart();
+      }
+
+    </script>
   </body>
 </html>
