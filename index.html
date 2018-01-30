@@ -19,7 +19,8 @@
     </div>
     <div id="charts" class="col-md-10">
       <canvas id="multiradar"></canvas>
-    <div id="filters" class="col-md-2 panel panel-info" style="border: 3px solid blue">
+    </div>
+    <div id="filters" class="col-md-2 panel panel-info">
       <div class="panel-heading">
         <select id="type" class="">
           <option value="0">Année par stations</option>
@@ -30,66 +31,70 @@
         <input type="number" name="year" id="year" value="2007" min="2007" max="2017">
         <select id="stations" style="display: none;"></select>
       </div>
-      <div class="panel-heading">
-        <div class="choice">
+      <div class="panel-heading choice">
         <span>Radar</span>
         <label class="switch">
           <input id="graph" type="checkbox"/>
           <span class="slider round"/>
         </label>
         <span>Ligne</span>
-        </div>
       </div>
     </div>
-    <div class="alert alert-info col-md-12" id="notifications"></div>
+    <div class="alert alert-warning col-md-12" id="notifications"></div>
     <canvas id="multilignes"></canvas>
     <script type='module'>
       import Factory from './classes/Factory.js';
-      var multiRadarCanvas = document.getElementById('multiradar').getContext('2d');
-      var multiLignesCanvas = document.getElementById('multilignes').getContext('2d');
 
-      var argsLignes = {
-        canvas: multiLignesCanvas
-      };
+      var canvas = document.getElementById('multiradar').getContext('2d');
 
-      var argsRadar = {
+      var argsChart = {
         year:2007,
-        canvas:multiRadarCanvas
+        canvas:canvas,
+        station: 0,
+        type: 0
       };
 
-      var multiLignesChart = new Factory('lignes', argsLignes).chart.generateChart();
-      var multiRadarChart = new Factory('radar', argsRadar).chart.generateChart();
+      var chart = new Factory('radar', argsChart).chart.generateChart();
 
-      showErrorsRadar(multiRadarChart);
-      getStations(multiRadarChart);
+      showErrorsRadar(chart);
+      getStations(chart);
 
       $("#year").bind("change paste keyup", function() {
-        clearChart(multiRadarCanvas, multiRadarChart);
-        multiRadarChart.setYear(this.value);
-        showErrorsRadar(multiRadarChart);
+        clearChart(canvas, chart);
+        chart.setYear(this.value);
+        showErrorsRadar(chart);
       });
 
       $("#type").bind("change", function() {
-        clearChart(multiRadarCanvas, multiRadarChart);
-        multiRadarChart.setType(this.value);
+        clearChart(canvas, chart);
+        chart.setType(this.value);
         if (this.value == 1) {
           $("#year").hide();
-          multiRadarChart.setStation($("#stations").find(":selected").val());
+          chart.setStation($("#stations").find(":selected").val());
           $("#stations").show();
         } else {
           $("#stations").hide();
-          multiRadarChart.setYear($("#year").val());
+          chart.setYear($("#year").val());
           $("#year").show();
         }
-        showErrorsRadar(multiRadarChart);
+        showErrorsRadar(chart);
       });
       $("#stations").change(function() {
-        clearChart(multiRadarCanvas, multiRadarChart);
-        multiRadarChart.setStation($("#stations").find(":selected").val());
+        clearChart(canvas, chart);
+        chart.setStation($("#stations").find(":selected").val());
       });
       $("#graph").change(function() {
-        //multiRadarChart.switchGraph(this.checked);
-        console.log("Switch graph");
+        clearChart(canvas, chart);
+        argsChart = {
+          canvas: canvas,
+          year: $("#year").val(),
+          station: $("#stations").find(":selected").val(),
+          type: $("#type").find(":selected").val()
+        };
+        if (this.checked)
+          chart = new Factory('line', argsChart).chart.generateChart();
+        else
+          chart = new Factory('radar', argsChart).chart.generateChart();
       });
 
       function clearChart(canvas, chart) {

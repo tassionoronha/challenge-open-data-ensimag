@@ -1,0 +1,38 @@
+[
+  {
+    "Station": "Fontaine les Balmes",
+    "latitude": 45.19050,
+	"longitude": 5.68697,
+	"altitude": 210
+  },
+  {
+    "Station": "Saint-Martin d'Heres",
+    "latitude": 45.18303,
+	"longitude": 5.75325,
+	"altitude": 219
+  },
+  {
+    "Station": "Grenoble Rocade Sud",
+    "latitude": 45.15843,
+	"longitude": 5.70376,
+	"altitude": 219
+  },
+  {
+    "Station": "Grenoble les Frenes",
+    "latitude": 45.16223,
+	"longitude": 5.73567,
+	"altitude": 214
+  },
+  {
+    "Station": "Grenoble Grands Boulevards",
+    "latitude": 45.18075,
+	"longitude": 5.72006,
+	"altitude": 214
+  },
+  {
+    "Station": "Grenoble Caserne de Bonne",
+    "latitude": 45.18334,
+	"longitude": 5.72518,
+	"altitude": 212
+  }
+]

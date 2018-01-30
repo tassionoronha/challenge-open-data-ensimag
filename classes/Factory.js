@@ -1,21 +1,10 @@
-import MultiRadar from './MultiRadar.js';
+import MultiGraph from './MultiRadar.js';
 import MultiLignes from './MultiLignes.js';
 
 class Factory{
   constructor(type, args){
     if(this.validateArgs(type, args)){
-
-      switch (type) {
-        case 'radar':
-          this.chart = new MultiRadar(args.year,args.canvas);
-          break;
-
-        case 'lignes':
-         this.chart = new MultiLignes(args.canvas);
-          break;
-        default:
-          throw "Bad type!";
-      }
+      this.chart = new MultiGraph(type, args);
     }
 
     return this;
@@ -26,13 +15,20 @@ class Factory{
   }
 
   validateArgs(type, args){
-    switch (type) {
-      case 'radar':
-        if(args.year < 2007 && args.year > 2017){
-          throw "Bad year!";
-          return false;
-        }
-        break;
+    if (type != 'radar' && type != 'line'){
+      throw "Bad type";
+      return false;
+    }
+    if (args.type == 0) {
+      if(args.year < 2007 || args.year > 2017){
+        throw "Bad year!";
+        return false;
+      }
+    } else if (args.type == 1) {
+      if (args.station < 0 || args.station >= Object.values(monthlyDatas).length){
+        throw "Bad station!";
+        return false;
+      }
     }
 
     if(typeof(args.canvas) != "object"){

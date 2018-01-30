@@ -1,10 +1,11 @@
 import Graphique from './Graphique.js';
 
-class MultiRadar extends Graphique {
-  constructor(year, objHTML){
+class MultiGraph extends Graphique {
+  constructor(graph, args){
     super();
-    this.year = year;
-    this.objHTML = objHTML;
+    this.year = args.year;
+    this.graph = graph;
+    this.objHTML = args.canvas;
     this.init = (this.year - this.beginYear) * 12;
     this.end = this.init + 11;
     this.data = Object.values(monthlyDatas);
@@ -12,8 +13,8 @@ class MultiRadar extends Graphique {
     this.state = [];
     this.chart = null;
     this.faults = [];
-    this.type = 0;
-    this.station = 0;
+    this.type = args.type;
+    this.station = args.station;
   }
 
   addFault(fault){
@@ -109,7 +110,7 @@ class MultiRadar extends Graphique {
       this.generateDynamicArrayStation();
     }
     this.chart = new Chart(this.objHTML, {
-      type: 'radar',
+      type: this.graph,
       data: {
         labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
         datasets: this.datasets
@@ -126,6 +127,11 @@ class MultiRadar extends Graphique {
           labels: {
             boxWidth: 40
           }
+        },
+        elements: {
+          line: {
+            tension: 0
+          }
         }
       }
     });
@@ -140,4 +146,4 @@ class MultiRadar extends Graphique {
   }
 }
 
-export default MultiRadar;
+export default MultiGraph;
