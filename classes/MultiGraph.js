@@ -27,6 +27,7 @@ class MultiGraph extends Graphique {
 
   generateDynamicArrayMonth(){
     this.datasets = [];
+    let colors = super.getColorScale(this.data.length, 1);
     for (let j = 0; j < this.data.length; ++j) {
       let values = [];
       let currentValues = Object.values(this.data[j].data);
@@ -37,11 +38,13 @@ class MultiGraph extends Graphique {
         }
         values[values.length] = currentValues[i];
       }
+      let color = super.getRGBColor(colors[j]);
+      console.log(color)
       let current = {
         label: this.data[j].Station,
         data: values,
-        borderColor: "rgb(" + super.getRGBColor(j) + ")",
-        backgroundColor: "rgba(" + super.getRGBColor(j) + ",0.2)",
+        borderColor: "rgb(" + color + ")",
+        backgroundColor: "rgba(" + color + ",0.1)",
       };
       this.datasets[j] = current;
     }
@@ -49,17 +52,19 @@ class MultiGraph extends Graphique {
 
   generateDynamicArrayStation(){
     this.datasets = [];
+    let colors = super.getColorScale(this.endYear-this.beginYear, 1);
     for (let j = 0; j < this.endYear-this.beginYear; ++j) {
       let values = [];
       let currentValues = Object.values(this.data[this.station].data);
       for (var i = j*12; i <= (j+1)*12-1; ++i) {
         values[values.length] = currentValues[i];
       }
+      let color = super.getRGBColor(colors[j]);
       let current = {
         label: this.beginYear+j,
         data: values,
-        borderColor: "rgb(" + super.getRGBColor(j) + ")",
-        backgroundColor: "rgba(" + super.getRGBColor(j) + ",0)",
+        borderColor: "rgb(" + color + ")",
+        backgroundColor: "rgba(" + color + ",0)",
       };
       this.datasets[j] = current;
     }
