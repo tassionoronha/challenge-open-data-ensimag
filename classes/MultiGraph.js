@@ -39,7 +39,6 @@ class MultiGraph extends Graphique {
         values[values.length] = currentValues[i];
       }
       let color = super.getRGBColor(colors[j]);
-      console.log(color)
       let current = {
         label: this.data[j].Station,
         data: values,
