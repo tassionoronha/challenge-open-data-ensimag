@@ -26,11 +26,11 @@ function initData() {
 		newOption.text = dailyDatas[i].Station;
 		newOption.value = i;
 		stationSelector.add(newOption);
-		console.log(dailyDatas[i].Station);
 	}
 
 	datas = dailyDatas[0].data;
 	draw_linear_week_graph();
+	//draw_scatter_plot_week_graph();
 }
 
 function changePlot() {
@@ -137,38 +137,72 @@ function draw_scatter_plot_week_graph() {
 	var dateDebut = getDateFromUniversalFormat(dateDebutSelected);
 	var dateFin = getDateFromUniversalFormat(dateFinSelected);
 
+	// find beginning of the chart
 	while(getDateFromFrenchFormat(keysJour[decalage]) < dateDebut){
 		decalage++;
 	}
 
+	// init all tab
 	arrayJourPeriode = [];
 	arrayJourValues = [];
+	arrayMeanValuesX = [];
+	arrayMeanValues = [];
+
+	arrayNbDataMean = [];
 
 	arrayJourPeriode[0] = "periode_x";
 	arrayJourValues[0] = "periode";
+	arrayMeanValuesX[0] = "moyenne_x";
+	arrayMeanValues[0] = "moyenne";
+
+	// init mean
+	for (var i = 1; i <= dureePeriode; i++) {
+		arrayMeanValues[i] = 0;
+		arrayMeanValuesX[i] = i-1;
+		arrayNbDataMean[i-1] = 0;
+	}
 
 	var positionAbsolue = decalage;
 	var positionTableau = 1;
 	while(positionAbsolue<keysJour.length && getDateFromFrenchFormat(keysJour[positionAbsolue]) <= dateFin){
-		arrayJourPeriode[positionTableau] = (positionTableau-1)%dureePeriode;
+		var dayInPeriode = (positionTableau-1)%dureePeriode;
+		arrayJourPeriode[positionTableau] = dayInPeriode;
 		arrayJourValues[positionTableau] = valuesJour[positionAbsolue];
+
+		if (valuesJour[positionAbsolue] != '-') {
+			arrayMeanValues[dayInPeriode+1] = arrayMeanValues[dayInPeriode+1] + valuesJour[positionAbsolue];
+			arrayNbDataMean[dayInPeriode] = arrayNbDataMean[dayInPeriode]+1;
+		}		
+
+		console.log(arrayMeanValues[dayInPeriode+1] + valuesJour[positionAbsolue]);
 
 		positionTableau++;
 		positionAbsolue++;
 	}
 
+	for (var i = 1; i < arrayMeanValues.length; i++) {
+		arrayMeanValues[i] = arrayMeanValues[i]/arrayNbDataMean[i-1];
+	}
+
 	tab[0] = arrayJourPeriode;
 	tab[1] = arrayJourValues;
+	tab[2] = arrayMeanValuesX;
+	tab[3] = arrayMeanValues;
 
 	console.log(tab);
 	
+	// draw chart
 	var chart = c3.generate({
 		data: {
 			xs: {
 				periode: 'periode_x',
+				moyenne: 'moyenne_x',
 			},
 			columns: tab,
-			type: 'scatter'
+			type: 'scatter',
+			types: {
+				moyenne: 'line',
+			}
 		},
 		axis: {
 			x: {
