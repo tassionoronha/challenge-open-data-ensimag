@@ -5,7 +5,7 @@
 - Faire la même chose pour les années ?
 - Faire la courbe moyenne pour le scatter plot 
 */
-var dureePeriode = 7;
+var dureePeriode = 10;
 var dateDebutSelected = "2016-01-01";
 var dateFinSelected = "2016-12-31";
 var allDatas;
@@ -50,9 +50,14 @@ function draw_linear_week_graph() {
 	console.log(allDatas);
 
 	tab = [];
-	
+	tab[0] = [];
+	tab[0][0] = 'x';
+
+	for (var i = 0; i < dureePeriode; i++) {
+		tab[0][i+1] = i;
+	}
+
 	var decalage = 0;
-	var nbTour = 0;
 
 	datas = allDatas[0].data;
 	var keysJour = Object.keys(datas);
@@ -63,46 +68,38 @@ function draw_linear_week_graph() {
 
 	while(getDateFromFrenchFormat(keysJour[decalage]) < dateDebut){
 		decalage++;
-	}	
-
-	while(getDayInWeek(keysJour[decalage]) != 1){
-		decalage++;
 	}
-	var debutPeriode = decalage;
-	console.log("debutPeriode: "+debutPeriode);
 
-	var finPeriode = debutPeriode+dureePeriode;
-	while(finPeriode<keysJour.length && getDateFromFrenchFormat(keysJour[finPeriode]) <= dateFin){
+	var debutPeriode = decalage;
+	var nbTour = 0;
+	while(debutPeriode<keysJour.length && getDateFromFrenchFormat(keysJour[debutPeriode]) <= dateFin) {
 		nbTour++;
 
-		arrayJourValues = [];
-		arrayJourValues[0] = "semaine "+nbTour;
+		tab[nbTour] = [];
+		tab[nbTour][0] = "periode "+nbTour;
+		
+		var possitionDansPeriode = 0;
+		while(possitionDansPeriode < dureePeriode) {
+			if (debutPeriode+possitionDansPeriode<keysJour.length && getDateFromFrenchFormat(keysJour[debutPeriode+possitionDansPeriode]) <= dateFin) {
+				tab[nbTour][possitionDansPeriode+1] = valuesJour[debutPeriode+possitionDansPeriode];
+			}else{
+				tab[nbTour][possitionDansPeriode+1] = '-';
+			}
 
-		for (var i = 1; i <= dureePeriode; i++) {
-			arrayJourValues[i] = valuesJour[debutPeriode+i-1];
+			possitionDansPeriode++;
 		}
-
-		tab[nbTour-1] = arrayJourValues;
-
-		debutPeriode = nbTour*dureePeriode+decalage;
-		finPeriode = debutPeriode+dureePeriode;
+		
+		debutPeriode = debutPeriode + possitionDansPeriode;
 	}
 
-	console.log("debutPeriode: "+debutPeriode+", nbTour: "+nbTour);
+	console.log("nbTour: "+nbTour);
 
 	console.log(tab);
 
-	colorTab = echelleTeintes(nbTour);
 	var chart = c3.generate({
-		bindto: '#chart',
 		data: {
-			columns:tab
-		},
-		axis: {
-			x: {
-				type: 'category',
-				categories: ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche']
-			}
+			x: 'x',
+			columns: tab
 		},
 		color: {
 			pattern: echelleTeintes(nbTour)
