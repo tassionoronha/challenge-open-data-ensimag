@@ -18,9 +18,32 @@ class Graphique {
     this.endYear = 2018;
   }
 
-  getRGBColor(i) {
-    let color = this.colors[i%this.colors.length];
+  getColor(i){
+    return this.colors[i%this.colors.length];
+  }
+
+  getRGBColor(color) {
     return color.r + "," + color.g + "," + color.b;
+  }
+
+  getColorScale(nbColors, RGB){
+    let colors = [];
+    let step = Math.floor(255/nbColors);
+    for (let i = 0; i < nbColors; ++i) {
+      let value = step + i * step;
+      switch (RGB) {
+      case 0:
+        colors[i] = {r:value, g:0 , b:127};
+        break;
+      case 1:
+        colors[i] = {g:value, r:127 , b:0};
+        break;
+      default:
+        colors[i] = {b:value, g:127 , r:0};
+        break;
+      }
+    }
+    return colors;
   }
 }
 
