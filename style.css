@@ -1,6 +1,6 @@
 #charts {
   height: 80%;
-  margin-top: 5px;
+  padding-top: 5px;
 }
 
 @media (min-width: 990px) {
@@ -27,6 +27,7 @@
 #filters.panel {
   padding: 0;
   border-radius: 0;
+  margin: 0;
 }
 
 .panel-heading,
@@ -57,6 +58,11 @@
   width: 60px;
   height: 20px;
   margin: 1px 0 0 0;
+}
+
+.choice {
+  padding-top: 7px;
+  padding-bottom: 2px;
 }
 
 .choice > span:first-child {
