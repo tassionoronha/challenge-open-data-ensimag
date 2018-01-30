@@ -1,4 +1,4 @@
-import MultiGraph from './MultiRadar.js';
+import MultiGraph from './MultiGraph.js';
 import MultiLignes from './MultiLignes.js';
 
 class Factory{
