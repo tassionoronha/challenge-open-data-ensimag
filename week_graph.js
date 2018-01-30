@@ -8,6 +8,7 @@ var dateDebutSelected = "2016-01-01";
 var dateFinSelected = "2016-12-31";
 var datas;
 var showLegende = true;
+var chart;
 
 window.onload = initData;
 
@@ -62,14 +63,14 @@ function changeLegende() {
 	if (myButton.getAttribute("display")=="true") {
 		showLegende = false;
 		myButton.setAttribute("display", "false");
+		chart.legend.hide();
 		myButton.firstChild.data = "Afficher la légende";
 	}else{
 		showLegende = true;
 		myButton.setAttribute("display", "true");
 		myButton.firstChild.data = "Masquer la légende";
+		chart.legend.show();
 	}
-
-	runGraph();
 }
 
 function runGraph() {
@@ -126,7 +127,7 @@ function draw_linear_week_graph() {
 		debutPeriode = debutPeriode + possitionDansPeriode;
 	}
 
-	var chart = c3.generate({
+	chart = c3.generate({
 		data: {
 			x: 'x',
 			columns: tab,
@@ -134,9 +135,6 @@ function draw_linear_week_graph() {
 		},
 		color: {
 			pattern: echelleTeintes(nbTour)
-		},
-		legend: {
-			show: showLegende
 		},
     tooltip: {
       format: {
@@ -148,6 +146,10 @@ function draw_linear_week_graph() {
       }
     }
 	});
+
+	if (showLegende == false) {
+		chart.legend.hide();
+	}
 }
 
 function draw_scatter_plot_week_graph() {
@@ -235,9 +237,9 @@ function draw_scatter_plot_week_graph() {
 	colors = echelleTeintes(nbTour);
 	colors[colors.length] = "#000000";
 	console.log(colors);
-	
+
 	// draw chart
-	var chart = c3.generate({
+	chart = c3.generate({
 		data: {
 			xs: nbPeriode,
 			columns: tab,
@@ -248,9 +250,6 @@ function draw_scatter_plot_week_graph() {
 		},
 		color: {
 			pattern: colors
-		},
-		legend: {
-			show: showLegende
 		},
 		axis: {
 			x: {
@@ -264,6 +263,10 @@ function draw_scatter_plot_week_graph() {
 			}
 		}
 	});
+
+	if (showLegende == false) {
+		chart.legend.hide();
+	}
 }
 
 function getDateFromFrenchFormat(myDate) {
