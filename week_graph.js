@@ -3,10 +3,12 @@
 - Choisir la date de début et la date de fin
 - Faire en sorte d'afficher toutes les données dans l'interval (et pas juste les semaines complètes)
 - Faire la même chose pour les années ?
+- Faire la courbe moyenne pour le scatter plot 
 */
 var dureePeriode = 7;
 var dateDebutSelected = "2016-01-01";
 var dateFinSelected = "2016-12-31";
+var dataFile = "datas/data_boulevard_all_2016.json";
 
 window.onload = initData;
 
@@ -14,33 +16,31 @@ function initData() {
 	document.getElementById("dateDebut").value = dateDebutSelected;
 	document.getElementById("dateFin").value = dateFinSelected;
 
-	d3.text("datas/data_boulevard_all_2016.json", "text/plain", draw_linear_week_graph);
+	d3.text(dataFile, "text/plain", draw_linear_week_graph);
 }
 
 function changePlot() {
-	console.log("hello")
 	var myButton = document.getElementById("switchButton");
 
 	if (myButton.getAttribute("currentPlot")=="1") {
-		d3.text("datas/data_boulevard_all_2016.json", "text/plain", draw_scatter_plot_week_graph);
+		d3.text(dataFile, "text/plain", draw_scatter_plot_week_graph);
 		myButton.setAttribute("currentPlot", "0");
 	}else{
-		d3.text("datas/data_boulevard_all_2016.json", "text/plain", draw_linear_week_graph);
+		d3.text(dataFile, "text/plain", draw_linear_week_graph);
 		myButton.setAttribute("currentPlot", "1");
 	}
 }
 
 function changeDates() {
-	console.log("blop");
 	dateDebutSelected = document.getElementById("dateDebut").value;
 	dateFinSelected = document.getElementById("dateFin").value;
 	var myButton = document.getElementById("switchButton");
 	
 	console.log(myButton.getAttribute("currentPlot")=="1")
 	if (myButton.getAttribute("currentPlot")=="1") {
-		d3.text("datas/data_boulevard_all_2016.json", "text/plain", draw_linear_week_graph);
+		d3.text(dataFile, "text/plain", draw_linear_week_graph);
 	}else{
-		d3.text("datas/data_boulevard_all_2016.json", "text/plain", draw_scatter_plot_week_graph);
+		d3.text(dataFile, "text/plain", draw_scatter_plot_week_graph);
 	}
 }
 
@@ -180,7 +180,7 @@ function echelleTeintes(nbElem) {
 	var colorTab = [];
 
 	for (var i = 0; i < nbElem; i++) {
-		colorTab[i] = "#" + "FF" + componentToHex(255-i*avancement) + "00";
+		colorTab[i] = "#" + "FF" + componentToHex(255-(i+1)*avancement) + "00";
 		//colorTab[i] = "#" + "FF" + componentToHex(i*avancement) + "00";
 		//colorTab[i] = "#" + "00" + componentToHex(i*avancement) + "FF";
 	}
