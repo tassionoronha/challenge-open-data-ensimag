@@ -9,6 +9,7 @@ var dureePeriode = 7;
 var dateDebutSelected = "2016-01-01";
 var dateFinSelected = "2016-12-31";
 var datas;
+var showLegende = true;
 
 window.onload = initData;
 
@@ -37,8 +38,10 @@ function changePlot() {
 	var myButton = document.getElementById("switchButton");
 
 	if (myButton.getAttribute("currentPlot")=="1") {
+		document.getElementById("legendButton").setAttribute("style","display:none;");
 		myButton.setAttribute("currentPlot", "0");
 	}else{
+		document.getElementById("legendButton").setAttribute("style","display:inline;");
 		myButton.setAttribute("currentPlot", "1");
 	}
 
@@ -55,6 +58,21 @@ function changeDates() {
 	dateDebutSelected = document.getElementById("dateDebut").value;
 	dateFinSelected = document.getElementById("dateFin").value;
 	dureePeriode = document.getElementById("dureePeriode").value;	
+	runGraph();
+}
+
+function changeLegende() {
+	var myButton = document.getElementById("legendButton");
+	if (myButton.getAttribute("display")=="true") {
+		showLegende = false;
+		myButton.setAttribute("display", "false");
+		myButton.firstChild.data = "Afficher la légende";
+	}else{
+		showLegende = true;
+		myButton.setAttribute("display", "true");
+		myButton.firstChild.data = "Masquer la légende";
+	}
+
 	runGraph();
 }
 
@@ -121,6 +139,9 @@ function draw_linear_week_graph() {
 		},
 		color: {
 			pattern: echelleTeintes(nbTour)
+		},
+		legend: {
+			show: showLegende
 		}
 	});
 }
