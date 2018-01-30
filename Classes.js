@@ -18,6 +18,50 @@ class Graphique {
   }
 }
 
+
+class Factory{
+  constructor(type, args){
+    if(this.validateArgs(type, args)){
+
+      switch (type) {
+        case 'radar':
+          this.chart = new MultiRadar(args.year,args.canvas);
+          break;
+
+        case 'lignes':
+         this.chart = new MultiLignes(args.canvas);
+          break;
+        default:
+          throw "Bad type!";
+      }
+    }
+
+    return this;
+  }
+
+  getChart(){
+    return this.chart;
+  }
+
+  validateArgs(type, args){
+    switch (type) {
+      case 'radar':
+        if(args.year < 2007 && args.year > 2017){
+          throw "Bad year!";
+          return false;
+        }
+        break;
+    }
+
+    if(typeof(args.canvas) != "object"){
+      throw "Bad canvas!";
+      return false;
+    }
+
+    return true;
+  }
+}
+
 class MultiLignes extends Graphique {
   constructor(objHTML){
     super();
@@ -72,6 +116,14 @@ class MultiRadar extends Graphique {
     }
   }
 
+  addFault(fault){
+    var exists = false;
+    for (var i = 0; i < this.faults.length; i++) {
+      if(this.faults[i].index == fault.index){ exists = true }
+    }
+    if(!exists && !this.state[fault.index]){this.faults.push(fault)}
+  }
+
   generateDynamicArrayMonth(){
     this.datasets = [];
     for (let j = 0; j < this.data.length; ++j) {
@@ -79,7 +131,8 @@ class MultiRadar extends Graphique {
       let currentValues = Object.values(this.data[j].data);
       for (var i = this.init; i <= this.end; i++) {
         if(currentValues[i] == "-"){
-          this.faults[this.data[j].Station] = j;
+          let fault = {station: this.data[j].Station, index: j};
+          this.addFault(fault);
         }
         values[values.length] = currentValues[i];
       }
