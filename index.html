@@ -19,7 +19,6 @@
     </div>
     <div id="charts" class="col-md-10">
       <canvas id="multiradar"></canvas>
-    </div>
     <div id="filters" class="col-md-2 panel panel-info" style="border: 3px solid blue">
       <div class="panel-heading">
         <select id="type" class="">
@@ -45,12 +44,23 @@
     <div class="alert alert-info col-md-12" id="notifications"></div>
     <canvas id="multilignes"></canvas>
     <script>
-      var multiLignesCanvas = document.getElementById('multilignes').getContext('2d');
       var multiRadarCanvas = document.getElementById('multiradar').getContext('2d');
+      var multiLignesCanvas = document.getElementById('multilignes').getContext('2d');
 
-      var multiLignesChart = new MultiLignes(multiLignesCanvas).generateChart();
-      var multiRadarChart = new MultiRadar(2007, multiRadarCanvas).generateChart();
+      var argsLignes = {
+        canvas: multiLignesCanvas
+      };
+
+      var argsRadar = {
+        year:2007,
+        canvas:multiRadarCanvas
+      };
+
+      var multiLignesChart = new Factory('lignes', argsLignes).chart.generateChart();
+      var multiRadarChart = new Factory('radar', argsRadar).chart.generateChart();
+
       showErrorsRadar(multiRadarChart);
+      getStations(multiRadarChart);
 
       $("#year").bind("change paste keyup", function() {
         clearChart(multiRadarCanvas, multiRadarChart);

@@ -1,30 +1,22 @@
 function showErrorsRadar(radar){
-  var faults = radar.getFaults();
-  var faultsValues = Object.values(faults);
-  var faults = Object.keys(faults);
-  if(faults){
+  faults = radar.getFaults();
+  if(faults.length > 0){
     $("#notifications").show();
-
     stringFaults = "Les stations à suivre manquent quellques donnés: ";
-    initialLenght = stringFaults.length;
-    console.log(faultsValues);
-    console.log(radar.state);
     for(let i=0; i<faults.length; i++){
-      //validar se existe nos filtros
-      if(!radar.state[faultsValues[i]]){
-        if(stringFaults.length > initialLenght){
-          stringFaults += `, ${faults[i]}`;
-        }else{
-          stringFaults += `${faults[i]}`;
-        }
-      }
+        i>0 ? stringFaults += `, ${faults[i].station}` : stringFaults += `${faults[i].station}`;
     }
-
-    if(stringFaults.length == initialLenght){
-      $("#notifications").hide();
-    }
-  }
-
     stringFaults += ".";
     $('#notifications').html(stringFaults);
+  }else{
+    $("#notifications").hide();
+  }
+}
+
+function getStations(radar){
+  let select = $("#stations");
+  for(let i = 0; i < radar.data.length; ++i) {
+    let opt = '<option value="' + i + '">' + radar.data[i].Station + '</option>';
+    select.append(opt);
+  }
 }
