@@ -2,6 +2,7 @@
 - Régler la taille de l'affichage
 - indiquer la date au survol
 - faire un décalage du scatter plot pour que le 0 et la légende ne fussionnent pas
+- Tracer mean pour line graph
 */
 var dureePeriode = 7;
 var dateDebutSelected = "2016-01-01";
@@ -136,15 +137,15 @@ function draw_linear_week_graph() {
 		color: {
 			pattern: echelleTeintes(nbTour)
 		},
-    tooltip: {
-      format: {
-        title: function(d) { return 'Jour ' + d},
-        name: function(value, ratio, id, index) {
-          let idx = periods.indexOf(id);
-          return idx + " - " + keysJour[decalage+idx*dureePeriode+index];
-        }
-      }
-    }
+		tooltip: {
+			format: {
+				title: function(d) { return 'Jour ' + d},
+				name: function(value, ratio, id, index) {
+					let idx = periods.indexOf(id);
+					return idx + " - " + keysJour[decalage+idx*dureePeriode+index];
+				}
+			}
+		}
 	});
 
 	if (showLegende == false) {
@@ -199,7 +200,7 @@ function draw_scatter_plot_week_graph() {
 		arrayJourValues = [];
 		arrayJourPeriode[0] = "periode"+nbTour+"_x";;
 		arrayJourValues[0] = "periode"+nbTour;
-		//periods[nbTour] = arrayJourPeriode[0];
+		periods[nbTour] = arrayJourValues[0];
 		
 		var possitionDansPeriode = 0;
 		while(possitionDansPeriode < dureePeriode) {
@@ -260,6 +261,15 @@ function draw_scatter_plot_week_graph() {
 			},
 			y: {
 				label: 'Quantité de PM10 en microg/m3',
+			}
+		},
+		tooltip: {
+			format: {
+				title: function(d) { return 'Jour ' + d},
+				name: function(value, ratio, id, index) {
+					let idx = periods.indexOf(id);
+					return idx + " - " + keysJour[(decalage+idx*dureePeriode+index) - dureePeriode];
+				}
 			}
 		}
 	});
