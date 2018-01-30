@@ -168,10 +168,17 @@ class MultiRadar extends Graphique {
         datasets: this.datasets
       },
       options: {
+        maintainAspectRatio: false,
         scale: {
-            ticks: {
-                beginAtZero: true
-            }
+          ticks: {
+              beginAtZero: true
+          }
+        },
+        legend: {
+          position: 'bottom',
+          labels: {
+            boxWidth: 40
+          }
         }
       }
     });
