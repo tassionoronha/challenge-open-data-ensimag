@@ -30,7 +30,7 @@
       var multiRadarCanvas = document.getElementById('multiradar').getContext('2d');
 
       var multiLignesChart = new MultiLignes(multiLignesCanvas).generateChart();
-      var multiRadarChart = new MultiRadar(2011, multiRadarCanvas).generateChart();
+      var multiRadarChart = new MultiRadar(2007, multiRadarCanvas).generateChart();
       showErrorsRadar(multiRadarChart);
 
       $("#year").bind("change paste keyup", function() {
