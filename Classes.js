@@ -24,22 +24,10 @@ class Graphique {
   }
 }
 
-
 class Factory{
   constructor(type, args){
     if(this.validateArgs(type, args)){
-
-      switch (type) {
-        case 'radar':
-          this.chart = new MultiRadar(args.year,args.canvas);
-          break;
-
-        case 'lignes':
-         this.chart = new MultiLignes(args.canvas);
-          break;
-        default:
-          throw "Bad type!";
-      }
+      this.chart = new MultiGraph(type, args);
     }
 
     return this;
@@ -50,13 +38,20 @@ class Factory{
   }
 
   validateArgs(type, args){
-    switch (type) {
-      case 'radar':
-        if(args.year < 2007 && args.year > 2017){
-          throw "Bad year!";
-          return false;
-        }
-        break;
+    if (type != 'radar' && type != 'line'){
+      throw "Bad type";
+      return false;
+    }
+    if (args.type == 0) {
+      if(args.year < 2007 || args.year > 2017){
+        throw "Bad year!";
+        return false;
+      }
+    } else if (args.type == 1) {
+      if (args.station < 0 || args.station >= Object.values(monthlyDatas).length){
+        throw "Bad station!";
+        return false;
+      }
     }
 
     if(typeof(args.canvas) != "object"){
@@ -68,43 +63,12 @@ class Factory{
   }
 }
 
-class MultiLignes extends Graphique {
-  constructor(objHTML){
+class MultiGraph extends Graphique {
+  constructor(graph, args){
     super();
-    this.objHTML = objHTML;
-    this.keys = Object.keys(monthlyDatas[0].data);
-    this.values = Object.values(monthlyDatas);
-    this.datasets = [];
-    this.faults = [];
-    for (let i = 0; i < this.values.length; ++i) {
-      let current = {
-        label: this.values[i].Station,
-        data: Object.values(this.values[i].data),
-        borderColor: "rgb(" + super.getRGBColor(i) + ")",
-        backgroundColor: "rgba(" + super.getRGBColor(i) + ",0.1)",
-      };
-      this.datasets[i] = current;
-    }
-    this.chart = null;
-  }
-
-  generateChart(){
-    this.chart = new Chart(this.objHTML, {
-      type: 'line',
-      data: {
-        labels: this.keys,
-        datasets: this.datasets
-      }
-    });
-  }
-
-}
-
-class MultiRadar extends Graphique {
-  constructor(year, objHTML){
-    super();
-    this.year = year;
-    this.objHTML = objHTML;
+    this.year = args.year;
+    this.graph = graph;
+    this.objHTML = args.canvas;
     this.init = (this.year - this.beginYear) * 12;
     this.end = this.init + 11;
     this.data = Object.values(monthlyDatas);
@@ -112,8 +76,8 @@ class MultiRadar extends Graphique {
     this.state = [];
     this.chart = null;
     this.faults = [];
-    this.type = 0;
-    this.station = 0;
+    this.type = args.type;
+    this.station = args.station;
   }
 
   addFault(fault){
@@ -209,7 +173,7 @@ class MultiRadar extends Graphique {
       this.generateDynamicArrayStation();
     }
     this.chart = new Chart(this.objHTML, {
-      type: 'radar',
+      type: this.graph,
       data: {
         labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
         datasets: this.datasets
@@ -225,6 +189,11 @@ class MultiRadar extends Graphique {
           position: 'bottom',
           labels: {
             boxWidth: 40
+          }
+        },
+        elements: {
+          line: {
+            tension: 0
           }
         }
       }
