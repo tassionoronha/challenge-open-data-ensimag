@@ -3,7 +3,7 @@
     <meta charset="utf8"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment-with-locales.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
     <script type="text/javascript" src="data.json"></script>
@@ -57,7 +57,7 @@
         canvas:canvas,
         station: 0,
         type: 0,
-        filterMax: 80
+        state: []
       };
 
       var chart = new Factory('radar', argsChart).chart.generateChart();
@@ -108,7 +108,8 @@
           canvas: canvas,
           year: $("#year").val(),
           station: $("#stations").find(":selected").val(),
-          type: $("#type").find(":selected").val()
+          type: $("#type").find(":selected").val(),
+          state: chart.state
         };
         if (this.checked){
           chart = new Factory('line', argsChart).chart.generateChart();

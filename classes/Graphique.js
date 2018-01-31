@@ -14,8 +14,6 @@ class Graphique {
       {r:255,g:244,b:0},
       {r:29,g:230,b:110},
     ];
-    this.beginYear = 2007;
-    this.endYear = 2018;
   }
 
   getColor(i){
@@ -28,9 +26,9 @@ class Graphique {
 
   getColorScale(nbColors, RGB){
     let colors = [];
-    let step = Math.floor(255/nbColors);
+    let step = 255/nbColors;
     for (let i = 0; i < nbColors; ++i) {
-      let value = step + i * step;
+      let value = Math.floor(step + i * step);
       switch (RGB) {
       case 0:
         colors[i] = {r:value, g:0 , b:127};
@@ -44,6 +42,18 @@ class Graphique {
       }
     }
     return colors;
+  }
+
+  getMonthLabels(){
+    return ["Jan", "Fev", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Dec"];
+  }
+
+  getDailyLabels(){
+    let labels = [];
+    for (let i = 1; i < 32; ++i) {
+      labels[i-1] = i;
+    }
+    return labels;
   }
 }
 

@@ -1,5 +1,4 @@
 /* TODO :
-- faire un décalage du scatter plot pour que le 0 et la légende ne fussionnent pas
 - Faire bouton d'inversion des couleurs du graph
 */
 var dureePeriode = 7;
@@ -8,6 +7,7 @@ var dateFinSelected = "2017-12-31";
 var datas;
 var showLegende = true;
 var chart;
+var isColorInverse = false;
 
 window.onload = initData;
 
@@ -68,6 +68,11 @@ function changeLegende() {
 		myButton.firstChild.data = "Masquer la légende";
 		chart.legend.show();
 	}
+}
+
+function inverseColor() {
+	isColorInverse = !isColorInverse;
+	runGraph();
 }
 
 function runGraph() {
@@ -155,6 +160,21 @@ function draw_linear_week_graph() {
 		},
 		color: {
 			pattern: colors
+		},
+		axis: {
+			x: {
+				label: 'Jour dans la période',
+				//position: 'outer-center',
+				tick: {
+					fit: true
+				}
+			},
+			y: {
+				label: {
+					text: 'Quantité de PM10 en microg/m3',
+					position: 'outer-middle'
+				}
+			}
 		},
 		tooltip: {
 			format: {
@@ -267,13 +287,17 @@ function draw_scatter_plot_week_graph() {
 		},
 		axis: {
 			x: {
-				label: 'Jour de la période',
+				label: 'Jour dans la période',
+				//position: 'outer-center',
 				tick: {
 					fit: true
 				}
 			},
 			y: {
-				label: 'Quantité de PM10 en microg/m3',
+				label: {
+					text: 'Quantité de PM10 en microg/m3',
+					position: 'outer-middle'
+				}
 			}
 		},
 		tooltip: {
@@ -303,11 +327,16 @@ function getDateFromUniversalFormat(myDate) {
 }
 
 function echelleTeintes(nbElem) {
-	var avancement = Math.floor(255/nbElem);
+	var avancement = 255/nbElem;
 	var colorTab = [];
 
 	for (var i = 0; i < nbElem; i++) {
-		colorTab[i] = "#" + "FF" + componentToHex(255-(i+1)*avancement) + "00";
+		if (isColorInverse) {
+			myColor = (i+1)*avancement;
+		}else{
+			myColor = 255-(i+1)*avancement;
+		}
+		colorTab[i] = "#" + "FF" + componentToHex(Math.floor(myColor)) + "00";
 		//colorTab[i] = "#" + "FF" + componentToHex(i*avancement) + "00";
 		//colorTab[i] = "#" + "00" + componentToHex(i*avancement) + "FF";
 	}

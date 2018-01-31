@@ -14,9 +14,10 @@ function showErrors(graph){
 }
 
 function getStations(graph){
+  let stations = graph.dataReader.getStations();
   let select = $("#stations");
-  for(let i = 0; i < graph.monthData.length; ++i) {
-    let opt = '<option value="' + i + '">' + graph.monthData[i].Station + '</option>';
+  for(let i = 0; i < stations.length; ++i) {
+    let opt = '<option value="' + i + '">' + stations[i] + '</option>';
     select.append(opt);
   }
 }
@@ -24,3 +25,4 @@ function getStations(graph){
 function getMax(graph){
   $('#max').val(graph.getMax());
 }
+moment.locale('fr');
