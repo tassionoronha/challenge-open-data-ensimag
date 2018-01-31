@@ -60,13 +60,13 @@
 
       var chart = new Factory('radar', argsChart).chart.generateChart();
 
-      showErrorsRadar(chart);
+      showErrors(chart);
       getStations(chart);
 
       $("#year").bind("change paste keyup", function() {
         clearChart(canvas, chart);
         chart.setYear(this.value);
-        showErrorsRadar(chart);
+        showErrors(chart);
       });
 
       $("#type").bind("change", function() {
@@ -83,11 +83,12 @@
           $("#year").show();
         }
         chart.redraw();
-        showErrorsRadar(chart);
+        showErrors(chart);
       });
       $("#stations").change(function() {
         clearChart(canvas, chart);
         chart.setStation($("#stations").find(":selected").val());
+        showErrors(chart);
       });
       $("#graph").change(function() {
         clearChart(canvas, chart);

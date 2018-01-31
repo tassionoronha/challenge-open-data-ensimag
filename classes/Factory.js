@@ -1,5 +1,4 @@
 import MultiGraph from './MultiGraph.js';
-import MultiLignes from './MultiLignes.js';
 
 class Factory{
   constructor(type, args){
