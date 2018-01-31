@@ -1,22 +1,22 @@
-function showErrorsRadar(radar){
-  faults = radar.getFaults();
+function showErrors(graph){
+  faults = graph.getFaults();
   if(faults.length > 0){
     $("#notifications").show();
-    stringFaults = "Les stations à suivre manquent quellques donnés: ";
+    stringFaults = "Les données suivantes sont incomplètes : <span class='missingData'>";
     for(let i=0; i<faults.length; i++){
-        i>0 ? stringFaults += `, ${faults[i].station}` : stringFaults += `${faults[i].station}`;
+        i>0 ? stringFaults += `, ${faults[i].name}` : stringFaults += `${faults[i].name}`;
     }
-    stringFaults += ".";
+    stringFaults += "</span>.";
     $('#notifications').html(stringFaults);
   }else{
     $("#notifications").hide();
   }
 }
 
-function getStations(radar){
+function getStations(graph){
   let select = $("#stations");
-  for(let i = 0; i < radar.monthData.length; ++i) {
-    let opt = '<option value="' + i + '">' + radar.monthData[i].Station + '</option>';
+  for(let i = 0; i < graph.monthData.length; ++i) {
+    let opt = '<option value="' + i + '">' + graph.monthData[i].Station + '</option>';
     select.append(opt);
   }
 }
