@@ -26,9 +26,9 @@ class Graphique {
 
   getColorScale(nbColors, RGB){
     let colors = [];
-    let step = Math.floor(255/nbColors);
+    let step = 255/nbColors;
     for (let i = 0; i < nbColors; ++i) {
-      let value = step + i * step;
+      let value = Math.floor(step + i * step);
       switch (RGB) {
       case 0:
         colors[i] = {r:value, g:0 , b:127};
