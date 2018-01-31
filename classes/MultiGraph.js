@@ -18,8 +18,21 @@ class MultiGraph extends Graphique {
     this.station = args.station;
     this.labels = [];
     this.max = null;
+    this.filterMax = null;
   }
 
+  filterPointsMax(array, max){
+    if(max != null){
+      for (var i = 0; i < array.length; i++) {
+        array[i].data = array[i].data.filter(n => n < max);
+      }
+    }
+    return array;
+  }
+
+  getMax(){
+    return this.max;
+  }
   //Return the biggest number of array
   maxValue(array){
     var data = [];
@@ -139,6 +152,12 @@ class MultiGraph extends Graphique {
     return this;
   }
 
+  setFilterMax(filterMax){
+    this.filterMax = filterMax;
+    this.generateChart();
+    return this;
+  }
+
   setYear(year){
     this.year = year;
     this.init = (this.year - this.beginYear) * 12;
@@ -203,7 +222,7 @@ class MultiGraph extends Graphique {
             yAxes:[{
               ticks: {
                   beginAtZero: true,
-                  max: this.max
+                  suggestedMax: this.filterMax || this.max
               }
             }]
           };
@@ -212,7 +231,7 @@ class MultiGraph extends Graphique {
           options.scale = {
               ticks: {
                   beginAtZero: true,
-                  max: this.max
+                  suggestedMax: this.filterMax || this.max
               }
           };
         break;
@@ -237,7 +256,7 @@ class MultiGraph extends Graphique {
       type: this.graph,
       data: {
         labels: this.labels,
-        datasets: this.datasets
+        datasets: this.filterPointsMax(this.datasets, this.filterMax)
       },
       options: this.getOptions(this.graph)
     });

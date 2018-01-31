@@ -20,3 +20,7 @@ function getStations(graph){
     select.append(opt);
   }
 }
+
+function getMax(graph){
+  $('#max').val(graph.getMax());
+}
