@@ -164,7 +164,7 @@ class MultiGraph extends Graphique {
   getDailyLabels(){
     let labels = [];
     for (let i = 1; i < 32; ++i) {
-      labels[i-1] = "" + i;
+      labels[i-1] = i;
     }
     return labels;
   }
