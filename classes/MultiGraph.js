@@ -160,8 +160,12 @@ class MultiGraph extends Graphique {
     }
     return faults;
   }
-  resetFilterMax(){
+  resetFilters(){
+    this.year = this.dataReader.beginYear;
+    this.month = 0;
+    this.station = 0;
     this.filterMax = this.max;
+    this.state = [];
     this.generateChart();
     return this;
   }
@@ -189,8 +193,6 @@ class MultiGraph extends Graphique {
   }
   setYear(year){
     this.year = year;
-    this.init = (this.year - this.dataReader.beginYear) * 12;
-    this.end = this.init + 11;
     this.generateChart();
     return this;
   }
@@ -202,7 +204,7 @@ class MultiGraph extends Graphique {
   filterPointsMax(array, max){
     if(max != null){
       for (var i = 0; i < array.length; i++) {
-        array[i].data = array[i].data.filter(n => n < max);
+        array[i].data = array[i].data.filter(n => n < max || n == '-');
       }
     }
     return array;

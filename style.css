@@ -7,11 +7,6 @@
   #filters {
     height: 80%;
   }
-
-  #filters input,
-  #filters select {
-    width: 98%;
-  }
 }
 
 @media (max-width: 990px) {
@@ -29,6 +24,16 @@
   border-radius: 0;
   margin: 0;
 }
+#filters select {
+  width: 98%;
+}
+
+#filters input {
+  padding: 0;
+}
+#filters button {
+  /*display: inline;*/
+}
 
 .panel-heading,
 .panel-body {
@@ -39,6 +44,15 @@
 #filters select {
   margin: 3px;
   color: black;
+}
+
+#filters .filter label {
+  padding-left: 0;
+  margin: 10px 0 0 0;
+}
+#resetFilters {
+  width: 97%;
+  margin: 5px;
 }
 
 .page-header {
