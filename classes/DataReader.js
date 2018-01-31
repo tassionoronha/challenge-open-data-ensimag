@@ -42,7 +42,7 @@ class DataReader {
         ++currentDay;
         let val = currentValues[init + currentDay];
         if(val == "-"){
-          let fault = {name: date.format("MMMM"), index: i};
+          let fault = {name: capitalizeFirstLetter(date.format("MMMM")), index: i};
           this._addFault(fault);
         }
         date = moment(dates[init + currentDay], 'DD/MM/YYYY');

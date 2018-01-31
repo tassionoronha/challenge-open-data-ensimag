@@ -45,7 +45,12 @@ class Graphique {
   }
 
   getMonthLabels(){
-    return ["Jan", "Fev", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Dec"];
+    let labels = [];
+    for (let i = 0; i < 12; ++i) {
+      let date = moment([2018, i]);
+      labels[i] = capitalizeFirstLetter(date.format("MMMM"));
+    }
+    return labels;
   }
 
   getDailyLabelsForMonth(year, month){

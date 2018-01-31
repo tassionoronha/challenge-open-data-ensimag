@@ -56,5 +56,9 @@ function clearChart(canvas, chart) {
   chart.destroyChart();
 }
 
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 moment.locale('fr');
 let dataLoader =new DataLoader();
