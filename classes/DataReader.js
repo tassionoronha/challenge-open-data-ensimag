@@ -25,7 +25,7 @@ class DataReader {
         let val = currentValues[init + currentDay];
         if(val == "-"){
           let fault = {name: date.format("MMMM"), index: i};
-          this.addFault(fault);
+          this._addFault(fault);
         }
         date = moment(dates[init + currentDay], 'DD/MM/YYYY');
         values[values.length] = val;
@@ -43,7 +43,7 @@ class DataReader {
       for (var i = j*12; i <= (j+1)*12-1; ++i) {
         if(currentValues[i] == "-"){
           let fault = {name: this.beginYear+j, index: j};
-          this.addFault(fault);
+          this._addFault(fault);
         }
         values[values.length] = currentValues[i];
       }
@@ -62,7 +62,7 @@ class DataReader {
       for (var i = init; i <= end; i++) {
         if(currentValues[i] == "-"){
           let fault = {name: this.monthData[j].Station, index: j};
-          this.addFault(fault);
+          this._addFault(fault);
         }
         values[values.length] = currentValues[i];
       }
@@ -70,6 +70,7 @@ class DataReader {
     }
     return res;
   }
+
   getStations(){
     let stations = [];
     for (let i = 0; i < this.monthData.length; ++i) {
@@ -83,16 +84,16 @@ class DataReader {
   getMax(){
     return this.maxValue;
   }
+  cleanFaults(){
+    this.faults = [];
+  }
 
-  addFault(fault){
+  _addFault(fault){
     var exists = false;
     for (var i = 0; i < this.faults.length; i++) {
       if(this.faults[i].index == fault.index){ exists = true;break; }
     }
     if(!exists){this.faults.push(fault)}
-  }
-  cleanFaults(){
-    this.faults = [];
   }
   _getDailyInitIndex(dates, year){
     let init = -1;
@@ -105,7 +106,6 @@ class DataReader {
     }
     return init;
   }
-
   //Return the biggest number of array
   _findMaxValue(array){
     var data = [];
