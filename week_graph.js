@@ -321,11 +321,11 @@ function getDateFromUniversalFormat(myDate) {
 }
 
 function echelleTeintes(nbElem) {
-	var avancement = Math.floor(255/nbElem);
+	var avancement = 255/nbElem;
 	var colorTab = [];
 
 	for (var i = 0; i < nbElem; i++) {
-		colorTab[i] = "#" + "FF" + componentToHex(255-(i+1)*avancement) + "00";
+		colorTab[i] = "#" + "FF" + componentToHex(Math.floor(255-(i+1)*avancement)) + "00";
 		//colorTab[i] = "#" + "FF" + componentToHex(i*avancement) + "00";
 		//colorTab[i] = "#" + "00" + componentToHex(i*avancement) + "FF";
 	}
