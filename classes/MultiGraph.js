@@ -95,6 +95,7 @@ class MultiGraph extends Graphique {
   }
 
   setType(type){
+    this.max = this.filterMax;
     this.type = type;
     this.state = [];
   }
