@@ -336,6 +336,10 @@ function echelleTeintes(nbElem) {
 			myColor = 255-(i+1)*avancement;
 		}
 
+		if (myColor<0) {
+			myColor = 0;
+		}
+
 		var colorPicked = parseInt(document.getElementById("colorChoice").value);
 
 		switch(colorPicked){
