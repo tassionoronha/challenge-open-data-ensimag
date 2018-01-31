@@ -1,5 +1,5 @@
-var dureePeriode = 7;
-var dateDebutSelected = "2017-01-01";
+var dureePeriode = 28;
+var dateDebutSelected = "2015-01-01";
 var dateFinSelected = "2017-12-31";
 var datas;
 var showLegende = true;
@@ -23,7 +23,7 @@ function initData() {
 	}
 
 	datas = dailyDatas[0].data;
-	draw_linear_week_graph();
+	runGraph();
 }
 
 function changePlot() {
@@ -78,9 +78,9 @@ function changeColor() {
 function runGraph() {
 	var myButton = document.getElementById("switchButton");
 	if (myButton.getAttribute("currentPlot")=="1") {
-		draw_linear_week_graph();
-	}else{
 		draw_scatter_plot_week_graph();
+	}else{
+		draw_linear_week_graph();
 	}
 }
 
