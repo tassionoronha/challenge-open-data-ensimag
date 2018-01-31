@@ -1,12 +1,11 @@
 /* TODO :
-- Régler la taille de l'affichage
-- indiquer la date au survol
 - faire un décalage du scatter plot pour que le 0 et la légende ne fussionnent pas
 - Tracer mean pour line graph
+- Faire bouton d'inversion des couleurs du graph
 */
 var dureePeriode = 7;
-var dateDebutSelected = "2016-01-01";
-var dateFinSelected = "2016-12-31";
+var dateDebutSelected = "2017-01-01";
+var dateFinSelected = "2017-12-31";
 var datas;
 var showLegende = true;
 var chart;
@@ -172,10 +171,10 @@ function draw_scatter_plot_week_graph() {
 	var nbPeriode = {moyenne: "moyenne_x"};	
 
 	// init all tab
-	arrayMeanValuesX = [];
-	arrayMeanValues = [];
+	var arrayMeanValuesX = [];
+	var arrayMeanValues = [];
 
-	arrayNbDataMean = [];
+	var arrayNbDataMean = [];
 
 	arrayMeanValuesX[0] = "moyenne_x";
 	arrayMeanValues[0] = "moyenne";
@@ -212,7 +211,7 @@ function draw_scatter_plot_week_graph() {
 				arrayJourValues[possitionDansPeriode+1] = '-';
 			}
 
-			if (valuesJour[debutPeriode+possitionDansPeriode] != '-') {
+			if (valuesJour[debutPeriode+possitionDansPeriode] != '-' && ! isNaN(valuesJour[debutPeriode+possitionDansPeriode])) {
 				arrayMeanValues[possitionDansPeriode+1] = arrayMeanValues[possitionDansPeriode+1] + valuesJour[debutPeriode+possitionDansPeriode];
 				arrayNbDataMean[possitionDansPeriode] = arrayNbDataMean[possitionDansPeriode]+1;
 			}
