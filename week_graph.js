@@ -302,12 +302,6 @@ function getDateFromUniversalFormat(myDate) {
 	return new Date(myDate.split("-")[0], myDate.split("-")[1]-1, myDate.split("-")[2]);
 }
 
-function getDayInWeek(myDate) {
-	// Format : dd/mm/YYYY
-	var d = new Date(myDate.split("/")[2], myDate.split("/")[1]-1, myDate.split("/")[0]);
-	return d.getDay();
-}
-
 function echelleTeintes(nbElem) {
 	var avancement = Math.floor(255/nbElem);
 	var colorTab = [];
