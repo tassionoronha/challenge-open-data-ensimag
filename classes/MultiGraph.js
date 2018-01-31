@@ -17,6 +17,18 @@ class MultiGraph extends Graphique {
     this.faults = [];
     this.station = args.station;
     this.labels = [];
+    this.max = null;
+  }
+
+  //Return the biggest number of array
+  maxValue(array){
+    var data = [];
+    for (var i = 0; i < array.length; i++) {
+      let values = Object.values(array[i].data).filter(n => n != "-");
+      data = data.concat(values);
+    }
+
+    return Math.max.apply(null, data);
   }
 
   addFault(fault){
@@ -160,12 +172,56 @@ class MultiGraph extends Graphique {
     return labels;
   }
 
+  getOptions(type){
+    var options = {
+      maintainAspectRatio: false,
+      legend: {
+        position: 'bottom',
+        labels: {
+          boxWidth: 40
+        }
+      },
+      elements: {
+        line: {
+          tension: 0
+        }
+      }
+    }
+
+    switch (type) {
+        case 'line':
+          options.scales = {
+            yAxes:[{
+              ticks: {
+                  beginAtZero: true,
+                  max: this.max
+              }
+            }]
+          };
+        break;
+        case 'radar':
+          options.scale = {
+              ticks: {
+                  beginAtZero: true,
+                  max: this.max
+              }
+          };
+        break;
+        default:
+        throw "Bad type!";
+    }
+    return options;
+  }
+
   generateChart(){
     if (this.type == 0) {
+      this.max = this.maxValue(this.monthData);
       this.generateDynamicArrayMonth();
     } else if (this.type == 1) {
+      this.max = this.maxValue(this.monthData);
       this.generateDynamicArrayStation();
     } else {
+      this.max = this.maxValue(this.dayData);
       this.generateDynamicArrayDays();
     }
     this.chart = new Chart(this.objHTML, {
@@ -174,25 +230,7 @@ class MultiGraph extends Graphique {
         labels: this.labels,
         datasets: this.datasets
       },
-      options: {
-        maintainAspectRatio: false,
-        scale: {
-          ticks: {
-              beginAtZero: true
-          }
-        },
-        legend: {
-          position: 'bottom',
-          labels: {
-            boxWidth: 40
-          }
-        },
-        elements: {
-          line: {
-            tension: 0
-          }
-        }
-      }
+      options: this.getOptions(this.graph)
     });
     if (this.state.length > 0) {
       for(let i = 0; i < this.state.length; ++i) {
