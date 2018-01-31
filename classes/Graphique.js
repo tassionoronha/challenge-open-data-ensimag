@@ -14,8 +14,6 @@ class Graphique {
       {r:255,g:244,b:0},
       {r:29,g:230,b:110},
     ];
-    this.beginYear = 2007;
-    this.endYear = 2018;
   }
 
   getColor(i){
@@ -44,6 +42,18 @@ class Graphique {
       }
     }
     return colors;
+  }
+
+  getMonthLabels(){
+    return ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  }
+
+  getDailyLabels(){
+    let labels = [];
+    for (let i = 1; i < 32; ++i) {
+      labels[i-1] = i;
+    }
+    return labels;
   }
 }
 
