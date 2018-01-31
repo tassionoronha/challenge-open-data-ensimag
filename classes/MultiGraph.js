@@ -68,7 +68,12 @@ class MultiGraph extends Graphique {
       let values = [];
       while(i == moment(dates[init + currentDay], 'DD/MM/YYYY').month()) {
         ++currentDay;
-        values[values.length] = currentValues[init + currentDay];
+        let val = currentValues[init + currentDay];
+        if(val == "-"){
+          let fault = {name: labels[i], index: i};
+          this.addFault(fault);
+        }
+        values[values.length] = val;
       }
       let color = super.getRGBColor(colors[i]);
       this.datasets[i] = this.createDataset(labels[i],values,color,0);
@@ -91,7 +96,7 @@ class MultiGraph extends Graphique {
       let currentValues = Object.values(this.monthData[j].data);
       for (var i = this.init; i <= this.end; i++) {
         if(currentValues[i] == "-"){
-          let fault = {station: this.monthData[j].Station, index: j};
+          let fault = {name: this.monthData[j].Station, index: j};
           this.addFault(fault);
         }
         values[values.length] = currentValues[i];
@@ -109,6 +114,10 @@ class MultiGraph extends Graphique {
       let values = [];
       let currentValues = Object.values(this.monthData[this.station].data);
       for (var i = j*12; i <= (j+1)*12-1; ++i) {
+        if(currentValues[i] == "-"){
+          let fault = {name: this.beginYear+j, index: j};
+          this.addFault(fault);
+        }
         values[values.length] = currentValues[i];
       }
       let color = super.getRGBColor(colors[j]);
@@ -167,7 +176,7 @@ class MultiGraph extends Graphique {
   getDailyLabels(){
     let labels = [];
     for (let i = 1; i < 32; ++i) {
-      labels[i-1] = "" + i;
+      labels[i-1] = i;
     }
     return labels;
   }
