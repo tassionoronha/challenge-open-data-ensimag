@@ -47,6 +47,8 @@ function getStations(graph){
   }
 }
 
+function getMax(graph){
+  $('#max').val(graph.getMax());
+}
 moment.locale('fr');
 let dataLoader =new DataLoader();
-

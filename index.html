@@ -31,6 +31,7 @@
       </div>
       <div class="panel-body">
         <input type="number" name="year" id="year" value="2007" min="2007" max="2017">
+        <input type="number" name="max" id="max" value="0" min="0" max="150">
         <select id="stations" style="display: none;"></select>
       </div>
       <div class="panel-heading choice">
@@ -63,10 +64,17 @@
 
       showErrors(chart);
       getStations(chart);
+      getMax(chart);
 
       $("#year").bind("change paste keyup", function() {
         clearChart(canvas, chart);
         chart.setYear(this.value);
+        showErrors(chart);
+      });
+
+      $("#max").bind("change paste keyup", function() {
+        clearChart(canvas, chart);
+        chart.setFilterMax(this.value);
         showErrors(chart);
       });
 
@@ -85,12 +93,15 @@
         }
         chart.redraw();
         showErrors(chart);
+        getMax(chart);
       });
+
       $("#stations").change(function() {
         clearChart(canvas, chart);
         chart.setStation($("#stations").find(":selected").val());
         showErrors(chart);
       });
+
       $("#graph").change(function() {
         clearChart(canvas, chart);
         argsChart = {
@@ -100,10 +111,13 @@
           type: $("#type").find(":selected").val(),
           state: chart.state
         };
-        if (this.checked)
+        if (this.checked){
           chart = new Factory('line', argsChart).chart.generateChart();
-        else
+
+        }else{
           chart = new Factory('radar', argsChart).chart.generateChart();
+        }
+        getMax(chart);
       });
 
       function clearChart(canvas, chart) {
