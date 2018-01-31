@@ -1,5 +1,4 @@
 /* TODO :
-- faire un décalage du scatter plot pour que le 0 et la légende ne fussionnent pas
 - Faire bouton d'inversion des couleurs du graph
 */
 var dureePeriode = 7;
@@ -156,6 +155,21 @@ function draw_linear_week_graph() {
 		color: {
 			pattern: colors
 		},
+		axis: {
+			x: {
+				label: 'Jour dans la période',
+				//position: 'outer-center',
+				tick: {
+					fit: true
+				}
+			},
+			y: {
+				label: {
+					text: 'Quantité de PM10 en microg/m3',
+					position: 'outer-middle'
+				}
+			}
+		},
 		tooltip: {
 			format: {
 				title: function(d) { return 'Jour ' + d},
@@ -267,13 +281,17 @@ function draw_scatter_plot_week_graph() {
 		},
 		axis: {
 			x: {
-				label: 'Jour de la période',
+				label: 'Jour dans la période',
+				//position: 'outer-center',
 				tick: {
 					fit: true
 				}
 			},
 			y: {
-				label: 'Quantité de PM10 en microg/m3',
+				label: {
+					text: 'Quantité de PM10 en microg/m3',
+					position: 'outer-middle'
+				}
 			}
 		},
 		tooltip: {
