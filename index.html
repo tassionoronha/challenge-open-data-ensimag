@@ -2,14 +2,15 @@
   <head>
     <meta charset="utf8"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
     <script type="text/javascript" src="data.json"></script>
     <script type="text/javascript" src="dataMonth.json"></script>
     <script type="text/javascript" src="monthlyDatas2007.json"></script>
-    <script type="text/javascript" src="Classes.js"></script>
+    <script type="text/javascript" src="dailyDatas2007.json"></script>
+    <script src="./classes/Factory.js" type="module"></script>
     <script type="text/javascript" src="Functions.js"></script>
   </head>
 
@@ -22,9 +23,10 @@
     </div>
     <div id="filters" class="col-md-2 panel panel-info">
       <div class="panel-heading">
-        <select id="type" class="">
+        <select id="type">
           <option value="0">Année par stations</option>
           <option value="1">Station par années</option>
+          <option value="2">Mois par stations</option>
         </select>
       </div>
       <div class="panel-body">
@@ -41,8 +43,12 @@
       </div>
     </div>
     <div class="alert alert-warning col-md-12" id="notifications"></div>
-    <canvas id="multilignes"></canvas>
-    <script>
+    <script nomodule>
+      console.log("Pas de module")
+    </script>
+    <script type='module'>
+      import Factory from './classes/Factory.js';
+
       var canvas = document.getElementById('multiradar').getContext('2d');
 
       var argsChart = {
@@ -54,13 +60,13 @@
 
       var chart = new Factory('radar', argsChart).chart.generateChart();
 
-      showErrorsRadar(chart);
+      showErrors(chart);
       getStations(chart);
 
       $("#year").bind("change paste keyup", function() {
         clearChart(canvas, chart);
         chart.setYear(this.value);
-        showErrorsRadar(chart);
+        showErrors(chart);
       });
 
       $("#type").bind("change", function() {
@@ -68,18 +74,21 @@
         chart.setType(this.value);
         if (this.value == 1) {
           $("#year").hide();
-          chart.setStation($("#stations").find(":selected").val());
           $("#stations").show();
-        } else {
+        } else if (this.value == 0) {
           $("#stations").hide();
-          chart.setYear($("#year").val());
+          $("#year").show();
+        } else {
+          $("#stations").show();
           $("#year").show();
         }
-        showErrorsRadar(chart);
+        chart.redraw();
+        showErrors(chart);
       });
       $("#stations").change(function() {
         clearChart(canvas, chart);
         chart.setStation($("#stations").find(":selected").val());
+        showErrors(chart);
       });
       $("#graph").change(function() {
         clearChart(canvas, chart);

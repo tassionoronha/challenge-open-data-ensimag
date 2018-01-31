@@ -15,6 +15,7 @@
 	<h1>Affiche semaines</h1>
 	<button id="switchButton" type="button" onclick="changePlot()" currentPlot="1">Changer l'affichage</button>
 	<br/>
+	<br/>
 	<select name="station" id="station" onchange="changeStation()" size="1"></select>
 	<br/>
 	<input type="date" name="dateDebut" id="dateDebut">
@@ -23,5 +24,6 @@
 	<button type="button" onclick="changeDates()">Changer l'intervale</button>
 
 	<div id="chart"></div>
+	<button id="legendButton" type="button" onclick="changeLegende()" display="true">Masquer la légende</button>
 </body>
 </html>

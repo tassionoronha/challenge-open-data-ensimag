@@ -51,6 +51,11 @@
   margin: 10px 0 0 0;
 }
 
+.missingData {
+  font-weight: bold;
+}
+
+/* Slider */
 /* The switch - the box around the slider */
 .switch {
   position: relative;

@@ -1,14 +1,14 @@
 /* TODO :
-- Faire la même chose pour les années ?
-- Faire la courbe moyenne pour le scatter plot 
-- Régler la taille de l'affichage
-- indiquer la date au survol
 - faire un décalage du scatter plot pour que le 0 et la légende ne fussionnent pas
+- Tracer mean pour line graph
+- Faire bouton d'inversion des couleurs du graph
 */
 var dureePeriode = 7;
-var dateDebutSelected = "2016-01-01";
-var dateFinSelected = "2016-12-31";
+var dateDebutSelected = "2017-01-01";
+var dateFinSelected = "2017-12-31";
 var datas;
+var showLegende = true;
+var chart;
 
 window.onload = initData;
 
@@ -58,6 +58,21 @@ function changeDates() {
 	runGraph();
 }
 
+function changeLegende() {
+	var myButton = document.getElementById("legendButton");
+	if (myButton.getAttribute("display")=="true") {
+		showLegende = false;
+		myButton.setAttribute("display", "false");
+		chart.legend.hide();
+		myButton.firstChild.data = "Afficher la légende";
+	}else{
+		showLegende = true;
+		myButton.setAttribute("display", "true");
+		myButton.firstChild.data = "Masquer la légende";
+		chart.legend.show();
+	}
+}
+
 function runGraph() {
 	var myButton = document.getElementById("switchButton");
 	if (myButton.getAttribute("currentPlot")=="1") {
@@ -90,11 +105,13 @@ function draw_linear_week_graph() {
 
 	var debutPeriode = decalage;
 	var nbTour = 0;
+	let periods = [];
 	while(debutPeriode<keysJour.length && getDateFromFrenchFormat(keysJour[debutPeriode]) <= dateFin) {
 		nbTour++;
 
 		tab[nbTour] = [];
-		tab[nbTour][0] = "periode "+nbTour;
+		tab[nbTour][0] = "Periode "+ nbTour;
+		periods[nbTour] = tab[nbTour][0];
 		
 		var possitionDansPeriode = 0;
 		while(possitionDansPeriode < dureePeriode) {
@@ -110,21 +127,30 @@ function draw_linear_week_graph() {
 		debutPeriode = debutPeriode + possitionDansPeriode;
 	}
 
-	console.log("nbTour: "+nbTour);
-
-	console.log(tab);
-
-	var chart = c3.generate({
+	chart = c3.generate({
 		data: {
 			x: 'x',
-			columns: tab
+			columns: tab,
+			type: 'spline'
 		},
 		color: {
 			pattern: echelleTeintes(nbTour)
+		},
+		tooltip: {
+			format: {
+				title: function(d) { return 'Jour ' + d},
+				name: function(value, ratio, id, index) {
+					let idx = periods.indexOf(id);
+					return idx + " - " + keysJour[decalage+idx*dureePeriode+index];
+				}
+			}
 		}
 	});
-}
 
+	if (showLegende == false) {
+		chart.legend.hide();
+	}
+}
 
 function draw_scatter_plot_week_graph() {
 	tab = [];
@@ -142,16 +168,14 @@ function draw_scatter_plot_week_graph() {
 		decalage++;
 	}
 
+	var nbPeriode = {moyenne: "moyenne_x"};	
+
 	// init all tab
-	arrayJourPeriode = [];
-	arrayJourValues = [];
-	arrayMeanValuesX = [];
-	arrayMeanValues = [];
+	var arrayMeanValuesX = [];
+	var arrayMeanValues = [];
 
-	arrayNbDataMean = [];
+	var arrayNbDataMean = [];
 
-	arrayJourPeriode[0] = "periode_x";
-	arrayJourValues[0] = "periode";
 	arrayMeanValuesX[0] = "moyenne_x";
 	arrayMeanValues[0] = "moyenne";
 
@@ -162,47 +186,70 @@ function draw_scatter_plot_week_graph() {
 		arrayNbDataMean[i-1] = 0;
 	}
 
-	var positionAbsolue = decalage;
-	var positionTableau = 1;
-	while(positionAbsolue<keysJour.length && getDateFromFrenchFormat(keysJour[positionAbsolue]) <= dateFin){
-		var dayInPeriode = (positionTableau-1)%dureePeriode;
-		arrayJourPeriode[positionTableau] = dayInPeriode;
-		arrayJourValues[positionTableau] = valuesJour[positionAbsolue];
+	var debutPeriode = decalage;
+	var nbTour = 0;
+	let periods = [];
 
-		if (valuesJour[positionAbsolue] != '-') {
-			arrayMeanValues[dayInPeriode+1] = arrayMeanValues[dayInPeriode+1] + valuesJour[positionAbsolue];
-			arrayNbDataMean[dayInPeriode] = arrayNbDataMean[dayInPeriode]+1;
-		}		
+	while(debutPeriode<keysJour.length && getDateFromFrenchFormat(keysJour[debutPeriode]) <= dateFin) {
+		nbTour++;
 
-		console.log(arrayMeanValues[dayInPeriode+1] + valuesJour[positionAbsolue]);
+		nbPeriode["periode"+nbTour] = "periode"+nbTour+"_x";
 
-		positionTableau++;
-		positionAbsolue++;
+		arrayJourPeriode = [];
+		arrayJourValues = [];
+		arrayJourPeriode[0] = "periode"+nbTour+"_x";;
+		arrayJourValues[0] = "periode"+nbTour;
+		periods[nbTour] = arrayJourValues[0];
+		
+		var possitionDansPeriode = 0;
+		while(possitionDansPeriode < dureePeriode) {
+			arrayJourPeriode[possitionDansPeriode+1] = possitionDansPeriode;
+
+			if (debutPeriode+possitionDansPeriode<keysJour.length && getDateFromFrenchFormat(keysJour[debutPeriode+possitionDansPeriode]) <= dateFin) {
+				arrayJourValues[possitionDansPeriode+1] = valuesJour[debutPeriode+possitionDansPeriode];
+			}else{
+				arrayJourValues[possitionDansPeriode+1] = '-';
+			}
+
+			if (valuesJour[debutPeriode+possitionDansPeriode] != '-' && ! isNaN(valuesJour[debutPeriode+possitionDansPeriode])) {
+				arrayMeanValues[possitionDansPeriode+1] = arrayMeanValues[possitionDansPeriode+1] + valuesJour[debutPeriode+possitionDansPeriode];
+				arrayNbDataMean[possitionDansPeriode] = arrayNbDataMean[possitionDansPeriode]+1;
+			}
+
+			possitionDansPeriode++;
+		}
+
+		tab[(nbTour-1)*2] = arrayJourPeriode;
+		tab[(nbTour-1)*2+1] = arrayJourValues;
+		
+		debutPeriode = debutPeriode + possitionDansPeriode;
 	}
 
 	for (var i = 1; i < arrayMeanValues.length; i++) {
 		arrayMeanValues[i] = arrayMeanValues[i]/arrayNbDataMean[i-1];
 	}
 
-	tab[0] = arrayJourPeriode;
-	tab[1] = arrayJourValues;
-	tab[2] = arrayMeanValuesX;
-	tab[3] = arrayMeanValues;
+	tab[nbTour*2] = arrayMeanValuesX;
+	tab[nbTour*2+1] = arrayMeanValues;
 
 	console.log(tab);
 	
+	colors = echelleTeintes(nbTour);
+	colors[colors.length] = "#000000";
+	console.log(colors);
+
 	// draw chart
-	var chart = c3.generate({
+	chart = c3.generate({
 		data: {
-			xs: {
-				periode: 'periode_x',
-				moyenne: 'moyenne_x',
-			},
+			xs: nbPeriode,
 			columns: tab,
 			type: 'scatter',
 			types: {
-				moyenne: 'line',
+				moyenne: 'spline',
 			}
+		},
+		color: {
+			pattern: colors
 		},
 		axis: {
 			x: {
@@ -214,8 +261,21 @@ function draw_scatter_plot_week_graph() {
 			y: {
 				label: 'Quantité de PM10 en microg/m3',
 			}
+		},
+		tooltip: {
+			format: {
+				title: function(d) { return 'Jour ' + d},
+				name: function(value, ratio, id, index) {
+					let idx = periods.indexOf(id);
+					return idx + " - " + keysJour[(decalage+idx*dureePeriode+index) - dureePeriode];
+				}
+			}
 		}
 	});
+
+	if (showLegende == false) {
+		chart.legend.hide();
+	}
 }
 
 function getDateFromFrenchFormat(myDate) {
@@ -244,7 +304,6 @@ function echelleTeintes(nbElem) {
 		//colorTab[i] = "#" + "00" + componentToHex(i*avancement) + "FF";
 	}
 
-	console.log(colorTab);
 	return colorTab;
 }
 
