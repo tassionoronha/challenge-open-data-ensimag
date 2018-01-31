@@ -1,3 +1,28 @@
+class DataLoader {
+  constructor(){
+    this.monthData = Object.values(monthlyDatas);
+    this.dayData = Object.values(dailyDatas);
+    this.dayMax = this._findMaxValue(this.dayData);
+    this.monthMax = this._findMaxValue(this.monthData);
+  }
+  getDayMaxValue(){
+    return this.dayMax;
+  }
+  getMonthMaxValue(){
+    return this.monthMax;
+  }
+  //Return the biggest number of array
+  _findMaxValue(array){
+    var data = [];
+    for (var i = 0; i < array.length; i++) {
+      let values = Object.values(array[i].data).filter(n => n != "-");
+      data = data.concat(values);
+    }
+
+    return Math.max.apply(null, data);
+  }
+}
+
 function showErrors(graph){
   faults = graph.getFaults();
   if(faults.length > 0){
@@ -23,4 +48,5 @@ function getStations(graph){
 }
 
 moment.locale('fr');
+let dataLoader =new DataLoader();
 

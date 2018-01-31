@@ -4,7 +4,7 @@ import DataReader from './DataReader.js';
 class MultiGraph extends Graphique {
   constructor(graph, args){
     super();
-    this.dataReader = new DataReader();
+    this.dataReader = new DataReader(dataLoader);
     this.year = args.year;
     this.graph = graph;
     this.objHTML = args.canvas;
