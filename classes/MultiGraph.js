@@ -6,6 +6,7 @@ class MultiGraph extends Graphique {
     super();
     this.dataReader = new DataReader(dataLoader);
     this.year = args.year;
+    this.month = args.month-1;
     this.graph = graph;
     this.objHTML = args.canvas;
     this.type = args.type;
@@ -18,48 +19,8 @@ class MultiGraph extends Graphique {
     this.filterMax = null;
   }
 
-  filterPointsMax(array, max){
-    if(max != null){
-      for (var i = 0; i < array.length; i++) {
-        array[i].data = array[i].data.filter(n => n < max);
-      }
-    }
-    return array;
-  }
-
-  getMax(){
-    return this.max;
-  }
-  //Return the biggest number of array
-  maxValue(array){
-    var data = [];
-    for (var i = 0; i < array.length; i++) {
-      let values = Object.values(array[i].data).filter(n => n != "-");
-      data = data.concat(values);
-    }
-
-    return Math.max.apply(null, data);
-  }
-
-  addFault(fault){
-    var exists = false;
-    for (var i = 0; i < this.faults.length; i++) {
-      if(this.faults[i].index == fault.index){ exists = true }
-    }
-    if(!exists && !this.state[fault.index]){this.faults.push(fault)}
-  }
-
-  createDataset(label, values, color, opacity) {
-    return {
-      label: label,
-      data: values,
-      borderColor: "rgb(" + color + ")",
-      backgroundColor: "rgba(" + color + "," + opacity + ")",
-    };
-  }
-
   generateGraphDays(){
-    this.labels = this.getDailyLabels();
+    this.labels = super.getDailyLabels();
     this.datasets = [];
 
     let labels = this.getMonthLabels();
@@ -68,6 +29,17 @@ class MultiGraph extends Graphique {
     for (var i = 0; i < 12; i++) {
       let color = super.getRGBColor(colors[i]);
       this.datasets[i] = this.createDataset(labels[i],values[i],color,0);
+    }
+  }
+  generateGraphStationsDays(){
+    this.labels = super.getDailyLabelsForMonth(this.year, this.month);
+    this.datasets = [];
+    let stations = this.dataReader.getStations();
+    let colors = super.getColorScale(stations.length, 1);
+    let values = this.dataReader.getStationsByYearAndMonth(this.year, this.month, this.labels.length);
+    for (let j = 0; j < stations.length; ++j) {
+      let color = super.getRGBColor(colors[j]);
+      this.datasets[j] = this.createDataset(stations[j],values[j],color,0);
     }
   }
   generateGraphMonth(){
@@ -92,35 +64,6 @@ class MultiGraph extends Graphique {
       let color = super.getRGBColor(colors[j]);
       this.datasets[j] = this.createDataset(this.dataReader.beginYear+j,values[j],color,0);
     }
-  }
-
-  setType(type){
-    this.max = this.filterMax;
-    this.type = type;
-    this.state = [];
-  }
-  setStation(station){
-    this.station = station;
-    this.generateChart();
-    return this;
-  }
-
-  setFilterMax(filterMax){
-    this.filterMax = filterMax;
-    this.generateChart();
-    return this;
-  }
-
-  setYear(year){
-    this.year = year;
-    this.init = (this.year - this.dataReader.beginYear) * 12;
-    this.end = this.init + 11;
-    this.generateChart();
-    return this;
-  }
-  redraw(){
-    this.generateChart();
-    return this;
   }
 
   destroyChart(){
@@ -177,12 +120,19 @@ class MultiGraph extends Graphique {
   }
 
   generateChart(){
-    if (this.type == 0) {
+    switch(+this.type){
+    case 0:
       this.generateGraphMonth();
-    } else if (this.type == 1) {
+      break;
+    case 1:
       this.generateGraphStation();
-    } else {
+      break;
+    case 2:
       this.generateGraphDays();
+      break;
+    case 3:
+    default:
+      this.generateGraphStationsDays();
     }
     this.max = this.dataReader.getMax();
     this.chart = new Chart(this.objHTML, {
@@ -210,6 +160,85 @@ class MultiGraph extends Graphique {
     }
     return faults;
   }
+  resetFilterMax(){
+    this.filterMax = this.max;
+    this.generateChart();
+    return this;
+  }
+  setType(type){
+    this.max = this.filterMax;
+    this.type = type;
+    this.state = [];
+  }
+  setStation(station){
+    this.station = station;
+    this.generateChart();
+    return this;
+  }
+
+  setFilterMax(filterMax){
+    this.filterMax = filterMax;
+    this.generateChart();
+    return this;
+  }
+
+  setMonth(month){
+    this.month = month-1;
+    this.generateChart();
+    return this;
+  }
+  setYear(year){
+    this.year = year;
+    this.init = (this.year - this.dataReader.beginYear) * 12;
+    this.end = this.init + 11;
+    this.generateChart();
+    return this;
+  }
+  redraw(){
+    this.generateChart();
+    return this;
+  }
+
+  filterPointsMax(array, max){
+    if(max != null){
+      for (var i = 0; i < array.length; i++) {
+        array[i].data = array[i].data.filter(n => n < max);
+      }
+    }
+    return array;
+  }
+
+  getMax(){
+    return this.max;
+  }
+  //Return the biggest number of array
+  maxValue(array){
+    var data = [];
+    for (var i = 0; i < array.length; i++) {
+      let values = Object.values(array[i].data).filter(n => n != "-");
+      data = data.concat(values);
+    }
+
+    return Math.max.apply(null, data);
+  }
+
+  addFault(fault){
+    var exists = false;
+    for (var i = 0; i < this.faults.length; i++) {
+      if(this.faults[i].index == fault.index){ exists = true }
+    }
+    if(!exists && !this.state[fault.index]){this.faults.push(fault)}
+  }
+
+  createDataset(label, values, color, opacity) {
+    return {
+      label: label,
+      data: values,
+      borderColor: "rgb(" + color + ")",
+      backgroundColor: "rgba(" + color + "," + opacity + ")",
+    };
+  }
+
 }
 
 export default MultiGraph;
