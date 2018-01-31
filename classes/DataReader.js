@@ -6,14 +6,33 @@ class DataReader {
     this.maxValue = -1;
     this.datas = dataLoader;
   }
-  getDuration(){
-    return this.endYear-this.beginYear;
+  getStationsByYearAndMonth(year, month, monthLength){
+    this.maxValue = this.datas.getDayMaxValue();
+    let res = [];
+    let stations = this.getStations();
+    let dates = Object.keys(this.datas.dayData[0].data);
+    let init = this._getDailyInitIndex(dates, year, month);
+    var currentDay = 0;
+    for (let j = 0; j < stations.length; ++j) {
+      let values = [];
+      let currentValues = Object.values(this.datas.dayData[j].data);
+      for(let i = 0; i < monthLength; ++i) {
+        let val = currentValues[init + i];
+        if(val == "-"){
+          let fault = {name: stations[j], index: j};
+          this._addFault(fault);
+        }
+        values[values.length] = val;
+      }
+      res[j] = values;
+    }
+    return res;
   }
   getMonthsByYearAndStation(year, station){
     this.maxValue = this.datas.getDayMaxValue();
     let res = [];
     let dates = Object.keys(this.datas.dayData[0].data);
-    let init = this._getDailyInitIndex(dates, year);
+    let init = this._getDailyInitIndex(dates, year, 0);
     var currentDay = 0;
     let currentValues = Object.values(this.datas.dayData[station].data);
     for (var i = 0; i < 12; i++) {
@@ -70,6 +89,9 @@ class DataReader {
     return res;
   }
 
+  getDuration(){
+    return this.endYear-this.beginYear;
+  }
   getStations(){
     let stations = [];
     for (let i = 0; i < this.datas.monthData.length; ++i) {
@@ -94,11 +116,11 @@ class DataReader {
     }
     if(!exists){this.faults.push(fault)}
   }
-  _getDailyInitIndex(dates, year){
+  _getDailyInitIndex(dates, year, month){
     let init = -1;
     for (let i = 0; i < dates.length; ++i) {
       let date = moment(dates[i], "DD/MM/YYYY");
-      if(init == -1 && date.year() == year) {
+      if(init == -1 && date.year() == year && date.month() == month) {
         init = i;
         break;
       }

@@ -48,6 +48,16 @@ class Graphique {
     return ["Jan", "Fev", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Dec"];
   }
 
+  getDailyLabelsForMonth(year, month){
+    let date = moment([+year, +month]);
+    date = date.add(1,'months').subtract(1, 'days');
+    let lastDay = date.date();
+    let labels = [];
+    for (let i = 1; i < lastDay+1; ++i) {
+      labels[i-1] = i;
+    }
+    return labels;
+  }
   getDailyLabels(){
     let labels = [];
     for (let i = 1; i < 32; ++i) {

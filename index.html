@@ -26,12 +26,15 @@
         <select id="type">
           <option value="0">Année par stations</option>
           <option value="1">Station par années</option>
-          <option value="2">Mois par stations</option>
+          <option value="2">Station par Mois</option>
+          <option value="3">Mois par stations</option>
         </select>
       </div>
       <div class="panel-body">
         <input type="number" name="year" id="year" value="2007" min="2007" max="2017">
+        <input type="number" name="month" id="month" value="1" min="1" max="12" style="display:none"/>
         <input type="number" name="max" id="max" value="0" min="0" max="150">
+        <button id="resetMax" class="btn btn-default">Reset max filter</button>
         <select id="stations" style="display: none;"></select>
       </div>
       <div class="panel-heading choice">
@@ -54,6 +57,7 @@
 
       var argsChart = {
         year:2007,
+        month: 1,
         canvas:canvas,
         station: 0,
         type: 0,
@@ -66,6 +70,11 @@
       getStations(chart);
       getMax(chart);
 
+      $("#month").bind("change paste keyup", function() {
+        clearChart(canvas, chart);
+        chart.setMonth(this.value);
+        showErrors(chart);
+      });
       $("#year").bind("change paste keyup", function() {
         clearChart(canvas, chart);
         chart.setYear(this.value);
@@ -81,18 +90,23 @@
       $("#type").bind("change", function() {
         clearChart(canvas, chart);
         chart.setType(this.value);
+        $("#year").hide();
+        $("#stations").hide();
+        $("#month").hide();
         if (this.value == 1) {
-          $("#year").hide();
           $("#stations").show();
         } else if (this.value == 0) {
-          $("#stations").hide();
           $("#year").show();
-        } else {
+        } else if (this.value == 2) {
           $("#stations").show();
           $("#year").show();
+        } else {
+          $("#year").show();
+          $("#month").show();
         }
         chart.redraw();
         showErrors(chart);
+        getMax(chart);
       });
 
       $("#stations").change(function() {
@@ -106,6 +120,7 @@
         argsChart = {
           canvas: canvas,
           year: $("#year").val(),
+          month: $("#month").val(),
           station: $("#stations").find(":selected").val(),
           type: $("#type").find(":selected").val(),
           state: chart.state
@@ -116,6 +131,11 @@
         }else{
           chart = new Factory('radar', argsChart).chart.generateChart();
         }
+        getMax(chart);
+      });
+      $("#resetMax").click(function() {
+        clearChart(canvas, chart);
+        chart.resetFilterMax();
         getMax(chart);
       });
 
