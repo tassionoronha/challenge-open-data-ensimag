@@ -50,5 +50,11 @@ function getStations(graph){
 function getMax(graph){
   $('#max').val(graph.getMax());
 }
+
+function clearChart(canvas, chart) {
+  canvas.clearRect(0, 0, 1200, 600);
+  chart.destroyChart();
+}
+
 moment.locale('fr');
 let dataLoader =new DataLoader();
