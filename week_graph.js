@@ -1,6 +1,3 @@
-/* TODO :
-- Faire bouton d'inversion des couleurs du graph
-*/
 var dureePeriode = 7;
 var dateDebutSelected = "2017-01-01";
 var dateFinSelected = "2017-12-31";
@@ -27,7 +24,6 @@ function initData() {
 
 	datas = dailyDatas[0].data;
 	draw_linear_week_graph();
-	//draw_scatter_plot_week_graph();
 }
 
 function changePlot() {
@@ -72,6 +68,10 @@ function changeLegende() {
 
 function inverseColor() {
 	isColorInverse = !isColorInverse;
+	runGraph();
+}
+
+function changeColor() {
 	runGraph();
 }
 
@@ -288,7 +288,6 @@ function draw_scatter_plot_week_graph() {
 		axis: {
 			x: {
 				label: 'Jour dans la période',
-				//position: 'outer-center',
 				tick: {
 					fit: true
 				}
@@ -336,9 +335,64 @@ function echelleTeintes(nbElem) {
 		}else{
 			myColor = 255-(i+1)*avancement;
 		}
-		colorTab[i] = "#" + "FF" + componentToHex(Math.floor(myColor)) + "00";
-		//colorTab[i] = "#" + "FF" + componentToHex(i*avancement) + "00";
-		//colorTab[i] = "#" + "00" + componentToHex(i*avancement) + "FF";
+
+		var colorPicked = parseInt(document.getElementById("colorChoice").value);
+
+		switch(colorPicked){
+			case 0:
+				// Nuances de rose claire
+				colorTab[i] = "#" + "FF" + componentToHex(Math.floor(myColor)) + "FF";
+				break;
+			case 1:
+				// Jaune au rouge
+				colorTab[i] = "#" + "FF" + componentToHex(Math.floor(myColor)) + "00";
+				break;
+			case 2:
+				// Vert claire à vert foncé
+				colorTab[i] = "#" + "00" + componentToHex(Math.floor(myColor)) + "00";
+				break;
+			case 3:
+				// Bleu claire à bleu foncé
+				colorTab[i] = "#" + "00" + componentToHex(Math.floor(myColor)) + "FF";
+				break;
+
+			case 4:
+				// Nuances de jaune claire
+				colorTab[i] = "#" + "FF" + "FF" + componentToHex(Math.floor(myColor));
+				break;
+			case 5:
+				// rose à rouge
+				colorTab[i] = "#" + "FF" + "00" + componentToHex(Math.floor(myColor));
+				break;
+			case 6:
+				// Bleu à noir
+				colorTab[i] = "#" + "00" + "00" + componentToHex(Math.floor(myColor));
+				break;
+			case 7:
+				// Bleu claire à Vert claire
+				colorTab[i] = "#" + "00" + "FF" + componentToHex(Math.floor(myColor));
+				break;
+
+			case 8:
+				// Nuances de bleu claire
+				colorTab[i] = "#" + componentToHex(Math.floor(myColor)) + "FF" + "FF";
+				break;
+			case 9:
+				// Jaune à vert claire
+				colorTab[i] = "#" + componentToHex(Math.floor(myColor)) + "FF" + "00";
+				break;
+			case 10:
+				// Rouge à noir
+				colorTab[i] = "#" + componentToHex(Math.floor(myColor)) + "00" + "00";
+				break;
+			case 11:
+				// Rose à bleu claire
+				colorTab[i] = "#" + componentToHex(Math.floor(myColor)) + "00" + "FF";
+				break;
+			default:
+				colorTab[i] = "#" + "FF" + componentToHex(Math.floor(myColor)) + "FF";
+		}
+
 	}
 
 	return colorTab;
