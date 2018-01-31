@@ -21,3 +21,6 @@ function getStations(graph){
     select.append(opt);
   }
 }
+
+moment.locale('fr');
+
