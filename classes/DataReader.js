@@ -1,22 +1,21 @@
 class DataReader {
-  constructor(){
-    this.monthData = Object.values(monthlyDatas);
-    this.dayData = Object.values(dailyDatas);
+  constructor(dataLoader){
     this.beginYear = 2007;
     this.endYear = 2018;
     this.faults = [];
     this.maxValue = -1;
+    this.datas = dataLoader;
   }
   getDuration(){
     return this.endYear-this.beginYear;
   }
   getMonthsByYearAndStation(year, station){
-    this.maxValue = this._findMaxValue(this.dayData);
+    this.maxValue = this.datas.getDayMaxValue();
     let res = [];
-    let dates = Object.keys(this.dayData[0].data);
+    let dates = Object.keys(this.datas.dayData[0].data);
     let init = this._getDailyInitIndex(dates, year);
     var currentDay = 0;
-    let currentValues = Object.values(this.dayData[station].data);
+    let currentValues = Object.values(this.datas.dayData[station].data);
     for (var i = 0; i < 12; i++) {
       let values = [];
       let date = moment(dates[init + currentDay], 'DD/MM/YYYY');
@@ -25,7 +24,7 @@ class DataReader {
         let val = currentValues[init + currentDay];
         if(val == "-"){
           let fault = {name: date.format("MMMM"), index: i};
-          this.addFault(fault);
+          this._addFault(fault);
         }
         date = moment(dates[init + currentDay], 'DD/MM/YYYY');
         values[values.length] = val;
@@ -35,15 +34,15 @@ class DataReader {
     return res;
   }
   getYearsByStation(station){
-    this.maxValue = this._findMaxValue(this.monthData);
+    this.maxValue = this.datas.getMonthMaxValue();
     let res = [];
     for (let j = 0; j < this.endYear-this.beginYear; ++j) {
       let values = [];
-      let currentValues = Object.values(this.monthData[station].data);
+      let currentValues = Object.values(this.datas.monthData[station].data);
       for (var i = j*12; i <= (j+1)*12-1; ++i) {
         if(currentValues[i] == "-"){
           let fault = {name: this.beginYear+j, index: j};
-          this.addFault(fault);
+          this._addFault(fault);
         }
         values[values.length] = currentValues[i];
       }
@@ -52,17 +51,17 @@ class DataReader {
     return res;
   }
   getStationsByYear(year){
-    this.maxValue = this._findMaxValue(this.monthData);
+    this.maxValue = this.datas.getMonthMaxValue();
     let res = [];
     let init = (year - this.beginYear) * 12;
     let end = init + 11;
-    for (let j = 0; j < this.monthData.length; ++j) {
+    for (let j = 0; j < this.datas.monthData.length; ++j) {
       let values = [];
-      let currentValues = Object.values(this.monthData[j].data);
+      let currentValues = Object.values(this.datas.monthData[j].data);
       for (var i = init; i <= end; i++) {
         if(currentValues[i] == "-"){
-          let fault = {name: this.monthData[j].Station, index: j};
-          this.addFault(fault);
+          let fault = {name: this.datas.monthData[j].Station, index: j};
+          this._addFault(fault);
         }
         values[values.length] = currentValues[i];
       }
@@ -70,10 +69,11 @@ class DataReader {
     }
     return res;
   }
+
   getStations(){
     let stations = [];
-    for (let i = 0; i < this.monthData.length; ++i) {
-      stations[i] = this.monthData[i].Station;
+    for (let i = 0; i < this.datas.monthData.length; ++i) {
+      stations[i] = this.datas.monthData[i].Station;
     }
     return stations;
   }
@@ -83,16 +83,16 @@ class DataReader {
   getMax(){
     return this.maxValue;
   }
+  cleanFaults(){
+    this.faults = [];
+  }
 
-  addFault(fault){
+  _addFault(fault){
     var exists = false;
     for (var i = 0; i < this.faults.length; i++) {
       if(this.faults[i].index == fault.index){ exists = true;break; }
     }
     if(!exists){this.faults.push(fault)}
-  }
-  cleanFaults(){
-    this.faults = [];
   }
   _getDailyInitIndex(dates, year){
     let init = -1;
@@ -104,17 +104,6 @@ class DataReader {
       }
     }
     return init;
-  }
-
-  //Return the biggest number of array
-  _findMaxValue(array){
-    var data = [];
-    for (var i = 0; i < array.length; i++) {
-      let values = Object.values(array[i].data).filter(n => n != "-");
-      data = data.concat(values);
-    }
-
-    return Math.max.apply(null, data);
   }
 }
 

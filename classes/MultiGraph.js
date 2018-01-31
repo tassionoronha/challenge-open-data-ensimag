@@ -4,13 +4,13 @@ import DataReader from './DataReader.js';
 class MultiGraph extends Graphique {
   constructor(graph, args){
     super();
-    this.dataReader = new DataReader();
+    this.dataReader = new DataReader(dataLoader);
     this.year = args.year;
     this.graph = graph;
     this.objHTML = args.canvas;
     this.type = args.type;
     this.datasets = [];
-    this.state = [];
+    this.state = args.state;
     this.chart = null;
     this.station = args.station;
     this.labels = [];
