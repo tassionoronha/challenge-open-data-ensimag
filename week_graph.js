@@ -7,6 +7,7 @@ var dateFinSelected = "2017-12-31";
 var datas;
 var showLegende = true;
 var chart;
+var isColorInverse = false;
 
 window.onload = initData;
 
@@ -67,6 +68,11 @@ function changeLegende() {
 		myButton.firstChild.data = "Masquer la légende";
 		chart.legend.show();
 	}
+}
+
+function inverseColor() {
+	isColorInverse = !isColorInverse;
+	runGraph();
 }
 
 function runGraph() {
@@ -325,7 +331,12 @@ function echelleTeintes(nbElem) {
 	var colorTab = [];
 
 	for (var i = 0; i < nbElem; i++) {
-		colorTab[i] = "#" + "FF" + componentToHex(Math.floor(255-(i+1)*avancement)) + "00";
+		if (isColorInverse) {
+			myColor = (i+1)*avancement;
+		}else{
+			myColor = 255-(i+1)*avancement;
+		}
+		colorTab[i] = "#" + "FF" + componentToHex(Math.floor(myColor)) + "00";
 		//colorTab[i] = "#" + "FF" + componentToHex(i*avancement) + "00";
 		//colorTab[i] = "#" + "00" + componentToHex(i*avancement) + "FF";
 	}
