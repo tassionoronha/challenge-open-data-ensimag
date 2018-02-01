@@ -145,6 +145,8 @@ class MultiGraph extends Graphique {
       break;
     case 3:
       this.generateGraphStationsDays();
+      break;
+    case 4:
     default:
       this.generateGraphStationDay();
     }

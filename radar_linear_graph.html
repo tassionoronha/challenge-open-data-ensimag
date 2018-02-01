@@ -152,10 +152,10 @@
           $("#stations").hide();
           $("#monthPanel").hide();
           $("#datesPanel").hide();
-          if (this.value == 1) {
-            $("#stations").show();
-          } else if (this.value == 0) {
+          if (this.value == 0) {
             $("#yearPanel").show();
+          } else if (this.value == 1) {
+            $("#stations").show();
           } else if (this.value == 2) {
             $("#stations").show();
             $("#yearPanel").show();
