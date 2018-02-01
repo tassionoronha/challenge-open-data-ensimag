@@ -55,3 +55,29 @@ function loadJSON(paths, callback) {
     callback(err);
   });
 }
+
+function loadScript(paths, callback) {
+  if (!Array.isArray(paths)) {
+    paths = [paths];
+  }
+  if (paths.length === 0) {
+    callback(null);
+    return;
+  }
+  var path = paths.shift();
+  $.getScript(path).then(function () {
+    loadScript(paths, callback);
+  }, function (err) {
+    callback(err);
+  });
+}
+
+function loadAll(scripts, jsons, callback) {
+  loadScript(scripts, function (err) {
+    if (err) {
+      callback(err);
+      return;
+    }
+    loadJSON(jsons, callback);
+  });
+}
