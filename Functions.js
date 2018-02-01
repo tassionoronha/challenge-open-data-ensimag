@@ -2,8 +2,13 @@ class DataLoader {
   constructor(){
     this.monthData = Object.values(monthlyDatas);
     this.dayData = Object.values(dailyDatas);
+    this.hourData = Object.values(hourData);
     this.dayMax = this._findMaxValue(this.dayData);
     this.monthMax = this._findMaxValue(this.monthData);
+    this.hourMax = this._findMaxValue(this.dayData);
+  }
+  getHourMaxValue(){
+    return this.hourMax;
   }
   getDayMaxValue(){
     return this.dayMax;
@@ -58,6 +63,11 @@ function clearChart(canvas, chart) {
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
+}
+function pad(n, width, z) {
+  z = z || '0';
+  n = n + '';
+  return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 }
 
 moment.locale('fr');
