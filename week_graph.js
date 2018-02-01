@@ -180,6 +180,9 @@ function draw_linear_week_graph() {
 			format: {
 				title: function(d) { return 'Jour ' + d},
 				name: function(value, ratio, id, index) {
+					if (id=="moyenne") {
+						return "moyenne";
+					}
 					let idx = periods.indexOf(id);
 					return idx + " - " + keysJour[(decalage+idx*dureePeriode+index) - dureePeriode];
 				}
@@ -303,6 +306,9 @@ function draw_scatter_plot_week_graph() {
 			format: {
 				title: function(d) { return 'Jour ' + d},
 				name: function(value, ratio, id, index) {
+					if (id=="moyenne") {
+						return "moyenne";
+					}
 					let idx = periods.indexOf(id);
 					return idx + " - " + keysJour[(decalage+idx*dureePeriode+index) - dureePeriode];
 				}
