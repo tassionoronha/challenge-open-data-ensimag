@@ -5,6 +5,9 @@ h1{
 .maindiv{
 	background-color: #898989;
 	text-align: justify;
+	max-width: 1300px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .subdiv{
