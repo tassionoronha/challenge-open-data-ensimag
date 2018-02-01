@@ -191,7 +191,6 @@
             type: $("#type").find(":selected").val(),
             state: chart.state
           };
-          console.log(argsChart);
           if (this.checked){
             chart = new Factory('line', argsChart, dataLoader).chart.generateChart();
 
