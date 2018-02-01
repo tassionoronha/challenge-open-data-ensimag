@@ -37,7 +37,7 @@
 		<br/><br/>
 		Les données que nous récupérions étaient déjà classifié en fonction de la station qui avant enregistré ses données. Cependant, elle s'étallaient sur une grande période de temps. Avant de pouvoir réellement les exploiter, il nous faller donc les "découper" en période plus petites. Nous affichons ensuite soit une seule période (Année par station), soit plusieurs période simultanément (affichage en période).
 		<br/><br/>
-		Afin de tirer le maximum des données que nous avions récupérés, nous avons également effectué des calcules de moyennes sur celles-ci. Ainsi, pour l'affichage en période, la moyenne pour chaque jour dans une période était calculé puis affiché. Par exemple, pour une période de 7 jours, cela nous donnait la moyenne pour tous les lundi dans l'interval puis tous les mardi, etc... 
+		Afin de tirer le maximum des données que nous avions récupérés, nous avons également effectué des calcules de moyennes sur celles-ci. Ainsi, pour l'affichage en période, la moyenne pour chaque jour dans une période était calculé puis affiché. Par exemple, pour une période de 7 jours, cela nous donnait la moyenne pour tous les lundi dans l'interval puis tous les mardi, etc...
 		<br/><br/>
 		Afin de réaliser notre carte, nous avons également du placer géographiquement nos données.
 	</p>
@@ -68,15 +68,15 @@
 	<p>
 		L'arquitecture se coupe entre trois roles basiques pour maximizer l'organisation du code et faciliter une croissance future, pour plus types de graphics ou types de données.
 		<ul>
-			<li>Dans la premiere partie(Views), nous avons les fichiers responsables pour l'affichage des resultats et le control des objects du DOM. Sont presents dans ces fichiers, eles fonctions responsables pour
-			demander au Factory.js le graphic avec les parameteres d'utilisateur. Le fichier Functions.js, fournir une enssemble de petites fonctions pour aider le fichier index.html a controler le flux entre les responsables de Factory.js
-			etrafraîchit l'écran avec les nouvelles.</li>
-			<li>La couche Graphic Manager est responsable en fait pour la gestion des requetes à venir de la couche précédent, maintenir les états, demander les données pour le responsable avec l'inteligence d'états et les regles
-				de chaque type de graphic et assurez-vous que les regles d'application vont marcher bien. La couche Views, n'access pas les classes de Graphics directment, avant de ça, une Factory sera le reponsable pour la creation des objects dans
-				ce couche. Avec ça, nous avons un code prêt pour recevoir d'autres types de specification pour graphics sans créer une dependence fonctionnel avec les classes anciens. Pour fin dans ce partie, le classe Graphique.js est responsable pour contenir
+			<li>Dans la première partie(Views), nous avons les fichiers responsables pour l'affichage des résultats et le control des objets du DOM. Sont présents dans ces fichiers, les fonctions responsables pour
+			demander au Factory.js le graphic avec les paramèteres d'utilisateurs. Le fichier Functions.js, fournir une enssemble de petites fonctions pour aider le fichier index.html às controler le flux entre les responsables de Factory.js
+			et rafraîchit l'écran avec les nouvelles.</li>
+			<li>La couche Graphic Manager est responsable en fait pour la gestion des requêtes à venir de la couche précédent, maintenir les états, demander les données pour le responsable avec l'intelligence d'états et les règles
+				de chaque type de graphic et assurez-vous que les règles d'application vont marcher bien. La couche Views, n'access pas les classes de Graphics directement, avant de ça, une Factory sera le responsable pour la création des objets dans
+				cette couche. Avec ça, nous avons un code prêt pour recevoir d'autres types de spécification pour graphics sans créer une dependence fonctionnelle avec les classes anciennes. Pour fin dans cette partie, le classe Graphique.js est responsable pour contenir
 				quelques petites fonctions pour aider la construction du graphic.</li>
-			<li>Le dérnier couche de notre application est par fin reponsable pour appliquer les regles d'edition necessaires à chaque type de données importes par l'application, faire les conversions necessesaires et devenir disponibles ces données sur une structure simple
-				pour le Graphic Manager travailler sans problemes de traitements.
+			<li>Le dernier couche de notre application est par fin responsable pour appliquer les règles d'édition nécessaires à chaque type de donnée importées par l'application, faire les conversions nécessesaires et devenir disponibles ces données sur une structure simple
+				pour le Graphic Manager travailler sans problèmes de traitements.
 			</li>
 		</ul>
 	</p>
