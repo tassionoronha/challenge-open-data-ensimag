@@ -1,0 +1,215 @@
+<html>
+  <head>
+    <meta charset="utf8"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment-with-locales.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="colors.js"></script>
+    <script type="text/javascript" src="data.json"></script>
+    <script type="text/javascript" src="dataMonth.json"></script>
+    <script type="text/javascript" src="monthlyDatas2007.json"></script>
+    <script type="text/javascript" src="dailyDatas2007.json"></script>
+    <script type="text/javascript" src="hourlyDatas2013.json"></script>
+    <script src="./classes/Factory.js" type="module"></script>
+    <script type="text/javascript" src="Functions.js"></script>
+  </head>
+
+  <body>
+    <div class="page-header">
+      <h1>Pollution à Grenoble</h1>
+    </div>
+    <div id="charts" class="col-md-10">
+      <canvas id="multiradar"></canvas>
+    </div>
+    <div id="filters" class="col-md-2 panel panel-info">
+      <div class="panel-heading">
+        <select id="type">
+          <option value="0">Année par stations</option>
+          <option value="1">Station par années</option>
+          <option value="2">Station par mois</option>
+          <option value="3">Mois par stations</option>
+          <option value="4">Station par jours</option>
+        </select>
+      </div>
+      <div class="panel-body">
+        <div class="filter" id="yearPanel">
+          <label for="year" class="col-sm-5">Année</label>
+          <input class="col-sm-6" type="number" name="year" id="year" value="2007" min="2007" max="2017"/>
+        </div>
+        <div class="filter" id="monthPanel" style="display: none">
+          <label for="month" class="col-sm-5">Mois</label>
+          <input class="col-sm-6" type="number" name="month" id="month" value="1" min="1" max="12"/>
+        </div>
+        <div id="datesPanel" style="display: none">
+          <div class="filter">
+            <label for="dateBegin" class="col-sm-5">Début</label>
+            <input type="date" name="dateBegin" id="dateBegin" class="col-sm-6"/>
+          </div>
+          <div class="filter">
+            <label for="dateEnd" class="col-sm-5">Fin</label>
+            <input type="date" name="dateEnd" id="dateEnd" class="col-sm-6"/>
+          </div>
+        </div>
+        <div class="filter" id="maxPanel">
+          <label for="max" class="col-sm-5">Maximum</label>
+          <input class="col-sm-6" type="number" name="max" id="max" value="0" min="0" max="150"/>
+        </div>
+        <select id="stations" style="display: none;"></select>
+      </div>
+      <div class="panel-heading choice">
+        <span>Radar</span>
+        <label class="switch">
+          <input id="graph" type="checkbox"/>
+          <span class="slider round"/>
+        </label>
+        <span>Ligne</span>
+      </div>
+      <select name="colorChoice" id="colorChoice" size="1">
+        <option value="1" selected="selected">Jaune -> rouge</option>
+        <option value="5">Rose -> Rouge</option>
+        <option value="9">Jaune -> vert claire</option>
+
+        <option value="3">Bleu claire -> Bleu foncé</option>
+        <option value="7">Bleu claire -> Vert claire</option>
+        <option value="11">Rose -> Bleu</option>
+
+        <option value="2">Vert claire -> Vert foncé</option>
+        <option value="6">Bleu -> Noir</option>
+        <option value="10">Rouge -> Noir</option>
+
+        <option value="0">Nuances de rose claire</option>
+        <option value="4">Nuances de jaune claire</option>
+        <option value="8">Nuances de bleu claire</option>
+      </select>
+      <button type="button" id="invertColors">Inverser les couleurs</button>
+      <button id="resetFilters" class="btn btn-warning">Réinitialiser les filtres</button>
+    </div>
+    <div class="alert alert-warning col-md-12" id="notifications"></div>
+    <script nomodule>
+      console.log("Pas de module")
+    </script>
+    <script type='module'>
+      import Factory from './classes/Factory.js';
+
+      var canvas = document.getElementById('multiradar').getContext('2d');
+
+      var argsChart = {
+        year:2007,
+        month: 1,
+        begin: "2013-01-01",
+        end: "2013-01-08",
+        canvas:canvas,
+        station: 0,
+        type: 0,
+        state: []
+      };
+
+      var chart = new Factory('radar', argsChart).chart.generateChart();
+
+      showErrors(chart);
+      getStations(chart);
+      getMax(chart);
+
+      $("#month").bind("change paste keyup", function() {
+        clearChart(canvas, chart);
+        chart.setMonth(this.value);
+        showErrors(chart);
+      });
+      $("#year").bind("change paste keyup", function() {
+        clearChart(canvas, chart);
+        chart.setYear(this.value);
+        showErrors(chart);
+      });
+
+      $("#max").bind("change paste keyup", function() {
+        clearChart(canvas, chart);
+        chart.setFilterMax(this.value);
+        showErrors(chart);
+      });
+      $("#dateBegin").bind("change paste keyup", function() {
+        clearChart(canvas, chart);
+        chart.setBegin(this.value);
+        showErrors(chart);
+      });
+      $("#dateEnd").bind("change paste keyup", function() {
+        clearChart(canvas, chart);
+        chart.setEnd(this.value);
+        showErrors(chart);
+      });
+
+      $("#type").bind("change", function() {
+        clearChart(canvas, chart);
+        chart.setType(this.value);
+        $("#yearPanel").hide();
+        $("#stations").hide();
+        $("#monthPanel").hide();
+        $("#datesPanel").hide();
+        if (this.value == 1) {
+          $("#stations").show();
+        } else if (this.value == 0) {
+          $("#yearPanel").show();
+        } else if (this.value == 2) {
+          $("#stations").show();
+          $("#yearPanel").show();
+        } else if (this.value == 3) {
+          $("#yearPanel").show();
+          $("#monthPanel").show();
+        } else {
+          $("#datesPanel").show();
+          $("#stations").show();
+          $("#dateBegin").val(chart.getDateForHTML(chart.begin));
+          $("#dateEnd").val(chart.getDateForHTML(chart.end));
+        }
+        chart.redraw();
+        showErrors(chart);
+        getMax(chart);
+      });
+
+      $("#stations").change(function() {
+        clearChart(canvas, chart);
+        chart.setStation($("#stations").find(":selected").val());
+        showErrors(chart);
+      });
+
+      $("#graph").change(function() {
+        clearChart(canvas, chart);
+        argsChart = {
+          canvas: canvas,
+          year: $("#year").val(),
+          month: $("#month").val(),
+          begin: $("#dateBegin").val(),
+          end: $("#dateEnd").val(),
+          station: $("#stations").find(":selected").val(),
+          type: $("#type").find(":selected").val(),
+          state: chart.state
+        };
+        if (this.checked){
+          chart = new Factory('line', argsChart).chart.generateChart();
+
+        }else{
+          chart = new Factory('radar', argsChart).chart.generateChart();
+        }
+        getMax(chart);
+      });
+      $("#resetFilters").click(function() {
+        clearChart(canvas, chart);
+        chart.resetFilters();
+        getMax(chart);
+        $("#year").val(chart.year);
+        $("#month").val(chart.month+1);
+        $("#stations").val(chart.station);
+      });
+      $("#colorChoice").change(function(){
+        clearChart(canvas, chart);
+        chart.changeColor();
+      });
+      $("#invertColors").click(function(){
+        clearChart(canvas, chart);
+        chart.invertColor();
+      });
+
+    </script>
+  </body>
+</html>

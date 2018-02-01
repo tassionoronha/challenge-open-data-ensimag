@@ -17,18 +17,32 @@ class MultiGraph extends Graphique {
     this.labels = [];
     this.max = null;
     this.filterMax = null;
+    this.begin = moment(args.begin, this.htmlFormat);
+    this.end = moment(args.end, this.htmlFormat);
   }
 
+  generateGraphStationDay(){
+    this.labels = super.getHourlyLabels();
+    let values = this.dataReader.getStationByDates(this.station, this.begin, this.end);
+    let length = this.end.diff(this.begin, 'days');
+    let colors = super.getColorScale(length, 1);
+    console.log(colors)
+    for (var i = 0; i < length; ++i) {
+      let color = super.getRGBColor(colors[i]);
+      let serieName = this.begin.clone().add(i, 'days').format(this.dataFormat);
+      this.datasets[i] = this.createDataset(serieName,values[i],color,0);
+    }
+  }
   generateGraphDays(){
     this.labels = super.getDailyLabels();
     this.datasets = [];
 
-    let labels = this.getMonthLabels();
+    let serieLabels = this.getMonthLabels();
     let colors = super.getColorScale(12, 1);
     let values = this.dataReader.getMonthsByYearAndStation(this.year, this.station);
     for (var i = 0; i < 12; i++) {
       let color = super.getRGBColor(colors[i]);
-      this.datasets[i] = this.createDataset(labels[i],values[i],color,0);
+      this.datasets[i] = this.createDataset(serieLabels[i],values[i],color,0);
     }
   }
   generateGraphStationsDays(){
@@ -131,8 +145,9 @@ class MultiGraph extends Graphique {
       this.generateGraphDays();
       break;
     case 3:
-    default:
       this.generateGraphStationsDays();
+    default:
+      this.generateGraphStationDay();
     }
     this.max = this.dataReader.getMax();
     this.chart = new Chart(this.objHTML, {
@@ -196,6 +211,23 @@ class MultiGraph extends Graphique {
     this.generateChart();
     return this;
   }
+  setBegin(date){
+    this.begin = moment(date, this.htmlFormat);
+    if (this.begin.isSameOrAfter(this.end)) {
+      this.end = this.begin.add('days', 7);
+    }
+    return this;
+  }
+  setEnd(date){
+    this.end = moment(date, this.htmlFormat);
+    if (this.end.isSameOrBefore(this.begin)) {
+      this.begin = this.end.subtract('days', 7);
+    }
+    return this.generate();
+  }
+  changeColor(){
+    return this.generate();
+  }
   redraw(){
     this.generateChart();
     return this;
@@ -239,6 +271,25 @@ class MultiGraph extends Graphique {
       borderColor: "rgb(" + color + ")",
       backgroundColor: "rgba(" + color + "," + opacity + ")",
     };
+  }
+  getDateForHTML(date){
+    return date.format(this.htmlFormat);
+  }
+  generate(){
+    var generate = true;
+    if (this.end.diff(this.begin, 'days') > 63) {
+      if (!confirm("Voulez-vous afficher " + this.end.diff(this.begin, 'days') + " courbes ?")) {
+        generate = false;
+      }
+    }
+    if(generate) {
+      this.generateChart();
+    }
+  }
+  invertColor(){
+    this.color.inverseColor();
+    this.generateChart();
+    return this;
   }
 
 }
