@@ -5,7 +5,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment-with-locales.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/graph.css">
     <script type="text/javascript" src="js/base.js"></script>
     <script type="text/javascript" src="js/colors.js"></script>
     <script type="text/javascript" src="js/base.js"></script>
@@ -112,6 +112,8 @@
           type: 0,
           state: []
         };
+        $("#dateBegin").val(argsChart.begin);
+        $("#dateEnd").val(argsChart.end);
 
         var chart = new Factory('radar', argsChart, dataLoader).chart.generateChart();
 
@@ -165,8 +167,6 @@
           } else {
             $("#datesPanel").show();
             $("#stations").show();
-            $("#dateBegin").val(chart.getDateForHTML(chart.begin));
-            $("#dateEnd").val(chart.getDateForHTML(chart.end));
           }
           chart.redraw();
           showErrors(chart);
