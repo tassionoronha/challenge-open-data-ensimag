@@ -6,6 +6,28 @@ class DataReader {
     this.maxValue = -1;
     this.datas = dataLoader;
   }
+  getStationByDates(station, begin, end) {
+    this.maxValue = this.datas.getHourMaxValue();
+    let res = [];
+    var currentDay = 0;
+    let currentDate = begin.clone();
+    while(!currentDate.isSame(end)) {
+      let values = [];
+      for(let i = 0; i < 24; ++i) {
+        let date = currentDate.format("DD/MM/YYYY H:mm");
+        let val = this.datas.hourData[station].data[date];
+        if(val == "-"){
+          let fault = {name: currentDate.format("DD/MM/YYYY"), index: currentDay};
+          this._addFault(fault);
+        }
+        values[values.length] = val;
+        currentDate.add(1, 'hours');
+      }
+      res[currentDay] = values;
+      ++currentDay;
+    }
+    return res;
+  }
   getStationsByYearAndMonth(year, month, monthLength){
     this.maxValue = this.datas.getDayMaxValue();
     let res = [];

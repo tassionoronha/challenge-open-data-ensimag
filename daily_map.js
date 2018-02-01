@@ -85,7 +85,7 @@ document.getElementById("date").onchange = function(e) {
     console.log("beurk");
   }
 }
-document.getElementById("date").value = "2017-01-01"
+document.getElementById("date").value = "2007-01-01"
 
 function loadJSON(path, callback) {
   var xhr = new XMLHttpRequest();

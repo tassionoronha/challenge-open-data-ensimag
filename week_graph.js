@@ -4,7 +4,7 @@ var dateFinSelected = "2017-12-31";
 var datas;
 var showLegende = true;
 var chart;
-var isColorInverse = false;
+var color = new Color();
 
 window.onload = initData;
 
@@ -67,7 +67,7 @@ function changeLegende() {
 }
 
 function inverseColor() {
-	isColorInverse = !isColorInverse;
+	color.isColorInverse = !color.isColorInverse;
 	runGraph();
 }
 
@@ -149,7 +149,7 @@ function draw_linear_week_graph() {
 
 	console.log(tab)
 
-	colors = echelleTeintes(nbTour);
+	colors = color.echelleTeintes(nbTour);
 	colors[colors.length] = "#000000";
 
 	chart = c3.generate({
@@ -272,7 +272,7 @@ function draw_scatter_plot_week_graph() {
 
 	console.log(tab);
 	
-	colors = echelleTeintes(nbTour);
+	colors = color.echelleTeintes(nbTour);
 	colors[colors.length] = "#000000";
 
 	// draw chart
@@ -329,86 +329,4 @@ function getDateFromFrenchFormat(myDate) {
 function getDateFromUniversalFormat(myDate) {
 	// Format : YYYY-mm-dd
 	return new Date(myDate.split("-")[0], myDate.split("-")[1]-1, myDate.split("-")[2]);
-}
-
-function echelleTeintes(nbElem) {
-	var avancement = 255/nbElem;
-	var colorTab = [];
-
-	for (var i = 0; i < nbElem; i++) {
-		if (isColorInverse) {
-			myColor = (i+1)*avancement;
-		}else{
-			myColor = 255-(i+1)*avancement;
-		}
-
-		if (myColor<0) {
-			myColor = 0;
-		}
-
-		var colorPicked = parseInt(document.getElementById("colorChoice").value);
-
-		switch(colorPicked){
-			case 0:
-				// Nuances de rose claire
-				colorTab[i] = "#" + "FF" + componentToHex(Math.floor(myColor)) + "FF";
-				break;
-			case 1:
-				// Jaune au rouge
-				colorTab[i] = "#" + "FF" + componentToHex(Math.floor(myColor)) + "00";
-				break;
-			case 2:
-				// Vert claire à vert foncé
-				colorTab[i] = "#" + "00" + componentToHex(Math.floor(myColor)) + "00";
-				break;
-			case 3:
-				// Bleu claire à bleu foncé
-				colorTab[i] = "#" + "00" + componentToHex(Math.floor(myColor)) + "FF";
-				break;
-
-			case 4:
-				// Nuances de jaune claire
-				colorTab[i] = "#" + "FF" + "FF" + componentToHex(Math.floor(myColor));
-				break;
-			case 5:
-				// rose à rouge
-				colorTab[i] = "#" + "FF" + "00" + componentToHex(Math.floor(myColor));
-				break;
-			case 6:
-				// Bleu à noir
-				colorTab[i] = "#" + "00" + "00" + componentToHex(Math.floor(myColor));
-				break;
-			case 7:
-				// Bleu claire à Vert claire
-				colorTab[i] = "#" + "00" + "FF" + componentToHex(Math.floor(myColor));
-				break;
-
-			case 8:
-				// Nuances de bleu claire
-				colorTab[i] = "#" + componentToHex(Math.floor(myColor)) + "FF" + "FF";
-				break;
-			case 9:
-				// Jaune à vert claire
-				colorTab[i] = "#" + componentToHex(Math.floor(myColor)) + "FF" + "00";
-				break;
-			case 10:
-				// Rouge à noir
-				colorTab[i] = "#" + componentToHex(Math.floor(myColor)) + "00" + "00";
-				break;
-			case 11:
-				// Rose à bleu claire
-				colorTab[i] = "#" + componentToHex(Math.floor(myColor)) + "00" + "FF";
-				break;
-			default:
-				colorTab[i] = "#" + "FF" + componentToHex(Math.floor(myColor)) + "FF";
-		}
-
-	}
-
-	return colorTab;
-}
-
-function componentToHex(c) {
-	var hex = c.toString(16);
-	return hex.length == 1 ? "0" + hex : hex;
 }
