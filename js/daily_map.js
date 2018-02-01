@@ -5,7 +5,7 @@ $(function () {
     "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment-with-locales.min.js"
   ], [
     "stations.json",
-    "dailyDatas2007.json"
+    "datas/dailyDatas2007.json"
   ], function (err, jsons) {
     if (err) {
       // TODO error on page
