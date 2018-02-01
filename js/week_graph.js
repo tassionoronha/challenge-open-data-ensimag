@@ -178,8 +178,6 @@ $(function () {
 
     tab[nbTour+1] = arrayMeanValues;
 
-    console.log(tab)
-
     colors = color.echelleTeintes(nbTour);
     colors[colors.length] = "#000000";
 
@@ -300,8 +298,6 @@ $(function () {
 
     tab[nbTour*2] = arrayMeanValuesX;
     tab[nbTour*2+1] = arrayMeanValues;
-
-    console.log(tab);
 
     colors = color.echelleTeintes(nbTour);
     colors[colors.length] = "#000000";

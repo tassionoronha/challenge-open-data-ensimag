@@ -50,6 +50,7 @@
 
     <div class="subdiv">
       <h2>Visualisation des données</h2>
+      <hr/>
       <h3>Affichage des données par périodes</h3>
       <p>
         Le principe de l'affichage des données par période est de pouvoir déterminer s'il y a une certaine rythmicité dans la pollution de l'air. On peut, par exemple, se demander si le fait d'être en week-end n'entraînerait pas une diminution de la pollution de l'air. En effet, de nombreuses personnes sont en repos le week-end et n'ont donc pas à prendre la voiture pour aller travailler.
@@ -66,19 +67,46 @@
         <br/><br/>
         Pour finir, une spline (ligne arrondit) représentant la moyenne des données est toujours affichée. C'est cette ligne moyenne qui nous permettra véritablement de faire ressortir une tendance.
       </p>
+      <hr/>
       <h3>Timelapse de la pollution sur la carte de Grenoble</h3>
       <p>
         Cette page affiche une carte de Grenoble avec, en sur-impression, les données de la pollution. Plus la zone est polluée, plus la zone sera rouge et opaque. À l'inverse, moins la zone est polluée, plus elle sera verte et translucide.
         <br/><br/>
         Il est possible de voir l'évolution temporelle de la pollution à Grenoble en cliquant sur "Play". Cela a pour effet de lancer le timelapse. On peut l'arrêter à tout moment en cliquant sur "Stop" avant de le remettre en route. On peut également indique la date que l'on veut observer. Si l'on clique ensuite sur "Play", le timelapse reprendra depuis cette date. 
       </p>
-      <h3 style="color: red;">A COMPLETER !!!</h3>
+      <hr/>
+      <h3>Lignes et radars</h3>
+      <p>
+        Pour un certain nombre de nos graphiques, il est possible de choisir entre l'affichage en ligne ou en radar. Nous vous conseillons de naviguer de l'un à l'autre pour visualiser au mieux les informations.
+        <br/><br/>
+        Pour chaque graphique, il est possible de rentrer un "Maximum". Celui-ci règle la hauteur de l'échelle du graphique.
+      </p>
+      <h4>Années par stations</h4>
+      <p>
+        Affiche plusieurs stations pour une année au choix. 
+      </p>
+      <h4>Stations par années</h4>
+      <p>
+        Affiche toutes les années pour une station au choix. 
+      </p>
+      <h4>Stations par mois</h4>
+      <p>
+        Affiche tous les mois pour une année et une station au choix.
+      </p>
+      <h4>Mois par stations</h4>
+      <p>
+        Affiche toutes les stations pour une année et un mois au choix.
+      </p>
+      <h4>Station par jours</h4>
+      <p>
+        Pour un interval donnée et une station au choix, affiche toutes les données horaire de ladite station.
+      </p>
     </div>
 
     <div class="subdiv">
       <h2>Architecture</h2>
       <p style="text-align:center">
-        <img src="img/arquitecture.png"</img>
+        <img src="img/arquitecture.png"/>
       </p>
       <p>
         Notre architecture se découpe en trois rôles basiques. Cela permet de maximiser l'organisation du code et de faciliter une croissance future avec l'ajout de nouveaux graphiques et le traitement d'autres types de données.
@@ -126,5 +154,6 @@
         <br/><br/>
         Grâce à l'affichage de Stations par jours, on s'aperçoit que, dans une journée, la pollution commence à monter aux environs de 6~7h, peut grandement varier au cours de la journée mais redescend toujours le soir, la plupart du temps à partir de 19h.
       </p>
+    </div>
   </div>
 </div>

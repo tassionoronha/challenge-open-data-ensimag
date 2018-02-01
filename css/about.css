@@ -5,6 +5,9 @@ h1{
 .maindiv{
 	background-color: #898989;
 	text-align: justify;
+	max-width: 1300px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .subdiv{
@@ -14,4 +17,9 @@ h1{
 	padding-left: 1em;
 	padding-top: 0.3em;
 	padding-bottom: 0.3em;
+}
+
+hr{
+	height: 0.5em;
+	background-color: #555;
 }
