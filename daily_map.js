@@ -17,75 +17,87 @@ loadJSON("stations.json", function(err, json) {
   stationsData = json;
 });
 
-var dailyDatasMaxValue = 0.0;
-var dailyDatasMinValue = Infinity;
-var dailyDatasLength = dailyDatas.length;
-for (var stationIdx = 0; stationIdx < dailyDatasLength; stationIdx++) {
-  var values = Object.values(dailyDatas[stationIdx]["data"]);
-  var valuesLength = values.length;
-  for (var i = 0; i < valuesLength; i++) {
-    if (values[i] !== "-") {
-      if (values[i] > dailyDatasMaxValue) {
-        dailyDatasMaxValue = values[i];
-      }
-      if (values[i] < dailyDatasMinValue) {
-        dailyDatasMinValue = values[i];
+
+let file = "./datas/dailyDatas2007.json";
+loadJSON(file, function(err, json){
+  if (err) {
+    console.log("Failed to load: " + file);
+    return;
+  }
+  dailyDatas = json;
+
+  var dailyDatasMaxValue = 0.0;
+  var dailyDatasMinValue = Infinity;
+  var dailyDatasLength = dailyDatas.length;
+  for (var stationIdx = 0; stationIdx < dailyDatasLength; stationIdx++) {
+    var values = Object.values(dailyDatas[stationIdx]["data"]);
+    var valuesLength = values.length;
+    for (var i = 0; i < valuesLength; i++) {
+      if (values[i] !== "-") {
+        if (values[i] > dailyDatasMaxValue) {
+          dailyDatasMaxValue = values[i];
+        }
+        if (values[i] < dailyDatasMinValue) {
+          dailyDatasMinValue = values[i];
+        }
       }
     }
   }
-}
 
-console.log("Min: " + dailyDatasMinValue);
-console.log("Max: " + dailyDatasMaxValue);
+  console.log("Min: " + dailyDatasMinValue);
+  console.log("Max: " + dailyDatasMaxValue);
 
-var heat = L.heatLayer([], {
-  radius: 70,
-  blur: 70,
-  maxZoom: 10,
-  max: 1.0,
+  var heat = L.heatLayer([], {
+    radius: 70,
+    blur: 70,
+    maxZoom: 10,
+    max: 1.0,
 
-  gradient: {
-    0.0: 'green',
-    0.5: 'yellow',
-    1.0: 'red'
-  }
-}).addTo(mymap);
-
-document.getElementById("date").onchange = function(e) {
-  var currentDate = new Date(e.target.value);
-  heat.setLatLngs([]);
-  if (currentDate instanceof Date && !isNaN(currentDate)) {
-    console.log(currentDate);
-    var latLng = [];
-    for (var stationIdx = 0; stationIdx < dailyDatasLength; stationIdx++) {
-      var name = dailyDatas[stationIdx]["Station"];
-      var values = dailyDatas[stationIdx]["data"];
-      var data = stationNameToCoord(name);
-      if (data === null) {
-        console.error("Unknown station");
-        return;
-      }
-      var strDate = currentDate.getDate().toString().padStart(2, "0") + "/"
-        + (currentDate.getMonth() + 1).toString().padStart(2, "0") + "/"
-        + currentDate.getFullYear();
-      console.log("date: " + strDate);
-      var currentLevel = values[strDate];
-      if (!currentLevel || currentLevel === "-") {
-        console.warn("unknown value (ignoring)");
-        continue;
-      }
-      var ratioLevel = (currentLevel - dailyDatasMinValue)/(dailyDatasMaxValue - dailyDatasMinValue);
-      console.warn("known value " + currentLevel + " " + ratioLevel);
-      // TODO dailyDatasMinValue
-      data.push(ratioLevel);
-      latLng.push(data);
+    gradient: {
+      0.0: 'green',
+      0.5: 'yellow',
+      1.0: 'red'
     }
-    heat.setLatLngs(latLng);
-  } else {
-    console.log("beurk");
+  }).addTo(mymap);
+
+  document.getElementById("date").onchange = function(e) {
+    var currentDate = new Date(e.target.value);
+    heat.setLatLngs([]);
+    if (currentDate instanceof Date && !isNaN(currentDate)) {
+      console.log(currentDate);
+      var latLng = [];
+      for (var stationIdx = 0; stationIdx < dailyDatasLength; stationIdx++) {
+        var name = dailyDatas[stationIdx]["Station"];
+        var values = dailyDatas[stationIdx]["data"];
+        var data = stationNameToCoord(name);
+        if (data === null) {
+          console.error("Unknown station");
+          return;
+        }
+        var strDate = currentDate.getDate().toString().padStart(2, "0") + "/"
+          + (currentDate.getMonth() + 1).toString().padStart(2, "0") + "/"
+          + currentDate.getFullYear();
+        console.log("date: " + strDate);
+        var currentLevel = values[strDate];
+        if (!currentLevel || currentLevel === "-") {
+          console.warn("unknown value (ignoring)");
+          continue;
+        }
+        var ratioLevel = (currentLevel - dailyDatasMinValue)/(dailyDatasMaxValue - dailyDatasMinValue);
+        console.warn("known value " + currentLevel + " " + ratioLevel);
+        // TODO dailyDatasMinValue
+        data.push(ratioLevel);
+        latLng.push(data);
+      }
+      heat.setLatLngs(latLng);
+    } else {
+      console.log("beurk");
+    }
   }
-}
-document.getElementById("date").value = "2007-01-01"
+  document.getElementById("date").value = "2007-01-01"
+
+});
+
 
 function loadJSON(path, callback) {
   var xhr = new XMLHttpRequest();
