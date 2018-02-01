@@ -135,6 +135,8 @@ loadAll([
     console.log("Failed to load: " + files);
     return;
   }
+  Chart.defaults.global.defaultFontColor = "rgba(255, 255, 255, 0.5)"
+  Chart.defaults.global.defaultColor = "rgba(255, 255, 255, 0.5)";
   moment.locale('fr');
   drawChart(json);
 });
