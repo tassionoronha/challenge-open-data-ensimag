@@ -97,7 +97,7 @@
   import DataLoader from './js/classes/DataLoader.js';
   moment.locale('fr');
 
-  describe('Tests of Factory', function() {
+  describe('Tests of Polluition Grenoble', function() {
 
     var dataLoader = new DataLoader(1,2,3);
     var canvas = document.getElementById('multiradar').getContext('2d');
@@ -164,7 +164,21 @@
           testObj.chart.resetFilters();
           expect(testObj.chart.station).equal(0);
         });
-
+        it('redraw', function() {
+          var testObj = preChart.chart;
+          var testObj2 = testObj;
+          testObj.redraw();
+          expect(testObj).eql(testObj2);
+        });
+    });
+    describe('DataReader.js', function() {
+      it('addFault', function() {
+        var testObj = preChart.chart;
+        testObj.dataReader._addFault({name:'test', index: 1});
+        testObj.dataReader._addFault({name:'test2', index: 2});
+        testObj.dataReader._addFault({name:'test2', index: 1}); // ignore add 
+        expect(testObj.dataReader.faults).to.have.length(2);
+      });
     });
   });
     mocha.checkLeaks();
