@@ -8,7 +8,7 @@ $(function () {
   var color;
   var dailyDatas = null;
 
-  let file = "./datas/dailyDatas2007.json";
+  var file = "./datas/dailyDatas2007.json";
   loadAll([
     "https://d3js.org/d3.v3.min.js",
     "https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.18/c3.min.js",
@@ -149,7 +149,7 @@ $(function () {
 
     var debutPeriode = decalage;
     var nbTour = 0;
-    let periods = [];
+    var periods = [];
     while(debutPeriode<keysJour.length && getDateFromFrenchFormat(keysJour[debutPeriode]) <= dateFin) {
       nbTour++;
 
@@ -212,7 +212,7 @@ $(function () {
             if (id=="moyenne") {
               return "moyenne";
             }
-            let idx = periods.indexOf(id);
+            var idx = periods.indexOf(id);
             return idx + " - " + keysJour[(decalage+idx*dureePeriode+index) - dureePeriode];
           }
         }
@@ -259,7 +259,7 @@ $(function () {
 
     var debutPeriode = decalage;
     var nbTour = 0;
-    let periods = [];
+    var periods = [];
 
     while(debutPeriode<keysJour.length && getDateFromFrenchFormat(keysJour[debutPeriode]) <= dateFin) {
       nbTour++;
@@ -336,7 +336,7 @@ $(function () {
             if (id=="moyenne") {
               return "moyenne";
             }
-            let idx = periods.indexOf(id);
+            var idx = periods.indexOf(id);
             return idx + " - " + keysJour[(decalage+idx*dureePeriode+index) - dureePeriode];
           }
         }
