@@ -46,10 +46,10 @@ function loadJSON(paths, callback) {
       dataType: "json"
     });
   });
-  $.when(...promises).then(function () {
+  $.when(...promises).then(function (res) {
     var datas = Array.prototype.map.call(arguments, x => x[0]);
     if (!isArray) {
-      datas= datas[0];
+      datas = res;
     }
     callback(null, datas);
   }, function (err) {
