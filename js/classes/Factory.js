@@ -24,7 +24,7 @@ class Factory{
         return false;
       }
     } else if (args.type == 1) {
-      if (args.station < 0 || args.station >= Object.values(monthlyDatas).length){
+      if (args.station < 0 || args.station >= 6){
         throw "Bad station!";
         return false;
       }

@@ -97,7 +97,8 @@ class MultiGraph extends Graphique {
       legend: {
         position: 'bottom',
         labels: {
-          boxWidth: 40
+          boxWidth: 40,
+          fontColor: "rgba(255,255,255,0.8)"
         }
       },
       elements: {
@@ -110,10 +111,22 @@ class MultiGraph extends Graphique {
     switch (type) {
         case 'line':
           options.scales = {
+            xAxes:[{
+              gridLines: {
+                color: "rgba(255,255,255, 0.7)"
+              },
+              ticks: {
+                  fontColor: "rgba(255,255,255,0.8)"
+              },
+            }],
             yAxes:[{
               ticks: {
                   beginAtZero: true,
-                  suggestedMax: this.filterMax || this.max
+                  suggestedMax: this.filterMax || this.max,
+                  fontColor: "rgba(255,255,255,0.8)"
+              },
+              gridLines: {
+                color: "rgba(255,255,255, 0.7)"
               }
             }]
           };
@@ -122,7 +135,15 @@ class MultiGraph extends Graphique {
           options.scale = {
               ticks: {
                   beginAtZero: true,
-                  suggestedMax: this.filterMax || this.max
+                  suggestedMax: this.filterMax || this.max,
+                  fontColor: "rgba(255,255,255,1)",
+                  backdropColor: "rgba(155,155,155,0.7)"
+              },
+              gridLines: {
+                color: "rgba(255,255,255, 0.7)"
+              },
+              angleLines: {
+                color: "rgba(255, 255, 255, 0.7)"
               }
           };
           break;

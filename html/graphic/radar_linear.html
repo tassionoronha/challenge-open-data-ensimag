@@ -1,12 +1,9 @@
-<div>
+<div class="d-flex flex-row h-100">
   <link rel="stylesheet" href="css/graph.css"/>
-  <div class="page-header">
-    <h1>Pollution à Grenoble</h1>
-  </div>
   <div id="charts" class="col-md-10">
     <canvas id="multiradar"></canvas>
   </div>
-  <div id="filters" class="col-md-2 panel panel-info">
+  <div id="filters" class="col-md-2 panel panel-default">
     <div class="panel-heading">
       <select id="type">
         <option value="0">Année par stations</option>
@@ -67,7 +64,7 @@
       <option value="8">Nuances de bleu claire</option>
     </select>
     <div id="colors">
-      <button type="button" id="invertColors">Inverser les couleurs</button>
+      <button type="button" id="invertColors" class="btn btn-secondary">Inverser les couleurs</button>
       <button id="resetFilters" class="btn btn-warning">Réinitialiser les filtres</button>
     </div>
   </div>

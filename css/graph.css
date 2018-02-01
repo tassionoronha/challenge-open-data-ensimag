@@ -9,16 +9,6 @@
   }
 }
 
-@media (max-width: 990px) {
-  .page-header {
-    padding-bottom: 4px;
-  }
-  .page-header h1 {
-    font-size: 1.7em;
-    margin: 5px 0 0 0;
-  }
-}
-
 #filters.panel {
   padding: 0;
   border-radius: 0;
@@ -41,12 +31,15 @@
   padding: 5px;
 }
 
+#filters {
+  font-size: 0.9em;
+}
+
 #filters #colors button,
 #filters input,
 #filters button,
 #filters select {
   margin: 3px;
-  color: black;
 }
 
 #filters .filter label {
