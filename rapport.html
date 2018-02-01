@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<title>Challenge Open Datas</title>
+</head>
+<body>
+	<h1>Pollution de l'air à Grenoble</h1>
+	<h2>Avant-propos</h2>
+	<p>
+		Afin de pouvoir utiliser la bibliothèque chart.js et permettre d'afficher certaines de nos graphiques, veuliez suivre les étapes suivantes:<br/>
+		- Rendez-vous à la page <a href="about:config">about:config</a> de votre navigateur Firefox.<br/>
+		- Cliquez sur "Je prends le risque".<br/>
+		- Dans la barre de recherche, tapez "modules".<br/>
+		- Trouvez la ligne "dom.moduleScripts.enabled".<br/>
+		- Double-cliquez dessus afin que la booleén prenne la valeur "true".<br/><br/>
+		Tous nos graphiques devraient désormais s'afficher correctement.
+	</p>
+
+	<h2>Démarche</h2>
+	<p>
+		Grenoble est une ville entourée de montagne. De part cette particularité géographique, l'air de cette ville connait souvent de forts piques de pollution. En effet, la pollution, notamment aux particules fînes PM10, est prise au piège et n'est pas disperessé par le vent.<br/>
+		Ainsi, la pollution de l'air à Grenoble est un enjeux de santé important et nous avons voulue en savoir plus à ce sujet.
+	</p>
+
+	<h2>Sources des données</h2>
+	<p>
+		Toutes nos données son tirés de <a href="http://www.atmo-auvergnerhonealpes.fr/donnees/telecharger">http://www.atmo-auvergnerhonealpes.fr/donnees/telecharger</a>.<br/>
+		Atmo est un site contenant des données publiques sur la pollution de l'air en Auvergne-Rhône-Alpes. Il y est possible d'y visualiser sur une carte la qualité de l'air en temps réel ainsi d'en voir une synthèse annuel. En outre, les données récoltés par Atmo son disponibles au téléchargement.
+		<br/><br/>
+		Sur ce site, nous traitons les données concernant la pollution au particules fînes PM10 à Grenoble entre le 1er janvier 2007 et le 31 décembre 2017.
+	</p>
+
+	<h2>Traitements opérées</h2>
+	<p>
+		Les données que nous récupérions étaient au format CSV. Afin de faciliter leur exploitation, nous avons commencé par les convertire en json à l'aide d'un convertisseur en ligne.
+		<br/><br/>
+		Les données que nous récupérions étaient déjà classifié en fonction de la station qui avant enregistré ses données. Cependant, elle s'étallaient sur une grande période de temps. Avant de pouvoir réellement les exploiter, il nous faller donc les "découper" en période plus petites. Nous affichons ensuite soit une seule période (Année par station), soit plusieurs période simultanément (affichage en période).
+		<br/><br/>
+		Afin de tirer le maximum des données que nous avions récupérés, nous avons également effectué des calcules de moyennes sur celles-ci. Ainsi, pour l'affichage en période, la moyenne pour chaque jour dans une période était calculé puis affiché. Par exemple, pour une période de 7 jours, cela nous donnait la moyenne pour tous les lundi dans l'interval puis tous les mardi, etc...
+		<br/><br/>
+		Afin de réaliser notre carte, nous avons également du placer géographiquement nos données.
+	</p>
+
+	<h2>Visualisation des données</h2>
+	<h3>Affichage des données par périodes</h3>
+	<p>
+		Le principe de l'affichage des données par période est de pouvoir déterminer si il y a une certaine rythmicité dans la pollution de l'air. On peut, par exemple, se demander si le fait d'être en week-end n'entrainerait pas une diminusion de la pollution de l'air. En effet, de nombreuses personnes sont en repos le week-end et n'ont donc pas à prendre la voiture pour aller travailler.
+		<br/><br/>
+		On pourrait également se demander si les saisons et le climat qui va avec n'auraient pas à un lien avec la pollution de l'air.
+		<br/><br/>
+		Les données sont affichés sur un tableau à deux dimensions :<br/>
+		L'axe des abscisses indique à quelle jour dans la période le point appartient.<br/>
+		L'axe des ordonnées nous informes sur le niveau de pollution en microgrammes par mètres cubes d'air (microg/m3). <br/>
+		Enfin, la couleur du point nous indique à quelle période celui-ci appartient. En outre, nous avons utilisé une échelle de teinte pour coloriser les périodes. Ainsi, plus la période est loin dans le passé, plus elle sera de couleur claire. Il est toutefois possible d'inverser l'échelle de teinte<br/>
+		Afin de rendre notre site accessible aux daltoniens, nous avons fait en sorte de pouvoir choisir l'échelle de teinte que l'on souhaite utilise.
+		<br/><br/>
+		Afin de pouvoir visualiser au mieux les données, de nombreuses options sont disponibles. Ainsi, il est possible d'avoir, au choix, un affichage en nuage de point ou en spline en cliquant sur le bouton "Changer l'affichage". La durée d'une période est configurable ainsi que la plage de données que l'on souhaite utiliser. De plus, il est possible de choisir la station pour laquelle nous observerons les données. Il est également possible de masquer la légende pour gagner de la place sur le graphique.
+		<br/><br/>
+		Pour finir, une spline (ligne arrondit) représentant la moyenne des données est toujours affichée. C'est cette ligne moyenne qui nous permettra véritablement de faire ressortir une tendance.
+	</p>
+
+	<h3>A COMPLETER !!!</h3>
+	<h2>Architecture</h2>
+	<p style="text-align:center">
+		<img src="images/arquitecture.png"</img>
+	</p>
+	<p>
+		L'arquitecture se coupe entre trois roles basiques pour maximizer l'organisation du code et faciliter une croissance future, pour plus types de graphics ou types de données.
+		<ul>
+			<li>Dans la première partie(Views), nous avons les fichiers responsables pour l'affichage des résultats et le control des objets du DOM. Sont présents dans ces fichiers, les fonctions responsables pour
+			demander au Factory.js le graphic avec les paramèteres d'utilisateurs. Le fichier Functions.js, fournir une enssemble de petites fonctions pour aider le fichier index.html às controler le flux entre les responsables de Factory.js
+			et rafraîchit l'écran avec les nouvelles.</li>
+			<li>La couche Graphic Manager est responsable en fait pour la gestion des requêtes à venir de la couche précédent, maintenir les états, demander les données pour le responsable avec l'intelligence d'états et les règles
+				de chaque type de graphic et assurez-vous que les règles d'application vont marcher bien. La couche Views, n'access pas les classes de Graphics directement, avant de ça, une Factory sera le responsable pour la création des objets dans
+				cette couche. Avec ça, nous avons un code prêt pour recevoir d'autres types de spécification pour graphics sans créer une dependence fonctionnelle avec les classes anciennes. Pour fin dans cette partie, le classe Graphique.js est responsable pour contenir
+				quelques petites fonctions pour aider la construction du graphic.</li>
+			<li>Le dernier couche de notre application est par fin responsable pour appliquer les règles d'édition nécessaires à chaque type de donnée importées par l'application, faire les conversions nécessesaires et devenir disponibles ces données sur une structure simple
+				pour le Graphic Manager travailler sans problèmes de traitements.
+			</li>
+		</ul>
+	</p>
+	<h2>Choix des technologies</h2>
+	<p>
+		Pour réaliser l'affichage en périodes, nous avons utilisé la librairie <a href="http://c3js.org/">C3</a> qui, elle même, se base sur <a href="https://d3js.org/">D3</a>.
+		<br/><br/>
+		Pour tous les autres affichages, notamment les radars, nous avons utilisé la librairie <a href="http://www.chartjs.org/">Chart.js</a>.
+	</p>
+	<h2>Résultats observés</h2>
+	<p>
+		Grâce à l'affichage des données par périodes, nous nous sommes rendus compte que la pollutions baissait le week-end et, plus particulièrement, le dimanche. Si vous souhaitez observer ce phénomène au mieux, nous vous conseillons de commencer par masquer la légende puis de choisir une période de 28 jours pour un interval de données allant du 1er janvier 2007 au 31 décembre 2017. Enfin, cliquez sur "Changer l'intervale".
+		<br/><br/>
+		Sur le même affichage des données par période, il vous est proposé séléctionner la station. En changeant l'affichage d'une station à l'autre, on s'apperçoit que la variation dû au week-end est plus importante à certains endroits de Grenoble qu'à d'autres. Ainsi, la pollution à "Fontaine les Balmes", qui est une zone principalement résidentielle, varie moins le week-end que celle à "Grenoble Rocade sud".
+		<br/><br/>
+		Grâce à divers affichages, notemment celui en périodes, nous avons également pu remarquer que Grenoble est moins pollué en été qu'en hiver avec des variations beaucoup moins grande. Cela pourrait, en partie, s'expliquer par le fait qu'il y a moins d'habitants à Grenoble en été qu'en hiver.
+		<br/><br/>
+		En observant les données récoltés sur 10 ans, nous avons également pu nous rendre compte que la pollution en PM10 était plus importe il y a 10 ans que maintenant. Cela pourrait être dû au fait que les voitures modernes émettent moins de ce type de particules. En tous cas, il s'agit là d'un signe encourageans.
+		<br/><br/>
+		Lorsque l'on visualise les données par mois par stations ainsi que sur la carte, on peut s'appercevoir que certains endroit de Grenoble sont systématiquement plus pollués que d'autres. Ainsi, le centre de Grenoble à tendance à être plus pollué que sa périphérie. La seule exception correspond à "Grenoble Rocade sud" qui peut s'expliquer par le fait que, de part le trafic, les rocades et autoroutes sont plus pollués que les zones urbaines.
+		<b>A COMPLETER !!!</b>
+	</p>
+</body>
+</html>

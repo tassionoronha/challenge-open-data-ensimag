@@ -12,7 +12,7 @@
 	<script type="text/javascript" src="dailyDatas2007.json"></script>
 </head>
 <body>
-	<h1>Affiche semaines</h1>
+	<h1>Affichage en périodes</h1>
 	<button id="switchButton" type="button" onclick="changePlot()" currentPlot="1">Changer l'affichage</button>
 	<br/>
 	<br/>
@@ -22,7 +22,26 @@
 	<input type="date" name="dateFin" id="dateFin">
 	<input type="number" name="dureePeriode" id="dureePeriode" min="2">
 	<button type="button" onclick="changeDates()">Changer l'intervale</button>
+	<br/><br/>
+	<select name="colorChoice" id="colorChoice" onchange="changeColor()" size="1">
+		<option value="1" selected="selected">Jaune -> rouge</option>
+		<option value="5">Rose -> Rouge</option>
+		<option value="9">Jaune -> vert claire</option>
 
+		<option value="3">Bleu claire -> Bleu foncé</option>
+		<option value="7">Bleu claire -> Vert claire</option>
+		<option value="11">Rose -> Bleu</option>
+
+		<option value="2">Vert claire -> Vert foncé</option>
+		<option value="6">Bleu -> Noir</option>
+		<option value="10">Rouge -> Noir</option>
+
+		<option value="0">Nuances de rose claire</option>
+		<option value="4">Nuances de jaune claire</option>
+		<option value="8">Nuances de bleu claire</option>
+	</select>
+	<button type="button" onclick="inverseColor()">Inverser les couleurs</button>
+	<br/><br/>
 	<div id="chart"></div>
 	<button id="legendButton" type="button" onclick="changeLegende()" display="true">Masquer la légende</button>
 </body>

@@ -1,207 +1,147 @@
 import Graphique from './Graphique.js';
+import DataReader from './DataReader.js';
 
 class MultiGraph extends Graphique {
   constructor(graph, args){
     super();
+    this.dataReader = new DataReader(dataLoader);
     this.year = args.year;
+    this.month = args.month-1;
     this.graph = graph;
     this.objHTML = args.canvas;
-    this.init = (this.year - this.beginYear) * 12;
-    this.end = this.init + 11;
     this.type = args.type;
-    this.monthData = Object.values(monthlyDatas);
-    this.dayData = Object.values(dailyDatas);
     this.datasets = [];
-    this.state = [];
+    this.state = args.state;
     this.chart = null;
-    this.faults = [];
     this.station = args.station;
     this.labels = [];
+    this.max = null;
+    this.filterMax = null;
   }
 
-  addFault(fault){
-    var exists = false;
-    for (var i = 0; i < this.faults.length; i++) {
-      if(this.faults[i].index == fault.index){ exists = true }
-    }
-    if(!exists && !this.state[fault.index]){this.faults.push(fault)}
-  }
-
-  generateDynamicArrayDays(){
-    this.labels = this.getDailyLabels();
+  generateGraphDays(){
+    this.labels = super.getDailyLabels();
     this.datasets = [];
-    let init = -1;
-    let end = -1;
-    let dates = Object.keys(this.dayData[0].data);
-    for (let i = 0; i < dates.length; ++i) {
-      let date = moment(dates[i], "DD/MM/YYYY");
-      if(init == -1 && date.year() == this.year) {
-        init = i;
-      }
-      if(date.year() == (+this.year)+1) {
-        end = i-1;
-        break;
-      }
-    }
-    if (end == -1) { // we are on the last year of datas
-      end = dates.length;
-    }
 
     let labels = this.getMonthLabels();
     let colors = super.getColorScale(12, 1);
-    let values = [];
-    var currentDay = 0;
-    let currentValues = Object.values(this.dayData[this.station].data);
+    let values = this.dataReader.getMonthsByYearAndStation(this.year, this.station);
     for (var i = 0; i < 12; i++) {
-      let values = [];
-      while(i == moment(dates[init + currentDay], 'DD/MM/YYYY').month()) {
-        ++currentDay;
-        let val = currentValues[init + currentDay];
-        if(val == "-"){
-          let fault = {name: labels[i], index: i};
-          this.addFault(fault);
-        }
-        values[values.length] = val;
-      }
       let color = super.getRGBColor(colors[i]);
-      this.datasets[i] = this.createDataset(labels[i],values,color,0);
+      this.datasets[i] = this.createDataset(labels[i],values[i],color,0);
     }
   }
-  createDataset(label, values, color, opacity) {
-    return {
-      label: label,
-      data: values,
-      borderColor: "rgb(" + color + ")",
-      backgroundColor: "rgba(" + color + "," + opacity + ")",
-    };
+  generateGraphStationsDays(){
+    this.labels = super.getDailyLabelsForMonth(this.year, this.month);
+    this.datasets = [];
+    let stations = this.dataReader.getStations();
+    let colors = super.getColorScale(stations.length, 1);
+    let values = this.dataReader.getStationsByYearAndMonth(this.year, this.month, this.labels.length);
+    for (let j = 0; j < stations.length; ++j) {
+      let color = super.getRGBColor(colors[j]);
+      this.datasets[j] = this.createDataset(stations[j],values[j],color,0);
+    }
   }
-  generateDynamicArrayMonth(){
+  generateGraphMonth(){
     this.labels = this.getMonthLabels();
     this.datasets = [];
-    let colors = super.getColorScale(this.monthData.length, 1);
-    for (let j = 0; j < this.monthData.length; ++j) {
-      let values = [];
-      let currentValues = Object.values(this.monthData[j].data);
-      for (var i = this.init; i <= this.end; i++) {
-        if(currentValues[i] == "-"){
-          let fault = {name: this.monthData[j].Station, index: j};
-          this.addFault(fault);
-        }
-        values[values.length] = currentValues[i];
-      }
+    let stations = this.dataReader.getStations();
+    let values = this.dataReader.getStationsByYear(this.year);
+    let colors = super.getColorScale(stations.length, 1);
+    for (let j = 0; j < stations.length; ++j) {
       let color = super.getRGBColor(colors[j]);
-      this.datasets[j] = this.createDataset(this.monthData[j].Station,values,color,0.1);
+      this.datasets[j] = this.createDataset(stations[j],values[j],color,0.1);
     }
   }
 
-  generateDynamicArrayStation(){
+  generateGraphStation(){
     this.labels = this.getMonthLabels();
     this.datasets = [];
-    let colors = super.getColorScale(this.endYear-this.beginYear, 1);
-    for (let j = 0; j < this.endYear-this.beginYear; ++j) {
-      let values = [];
-      let currentValues = Object.values(this.monthData[this.station].data);
-      for (var i = j*12; i <= (j+1)*12-1; ++i) {
-        if(currentValues[i] == "-"){
-          let fault = {name: this.beginYear+j, index: j};
-          this.addFault(fault);
-        }
-        values[values.length] = currentValues[i];
-      }
+    let duration = this.dataReader.getDuration();
+    let colors = super.getColorScale(duration, 1);
+    let values = this.dataReader.getYearsByStation(this.station);
+    for (let j = 0; j < duration; ++j) {
       let color = super.getRGBColor(colors[j]);
-      this.datasets[j] = this.createDataset(this.beginYear+j,values,color,0);
+      this.datasets[j] = this.createDataset(this.dataReader.beginYear+j,values[j],color,0);
     }
-  }
-
-  getFaults(){
-    return this.faults;
-  }
-
-  setType(type){
-    this.type = type;
-    this.state = [];
-  }
-  setStation(station){
-    this.station = station;
-    this.generateChart();
-    return this;
-  }
-
-  setYear(year){
-    this.year = year;
-    this.init = (this.year - this.beginYear) * 12;
-    this.end = this.init + 11;
-    this.generateChart();
-    return this;
-  }
-  redraw(){
-    this.generateChart();
-    return this;
   }
 
   destroyChart(){
     this.state = [];
-    if (this.type == 1) {
-      let max;
-      if (this.type == 0)
-        max = this.chart.data.datasets.length;
-      else
-        max = this.endYear - this.beginYear;
-      for (let i = 0; i < max; ++i) {
-        this.state[i] = this.chart.getDatasetMeta(i).hidden;
-      }
+    let max = this.chart.data.datasets.length;
+    for (let i = 0; i < max; ++i) {
+      this.state[i] = this.chart.getDatasetMeta(i).hidden;
     }
     this.chart.destroy();
-    this.faults = [];
+    this.dataReader.cleanFaults();
     this.datasets = [];
     return this;
   }
 
-  getMonthLabels(){
-    return ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  }
-
-  getDailyLabels(){
-    let labels = [];
-    for (let i = 1; i < 32; ++i) {
-      labels[i-1] = i;
+  getOptions(type){
+    var options = {
+      maintainAspectRatio: false,
+      legend: {
+        position: 'bottom',
+        labels: {
+          boxWidth: 40
+        }
+      },
+      elements: {
+        line: {
+          tension: 0
+        }
+      }
     }
-    return labels;
+
+    switch (type) {
+        case 'line':
+          options.scales = {
+            yAxes:[{
+              ticks: {
+                  beginAtZero: true,
+                  suggestedMax: this.filterMax || this.max
+              }
+            }]
+          };
+          break;
+        case 'radar':
+          options.scale = {
+              ticks: {
+                  beginAtZero: true,
+                  suggestedMax: this.filterMax || this.max
+              }
+          };
+          break;
+        default:
+          throw "Bad type!";
+    }
+    return options;
   }
 
   generateChart(){
-    if (this.type == 0) {
-      this.generateDynamicArrayMonth();
-    } else if (this.type == 1) {
-      this.generateDynamicArrayStation();
-    } else {
-      this.generateDynamicArrayDays();
+    switch(+this.type){
+    case 0:
+      this.generateGraphMonth();
+      break;
+    case 1:
+      this.generateGraphStation();
+      break;
+    case 2:
+      this.generateGraphDays();
+      break;
+    case 3:
+    default:
+      this.generateGraphStationsDays();
     }
+    this.max = this.dataReader.getMax();
     this.chart = new Chart(this.objHTML, {
       type: this.graph,
       data: {
         labels: this.labels,
-        datasets: this.datasets
+        datasets: this.filterPointsMax(this.datasets, this.filterMax)
       },
-      options: {
-        maintainAspectRatio: false,
-        scale: {
-          ticks: {
-              beginAtZero: true
-          }
-        },
-        legend: {
-          position: 'bottom',
-          labels: {
-            boxWidth: 40
-          }
-        },
-        elements: {
-          line: {
-            tension: 0
-          }
-        }
-      }
+      options: this.getOptions(this.graph)
     });
     if (this.state.length > 0) {
       for(let i = 0; i < this.state.length; ++i) {
@@ -212,6 +152,95 @@ class MultiGraph extends Graphique {
 
     return this;
   }
+  getFaults(){
+    let faults = this.dataReader.getFaults();
+    for(let i = 0; i < faults.length; ++i) {
+      if(this.state[faults[i].index])
+        faults.splice(i, 1);
+    }
+    return faults;
+  }
+  resetFilters(){
+    this.year = this.dataReader.beginYear;
+    this.month = 0;
+    this.station = 0;
+    this.filterMax = this.max;
+    this.state = [];
+    this.generateChart();
+    return this;
+  }
+  setType(type){
+    this.max = this.filterMax;
+    this.type = type;
+    this.state = [];
+  }
+  setStation(station){
+    this.station = station;
+    this.generateChart();
+    return this;
+  }
+
+  setFilterMax(filterMax){
+    this.filterMax = filterMax;
+    this.generateChart();
+    return this;
+  }
+
+  setMonth(month){
+    this.month = month-1;
+    this.generateChart();
+    return this;
+  }
+  setYear(year){
+    this.year = year;
+    this.generateChart();
+    return this;
+  }
+  redraw(){
+    this.generateChart();
+    return this;
+  }
+
+  filterPointsMax(array, max){
+    if(max != null){
+      for (var i = 0; i < array.length; i++) {
+        array[i].data = array[i].data.filter(n => n < max || n == '-');
+      }
+    }
+    return array;
+  }
+
+  getMax(){
+    return this.max;
+  }
+  //Return the biggest number of array
+  maxValue(array){
+    var data = [];
+    for (var i = 0; i < array.length; i++) {
+      let values = Object.values(array[i].data).filter(n => n != "-");
+      data = data.concat(values);
+    }
+
+    return Math.max.apply(null, data);
+  }
+
+  addFault(fault){
+    var exists = false;
+    for (var i = 0; i < this.faults.length; i++) {
+      if(this.faults[i].index == fault.index){ exists = true }
+    }
+    if(!exists && !this.state[fault.index]){this.faults.push(fault)}
+  }
+
+  createDataset(label, values, color, opacity) {
+    return {
+      label: label,
+      data: values,
+      borderColor: "rgb(" + color + ")",
+      backgroundColor: "rgba(" + color + "," + opacity + ")",
+    };
+  }
+
 }
 
 export default MultiGraph;

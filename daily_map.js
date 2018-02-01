@@ -51,7 +51,6 @@ var heat = L.heatLayer([], {
   }
 }).addTo(mymap);
 
-
 document.getElementById("date").onchange = function(e) {
   var currentDate = new Date(e.target.value);
   heat.setLatLngs([]);
@@ -112,3 +111,33 @@ function stationNameToCoord(name) {
   }
   return null;
 }
+class Player{
+  constructor(){
+    this.stopped = true;
+    this.current = 0;
+    this.htmlFormat = "YYYY-MM-DD";
+    this.dataFormat = "DD/MM/YYYY";
+  }
+  stop() {
+    this.stopped = true;
+  }
+  async play() {
+    this.stopped = false;
+    let dates = Object.keys(dailyDatas[0].data);
+    let ev = new Event("change");
+    let input = document.getElementById("date");
+    let selected = moment(input.value, this.htmlFormat).format(this.dataFormat);
+    for (this.current = dates.indexOf(selected); this.current < dates.length; ++this.current) {
+      let value = moment(dates[this.current], this.dataFormat);
+      input.value = value.format(this.htmlFormat);
+      input.dispatchEvent(ev);
+      if (this.stopped) break;
+      await this._sleep(400);
+    }
+  }
+  _sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+}
+
+let player = new Player();

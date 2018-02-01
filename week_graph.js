@@ -1,14 +1,10 @@
-/* TODO :
-- faire un décalage du scatter plot pour que le 0 et la légende ne fussionnent pas
-- Tracer mean pour line graph
-- Faire bouton d'inversion des couleurs du graph
-*/
-var dureePeriode = 7;
-var dateDebutSelected = "2017-01-01";
+var dureePeriode = 28;
+var dateDebutSelected = "2015-01-01";
 var dateFinSelected = "2017-12-31";
 var datas;
 var showLegende = true;
 var chart;
+var isColorInverse = false;
 
 window.onload = initData;
 
@@ -16,8 +12,6 @@ function initData() {
 	document.getElementById("dateDebut").value = dateDebutSelected;
 	document.getElementById("dateFin").value = dateFinSelected;
 	document.getElementById("dureePeriode").value = dureePeriode;
-
-	console.log(dailyDatas);
 
 	var stationSelector = document.getElementById("station");
 
@@ -29,8 +23,7 @@ function initData() {
 	}
 
 	datas = dailyDatas[0].data;
-	draw_linear_week_graph();
-	//draw_scatter_plot_week_graph();
+	runGraph();
 }
 
 function changePlot() {
@@ -73,12 +66,21 @@ function changeLegende() {
 	}
 }
 
+function inverseColor() {
+	isColorInverse = !isColorInverse;
+	runGraph();
+}
+
+function changeColor() {
+	runGraph();
+}
+
 function runGraph() {
 	var myButton = document.getElementById("switchButton");
 	if (myButton.getAttribute("currentPlot")=="1") {
-		draw_linear_week_graph();
-	}else{
 		draw_scatter_plot_week_graph();
+	}else{
+		draw_linear_week_graph();
 	}
 }
 
@@ -103,6 +105,17 @@ function draw_linear_week_graph() {
 		decalage++;
 	}
 
+	// init tab mean
+	var arrayMeanValues = [];
+	var arrayNbDataMean = [];
+	arrayMeanValues[0] = "moyenne";
+
+	// init mean
+	for (var i = 1; i <= dureePeriode; i++) {
+		arrayMeanValues[i] = 0;
+		arrayNbDataMean[i-1] = 0;
+	}
+
 	var debutPeriode = decalage;
 	var nbTour = 0;
 	let periods = [];
@@ -114,11 +127,12 @@ function draw_linear_week_graph() {
 		periods[nbTour] = tab[nbTour][0];
 		
 		var possitionDansPeriode = 0;
-		while(possitionDansPeriode < dureePeriode) {
-			if (debutPeriode+possitionDansPeriode<keysJour.length && getDateFromFrenchFormat(keysJour[debutPeriode+possitionDansPeriode]) <= dateFin) {
-				tab[nbTour][possitionDansPeriode+1] = valuesJour[debutPeriode+possitionDansPeriode];
-			}else{
-				tab[nbTour][possitionDansPeriode+1] = '-';
+		while(possitionDansPeriode < dureePeriode && getDateFromFrenchFormat(keysJour[debutPeriode+ possitionDansPeriode]) <= dateFin) {
+			tab[nbTour][possitionDansPeriode+1] = valuesJour[debutPeriode+possitionDansPeriode];
+
+			if (valuesJour[debutPeriode+possitionDansPeriode] != '-' && ! isNaN(valuesJour[debutPeriode+possitionDansPeriode])) {
+				arrayMeanValues[possitionDansPeriode+1] = arrayMeanValues[possitionDansPeriode+1] + valuesJour[debutPeriode+possitionDansPeriode];
+				arrayNbDataMean[possitionDansPeriode] = arrayNbDataMean[possitionDansPeriode]+1;
 			}
 
 			possitionDansPeriode++;
@@ -127,6 +141,17 @@ function draw_linear_week_graph() {
 		debutPeriode = debutPeriode + possitionDansPeriode;
 	}
 
+	for (var i = 1; i < arrayMeanValues.length; i++) {
+		arrayMeanValues[i] = arrayMeanValues[i]/arrayNbDataMean[i-1];
+	}
+
+	tab[nbTour+1] = arrayMeanValues;
+
+	console.log(tab)
+
+	colors = echelleTeintes(nbTour);
+	colors[colors.length] = "#000000";
+
 	chart = c3.generate({
 		data: {
 			x: 'x',
@@ -134,14 +159,32 @@ function draw_linear_week_graph() {
 			type: 'spline'
 		},
 		color: {
-			pattern: echelleTeintes(nbTour)
+			pattern: colors
+		},
+		axis: {
+			x: {
+				label: 'Jour dans la période',
+				//position: 'outer-center',
+				tick: {
+					fit: true
+				}
+			},
+			y: {
+				label: {
+					text: 'Quantité de PM10 en microg/m3',
+					position: 'outer-middle'
+				}
+			}
 		},
 		tooltip: {
 			format: {
 				title: function(d) { return 'Jour ' + d},
 				name: function(value, ratio, id, index) {
+					if (id=="moyenne") {
+						return "moyenne";
+					}
 					let idx = periods.indexOf(id);
-					return idx + " - " + keysJour[decalage+idx*dureePeriode+index];
+					return idx + " - " + keysJour[(decalage+idx*dureePeriode+index) - dureePeriode];
 				}
 			}
 		}
@@ -173,7 +216,6 @@ function draw_scatter_plot_week_graph() {
 	// init all tab
 	var arrayMeanValuesX = [];
 	var arrayMeanValues = [];
-
 	var arrayNbDataMean = [];
 
 	arrayMeanValuesX[0] = "moyenne_x";
@@ -202,14 +244,10 @@ function draw_scatter_plot_week_graph() {
 		periods[nbTour] = arrayJourValues[0];
 		
 		var possitionDansPeriode = 0;
-		while(possitionDansPeriode < dureePeriode) {
+		while(possitionDansPeriode < dureePeriode && getDateFromFrenchFormat(keysJour[debutPeriode+ possitionDansPeriode]) <= dateFin) {
 			arrayJourPeriode[possitionDansPeriode+1] = possitionDansPeriode;
-
-			if (debutPeriode+possitionDansPeriode<keysJour.length && getDateFromFrenchFormat(keysJour[debutPeriode+possitionDansPeriode]) <= dateFin) {
-				arrayJourValues[possitionDansPeriode+1] = valuesJour[debutPeriode+possitionDansPeriode];
-			}else{
-				arrayJourValues[possitionDansPeriode+1] = '-';
-			}
+			arrayJourValues[possitionDansPeriode+1] = valuesJour[debutPeriode+possitionDansPeriode];
+			
 
 			if (valuesJour[debutPeriode+possitionDansPeriode] != '-' && ! isNaN(valuesJour[debutPeriode+possitionDansPeriode])) {
 				arrayMeanValues[possitionDansPeriode+1] = arrayMeanValues[possitionDansPeriode+1] + valuesJour[debutPeriode+possitionDansPeriode];
@@ -236,7 +274,6 @@ function draw_scatter_plot_week_graph() {
 	
 	colors = echelleTeintes(nbTour);
 	colors[colors.length] = "#000000";
-	console.log(colors);
 
 	// draw chart
 	chart = c3.generate({
@@ -253,19 +290,25 @@ function draw_scatter_plot_week_graph() {
 		},
 		axis: {
 			x: {
-				label: 'Jour de la période',
+				label: 'Jour dans la période',
 				tick: {
 					fit: true
 				}
 			},
 			y: {
-				label: 'Quantité de PM10 en microg/m3',
+				label: {
+					text: 'Quantité de PM10 en microg/m3',
+					position: 'outer-middle'
+				}
 			}
 		},
 		tooltip: {
 			format: {
 				title: function(d) { return 'Jour ' + d},
 				name: function(value, ratio, id, index) {
+					if (id=="moyenne") {
+						return "moyenne";
+					}
 					let idx = periods.indexOf(id);
 					return idx + " - " + keysJour[(decalage+idx*dureePeriode+index) - dureePeriode];
 				}
@@ -288,20 +331,78 @@ function getDateFromUniversalFormat(myDate) {
 	return new Date(myDate.split("-")[0], myDate.split("-")[1]-1, myDate.split("-")[2]);
 }
 
-function getDayInWeek(myDate) {
-	// Format : dd/mm/YYYY
-	var d = new Date(myDate.split("/")[2], myDate.split("/")[1]-1, myDate.split("/")[0]);
-	return d.getDay();
-}
-
 function echelleTeintes(nbElem) {
-	var avancement = Math.floor(255/nbElem);
+	var avancement = 255/nbElem;
 	var colorTab = [];
 
 	for (var i = 0; i < nbElem; i++) {
-		colorTab[i] = "#" + "FF" + componentToHex(255-(i+1)*avancement) + "00";
-		//colorTab[i] = "#" + "FF" + componentToHex(i*avancement) + "00";
-		//colorTab[i] = "#" + "00" + componentToHex(i*avancement) + "FF";
+		if (isColorInverse) {
+			myColor = (i+1)*avancement;
+		}else{
+			myColor = 255-(i+1)*avancement;
+		}
+
+		if (myColor<0) {
+			myColor = 0;
+		}
+
+		var colorPicked = parseInt(document.getElementById("colorChoice").value);
+
+		switch(colorPicked){
+			case 0:
+				// Nuances de rose claire
+				colorTab[i] = "#" + "FF" + componentToHex(Math.floor(myColor)) + "FF";
+				break;
+			case 1:
+				// Jaune au rouge
+				colorTab[i] = "#" + "FF" + componentToHex(Math.floor(myColor)) + "00";
+				break;
+			case 2:
+				// Vert claire à vert foncé
+				colorTab[i] = "#" + "00" + componentToHex(Math.floor(myColor)) + "00";
+				break;
+			case 3:
+				// Bleu claire à bleu foncé
+				colorTab[i] = "#" + "00" + componentToHex(Math.floor(myColor)) + "FF";
+				break;
+
+			case 4:
+				// Nuances de jaune claire
+				colorTab[i] = "#" + "FF" + "FF" + componentToHex(Math.floor(myColor));
+				break;
+			case 5:
+				// rose à rouge
+				colorTab[i] = "#" + "FF" + "00" + componentToHex(Math.floor(myColor));
+				break;
+			case 6:
+				// Bleu à noir
+				colorTab[i] = "#" + "00" + "00" + componentToHex(Math.floor(myColor));
+				break;
+			case 7:
+				// Bleu claire à Vert claire
+				colorTab[i] = "#" + "00" + "FF" + componentToHex(Math.floor(myColor));
+				break;
+
+			case 8:
+				// Nuances de bleu claire
+				colorTab[i] = "#" + componentToHex(Math.floor(myColor)) + "FF" + "FF";
+				break;
+			case 9:
+				// Jaune à vert claire
+				colorTab[i] = "#" + componentToHex(Math.floor(myColor)) + "FF" + "00";
+				break;
+			case 10:
+				// Rouge à noir
+				colorTab[i] = "#" + componentToHex(Math.floor(myColor)) + "00" + "00";
+				break;
+			case 11:
+				// Rose à bleu claire
+				colorTab[i] = "#" + componentToHex(Math.floor(myColor)) + "00" + "FF";
+				break;
+			default:
+				colorTab[i] = "#" + "FF" + componentToHex(Math.floor(myColor)) + "FF";
+		}
+
 	}
 
 	return colorTab;
