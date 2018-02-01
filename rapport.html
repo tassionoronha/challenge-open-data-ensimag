@@ -66,17 +66,22 @@
 		<img src="images/arquitecture.png"</img>
 	</p>
 	<p>
-		L'arquitecture se coupe entre trois roles basiques pour maximizer l'organisation du code et faciliter une croissance future, pour plus types de graphics ou types de données.
+		Notre architecture se découpe en trois rôles basiques. Cela permet de maximiser l'organisation du code et de faciliter une croissance future avec l'ajout de nouveaux graphiques et le traitement d'autres types de données.
 		<ul>
-			<li>Dans la première partie(Views), nous avons les fichiers responsables pour l'affichage des résultats et le control des objets du DOM. Sont présents dans ces fichiers, les fonctions responsables pour
-			demander au Factory.js le graphic avec les paramèteres d'utilisateurs. Le fichier Functions.js, fournir une enssemble de petites fonctions pour aider le fichier index.html às controler le flux entre les responsables de Factory.js
-			et rafraîchit l'écran avec les nouvelles.</li>
-			<li>La couche Graphic Manager est responsable en fait pour la gestion des requêtes à venir de la couche précédent, maintenir les états, demander les données pour le responsable avec l'intelligence d'états et les règles
-				de chaque type de graphic et assurez-vous que les règles d'application vont marcher bien. La couche Views, n'access pas les classes de Graphics directement, avant de ça, une Factory sera le responsable pour la création des objets dans
-				cette couche. Avec ça, nous avons un code prêt pour recevoir d'autres types de spécification pour graphics sans créer une dependence fonctionnelle avec les classes anciennes. Pour fin dans cette partie, le classe Graphique.js est responsable pour contenir
-				quelques petites fonctions pour aider la construction du graphic.</li>
-			<li>Le dernier couche de notre application est par fin responsable pour appliquer les règles d'édition nécessaires à chaque type de donnée importées par l'application, faire les conversions nécessesaires et devenir disponibles ces données sur une structure simple
-				pour le Graphic Manager travailler sans problèmes de traitements.
+			<li>
+				Dans la première partie (Views), nous avons les fichiers responsables de l'affichage des résultats et du contrôle des objets du DOM. Sont présents dans ces fichiers les fonctions responsables de demander au Factory.js le graphique avec les paramètres d'utilisation. Le fichier Functions.js fourni un ensemble de petites fonctions pour aider le fichier index.html à contrôler le flux fourni par Factory.js. Fonctions.js rafraîchit également l'écran avec les données.
+				<br/><br/>
+			</li>
+			<li>
+				La couche Graphic Manager est responsable de la gestion des requêtes venant de la couche Views. Elle maintient également les états, demande les données au Data Manager, demande les règles fournis par l'utilisateur et s'assure que lesdites règles sont valides.
+				<br/><br/>
+				La couche Views, n'accède pas directement aux classes graphiques. Elle envoie ses requêtes à la Factory qui, elle, gère les objets graphiques. Avec ça, nous avons un code prêt à recevoir d'autres types de spécifications graphiques sans créer de dépendances fonctionnelles avec les anciennes classes. 
+				<br/><br/>
+				Enfin, la classe Graphique.js contient des fonctions permettant d'aider la construction de la figure finale.
+				<br/><br/>
+			</li>
+			<li>
+				Pour finir, la dernière couche de notre application est responsable d'appliquer les règles d'édition nécessaires à chaque type de données importées par l'application. Elle les convertit également et les rend disponibles pour le Graphic Manager.
 			</li>
 		</ul>
 	</p>
