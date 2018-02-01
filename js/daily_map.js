@@ -1,5 +1,12 @@
 $(function () {
-  loadJSON(["stations.json", "dailyDatas2007.json"], function (err, jsons) {
+  loadAll([
+    "https://unpkg.com/leaflet@1.3.1/dist/leaflet.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment-with-locales.min.js"
+  ], [
+    "stations.json",
+    "dailyDatas2007.json"
+  ], function (err, jsons) {
     if (err) {
       // TODO error on page
       console.error(err);
@@ -19,7 +26,7 @@ $(function () {
       id: 'mapbox.streets'
     }).addTo(mymap);
 
-    /*var heatLayer = L.heatLayer([], {
+    var heatLayer = L.heatLayer([], {
       radius: 70,
       blur: 70,
       maxZoom: 10,
@@ -31,6 +38,10 @@ $(function () {
         1.0: 'red'
       }
     }).addTo(mymap);
+
+    let player = new Player();
+
+    player.setDates(Object.keys(dataJson[0].data));
 
     $("#date").on('change', function () {
       var date = new Date(this.value);
@@ -49,13 +60,21 @@ $(function () {
         var val = x["data"][formatDate(date)];
         if (!val || val === "-") {
           // TODO error on page
-          console.warn("unknown level for " x["Station"] + " on " + formatDate(date));
+          console.warn("unknown level for " + x["Station"] + " on " + formatDate(date));
           return;
         }
-        return coord.concat(val);
+        return coord.concat(scaleInInterval(interval, val));
       }).filter(x => x !== undefined);
       heatLayer.setLatLngs(latLngVals);
-    });*/
+    });
+
+    $("#play_player").on("click", function () {
+      player.play();
+    });
+
+    $("#stop_player").on("click", function () {
+      player.stop();
+    });
 
   });
 
@@ -77,25 +96,28 @@ $(function () {
     }
     return [v[0]["latitude"], v[0]["longitude"]];
   }
+  function scaleInInterval(interval, value) {
+    return (value - interval[0])/(interval[1] - interval[0]);
+  }
 
-  /*class Player{
+  class Player{
     constructor(){
       this.stopped = true;
       this.current = 0;
       this.htmlFormat = "YYYY-MM-DD";
       this.dataFormat = "DD/MM/YYYY";
+      this.dates = [];
     }
     stop() {
       this.stopped = true;
     }
     async play() {
       this.stopped = false;
-      let dates = Object.keys(dailyDatas[0].data);
       let ev = new Event("change");
       let input = document.getElementById("date");
       let selected = moment(input.value, this.htmlFormat).format(this.dataFormat);
-      for (this.current = dates.indexOf(selected); this.current < dates.length; ++this.current) {
-        let value = moment(dates[this.current], this.dataFormat);
+      for (this.current = this.dates.indexOf(selected); this.current < this.dates.length; ++this.current) {
+        let value = moment(this.dates[this.current], this.dataFormat);
         input.value = value.format(this.htmlFormat);
         input.dispatchEvent(ev);
         if (this.stopped) break;
@@ -105,8 +127,9 @@ $(function () {
     _sleep(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
     }
+    setDates(dates) {
+      this.stopped = true;
+      this.dates = dates;
+    }
   }
-
-  let player = new Player();
-*/
 });
