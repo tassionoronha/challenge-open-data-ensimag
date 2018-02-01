@@ -54,8 +54,23 @@
 
 	<h3>A COMPLETER !!!</h3>
 	<h2>Architecture</h2>
+	<p style="text-align:center">
+		<img src="images/arquitecture.png"</img>
+	</p>
 	<p>
-		TODO
+		L'arquitecture se coupe entre trois roles basiques pour maximizer l'organisation du code et faciliter une croissance future, pour plus types de graphics ou types de données.
+		<ul>
+			<li>Dans la premiere partie(Views), nous avons les fichiers responsables pour l'affichage des resultats et le control des objects du DOM. Sont presents dans ces fichiers, eles fonctions responsables pour
+			demander au Factory.js le graphic avec les parameteres d'utilisateur. Le fichier Functions.js, fournir une enssemble de petites fonctions pour aider le fichier index.html a controler le flux entre les responsables de Factory.js
+			etrafraîchit l'écran avec les nouvelles.</li>
+			<li>La couche Graphic Manager est responsable en fait pour la gestion des requetes à venir de la couche précédent, maintenir les états, demander les données pour le responsable avec l'inteligence d'états et les regles
+				de chaque type de graphic et assurez-vous que les regles d'application vont marcher bien. La couche Views, n'access pas les classes de Graphics directment, avant de ça, une Factory sera le reponsable pour la creation des objects dans
+				ce couche. Avec ça, nous avons un code prêt pour recevoir d'autres types de specification pour graphics sans créer une dependence fonctionnel avec les classes anciens. Pour fin dans ce partie, le classe Graphique.js est responsable pour contenir
+				quelques petites fonctions pour aider la construction du graphic.</li>
+			<li>Le dérnier couche de notre application est par fin reponsable pour appliquer les regles d'edition necessaires à chaque type de données importes par l'application, faire les conversions necessesaires et devenir disponibles ces données sur une structure simple
+				pour le Graphic Manager travailler sans problemes de traitements.
+			</li>
+		</ul>
 	</p>
 	<h2>Choix des technologies</h2>
 	<p>
@@ -69,7 +84,7 @@
 		<br/><br/>
 		Grâce à divers affichages, notemment celui en périodes, nous avons également pu remarquer que Grenoble est moins pollué en été qu'en hiver avec des variations beaucoup moins grande. Cela pourrait, en partie, s'expliquer par le fait qu'il y a moins d'habitants à Grenoble en été qu'en hiver.
 		<br/><br/>
-		En observant les données récoltés sur 10 ans, nous avons également pu nous rendre compte que la pollution en PM10 était plus importe il y a 10 ans que maintenant. Cela pourrait être dû au fait que les voitures modernes émettent moins de ce type de particules. En tous cas, il s'agit là d'un signe encourageans. 
+		En observant les données récoltés sur 10 ans, nous avons également pu nous rendre compte que la pollution en PM10 était plus importe il y a 10 ans que maintenant. Cela pourrait être dû au fait que les voitures modernes émettent moins de ce type de particules. En tous cas, il s'agit là d'un signe encourageans.
 		<br/><br/>
 		A COMPLETER !!!
 	</p>
