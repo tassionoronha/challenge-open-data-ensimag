@@ -6,22 +6,30 @@
   <div class="maindiv">
     <div class="subdiv">
       <h2>Avant-propos</h2>
-      <p>
-        Afin de pouvoir utiliser la bibliothèque chart.js et permettre d'afficher certains de nos graphiques, veulliez suivre les étapes suivantes:<br/>
-        - Rendez-vous à la page <a href="about:config">about:config</a> de votre navigateur Firefox.<br/>
-        - Cliquez sur "Je prends le risque".<br/>
-        - Dans la barre de recherche, tapez "modules".<br/>
-        - Trouvez la ligne "dom.moduleScripts.enabled".<br/>
-        - Double-cliquez dessus afin que le booleén prenne la valeur "true".<br/><br/>
-        - Pour faire les tests, installez npm et executez "npm install && npm test"
-        Tous nos graphiques devraient désormais s'afficher correctement.
-      </p>
+        <p>Afin de pouvoir utiliser les modules Javascript et permettre d'afficher certains de nos graphiques, veuillez suivre les étapes suivantes:</p>
+        <h3>Firefox</h3>
+        <ul>
+          <li>Rendez-vous à la page <a href="about:config">about:config</a> de votre navigateur Firefox.</li>
+          <li>Cliquez sur "Je prends le risque".</li>
+          <li>Dans la barre de recherche, tapez "modules".</li>
+          <li>Trouvez la ligne "dom.moduleScripts.enabled".</li>
+          <li>Double-cliquez dessus afin que le booleén prenne la valeur "true".</li>
+        </ul>
+        <h3>Chrome</h3>
+        <p>Pour des questions de sécurité, chrome peut bloquer les requetes en protocole 'file://' donc il y a 2 solutions :</p>
+        <ul>
+          <li>Installez un mini serveur (npm install http-server && hs)</li>
+          <li>Lancez chrome en désactivant une option de sécurité (chrome --disable-web-security)</li>
+        </ul>
+        <p>Pour faire les tests, installez npm et executez "npm install && npm test"
     </div>
 
     <div class="subdiv">
       <h2>Démarche</h2>
       <p>
-        Grenoble est une ville entourée de montagnes. De par cette particularité géographique, l'air de cette ville connaît souvent de fort piques de pollution. En effet, la pollution, notamment aux particules fines PM10, est prise au piège et n'est pas dispersée par le vent.<br/>
+        Grenoble est une ville entourée de montagnes.
+        De par cette particularité géographique, l'air de cette ville connaît souvent de fort piques de pollution.
+        En effet, la pollution, notamment aux particules fines PM10, est prise au piège et n'est pas dispersée par le vent.<br/>
         Ainsi, la pollution de l'air à Grenoble est un enjeu de santé important et nous avons voulu en savoir plus à ce sujet.
       </p>
     </div>
@@ -30,7 +38,9 @@
       <h2>Sources des données</h2>
       <p>
         Toutes nos données sont tirées de <a href="http://www.atmo-auvergnerhonealpes.fr/donnees/telecharger">http://www.atmo-auvergnerhonealpes.fr/donnees/telecharger</a>.<br/>
-        Atmo est un site contenant des données publiques sur la pollution de l'air en Auvergne-Rhône-Alpes. Il y est possible d'y visualiser sur une carte la qualité de l'air en temps réel ainsi d'en voir une synthèse annuelle. En outre, les données récoltées par Atmo sont disponibles au téléchargement.
+        Atmo est un site diffusant des données publiques sur la pollution de l'air en Auvergne-Rhône-Alpes.
+        Il est possible d'y visualiser sur une carte la qualité de l'air en temps réel et aussi d'en voir une synthèse annuelle.
+        En outre, les données récoltées par Atmo sont disponibles au téléchargement.
         <br/><br/>
         Sur ce site, nous traitons les données concernant la pollution aux particules fines PM10 à Grenoble entre le 1er janvier 2007 et le 31 décembre 2017.
       </p>
@@ -61,31 +71,31 @@
         Les données sont affichées sur un tableau à deux dimensions :<br/>
         L'axe des abscisses nous indique à quel jour dans la période le point appartient.<br/>
         L'axe des ordonnées nous informe sur le niveau de pollution en microgrammes par mètres cubes d'air (microg/m3). <br/>
-        Enfin, la couleur du point nous indique à quelle période celui-ci appartient. 
+        Enfin, la couleur du point nous indique à quelle période celui-ci appartient.
         En outre, nous avons utilisé une échelle de teinte pour coloriser les périodes.
         Ainsi, plus la période est loin dans le passé, plus elle sera de couleur claire. Il est toutefois possible d'inverser l'échelle de teinte<br/>
         Afin de rendre notre site accessible aux daltoniens, nous avons fait en sorte de pouvoir choisir l'échelle de teinte que l'on souhaite utilise.
         <br/><br/>
-        Afin de pouvoir visualiser au mieux les données, de nombreuses options sont disponibles. 
+        Afin de pouvoir visualiser au mieux les données, de nombreuses options sont disponibles.
         Ainsi, il est possible d'avoir, au choix, un affichage en nuage de points ou en spline en cliquant sur le bouton "Changer l'affichage". La durée d'une période est configurable ainsi que la plage de données que l'on souhaite utiliser. De plus, il est possible de choisir la station pour laquelle nous observerons les données. Il est également possible de masquer la légende pour gagner de la place sur le graphique.
         <br/><br/>
-        Pour finir, une spline (ligne arrondit) représentant la moyenne des données est toujours affichée. 
+        Pour finir, une spline (ligne arrondit) représentant la moyenne des données est toujours affichée.
         C'est cette ligne moyenne qui nous permettra véritablement de faire ressortir une tendance.
       </p>
       <hr/>
       <h3>Timelapse de la pollution sur la carte de Grenoble</h3>
       <p>
-        Cette page affiche une carte de Grenoble avec, en sur-impression, les données de la pollution. 
+        Cette page affiche une carte de Grenoble avec, en sur-impression, les données de la pollution.
         Plus la zone est polluée, plus la zone sera rouge et opaque. À l'inverse, moins la zone est polluée, plus elle sera verte et translucide.
         <br/><br/>
-        Il est possible de voir l'évolution temporelle de la pollution à Grenoble en cliquant sur "Play". Cela a pour effet de lancer le timelapse. 
-        On peut l'arrêter à tout moment en cliquant sur "Stop" avant de le remettre en route. 
+        Il est possible de voir l'évolution temporelle de la pollution à Grenoble en cliquant sur "Play". Cela a pour effet de lancer le timelapse.
+        On peut l'arrêter à tout moment en cliquant sur "Stop" avant de le remettre en route.
         On peut également indique la date que l'on veut observer. Si l'on clique ensuite sur "Play", le timelapse reprendra depuis cette date.
       </p>
       <hr/>
       <h3>Lignes et radars</h3>
       <p>
-        Pour un certain nombre de nos graphiques, il est possible de choisir entre l'affichage en ligne ou en radar. 
+        Pour un certain nombre de nos graphiques, il est possible de choisir entre l'affichage en ligne ou en radar.
         Nous vous conseillons de naviguer de l'un à l'autre pour visualiser au mieux les informations.
         <br/><br/>
         Pour chaque graphique, il est possible de rentrer un "Maximum". Celui-ci règle la hauteur de l'échelle du graphique.
@@ -118,33 +128,29 @@
         <img src="img/arquitecture.png"/>
       </p>
       <p>
-        Notre architecture se découpe en trois rôles basiques. 
+        Notre architecture se découpe en trois rôles basiques.
         Cela permet de maximiser l'organisation du code et de faciliter une croissance future avec l'ajout de nouveaux graphiques et le traitement d'autres types de données.
         <ul>
           <li>
-            Dans la première partie (Views), nous avons les fichiers responsables de l'affichage des résultats et du contrôle des objets du DOM. 
-            Sont présents dans ces fichiers les fonctions responsables de demander au Factory.js le graphique avec les paramètres d'utilisation. 
-            Le fichier Functions.js fourni un ensemble de petites fonctions pour aider le fichier index.html à contrôler le flux fourni par Factory.js. 
+            Dans la première partie (Views), nous avons les fichiers responsables de l'affichage des résultats et du contrôle des objets du DOM.
+            Sont présents dans ces fichiers les fonctions responsables de demander au Factory.js le graphique avec les paramètres d'utilisation.
+            Le fichier Functions.js fourni un ensemble de petites fonctions pour aider le fichier index.html à contrôler le flux fourni par Factory.js.
             Fonctions.js rafraîchit également l'écran avec les données.
             <br/><br/>
           </li>
           <li>
-            La couche Graphic Manager est responsable de la gestion des requêtes venant de la couche Views. 
+            La couche Graphic Manager est responsable de la gestion des requêtes venant de la couche Views.
             Elle maintient également les états, demande les données au Data Manager, demande les règles fournis par l'utilisateur et s'assure que lesdites règles sont valides.
             <br/><br/>
-<<<<<<< HEAD
-            La couche Views, n'accède pas directement aux classes graphiques. Elle envoie ses requêtes à la Factory qui, elle, gère les objets graphiques. Avec ça, nous avons un code prêt à recevoir d'autres types de spécifications graphiques sans créer de dépendances fonctionnelles avec les anciennes classes.
-=======
-            La couche Views, n'accède pas directement aux classes graphiques. 
-            Elle envoie ses requêtes à la Factory qui, elle, gère les objets graphiques. 
-            Avec ça, nous avons un code prêt à recevoir d'autres types de spécifications graphiques sans créer de dépendances fonctionnelles avec les anciennes classes. 
->>>>>>> Add some corrections in report
+            La couche Views, n'accède pas directement aux classes graphiques.
+            Elle envoie ses requêtes à la Factory qui, elle, gère les objets graphiques.
+            Avec ça, nous avons un code prêt à recevoir d'autres types de spécifications graphiques sans créer de dépendances fonctionnelles avec les anciennes classes.
             <br/><br/>
             Enfin, la classe Graphique.js contient des fonctions permettant d'aider la construction de la figure finale.
             <br/><br/>
           </li>
           <li>
-            Pour finir, la dernière couche de notre application est responsable d'appliquer les règles d'édition nécessaires à chaque type de données importées par l'application. 
+            Pour finir, la dernière couche de notre application est responsable d'appliquer les règles d'édition nécessaires à chaque type de données importées par l'application.
             Elle les convertit également et les rend disponibles pour le Graphic Manager.
           </li>
         </ul>
@@ -164,30 +170,24 @@
     <div class="subdiv">
       <h2>Résultats observés</h2>
       <p>
-        Grâce à l'affichage des données par périodes, nous nous sommes rendu compte que la pollution baissait le week-end et, plus particulièrement, le dimanche. 
-        Si vous souhaitez observer ce phénomène au mieux, nous vous conseillons de commencer par masquer la légende puis de choisir une période de 28 jours pour un intervalle de données 
+        Grâce à l'affichage des données par périodes, nous nous sommes rendu compte que la pollution baissait le week-end et, plus particulièrement, le dimanche.
+        Si vous souhaitez observer ce phénomène au mieux, nous vous conseillons de commencer par masquer la légende puis de choisir une période de 28 jours pour un intervalle de données
         allant du 1er janvier 2007 au 31 décembre 2017. Enfin, cliquez sur "Changer l'intervalle".
         <br/><br/>
-        Sur le même affichage des données par période, il vous est proposé sélectionner la station. En changeant l'affichage d'une station à l'autre, on s'aperçoit que la 
-        variation due au week-end est plus importante à certains endroits de Grenoble qu'à d'autres. Ainsi, la pollution à "Fontaine les Balmes", qui est une zone principalement 
+        Sur le même affichage des données par période, il vous est proposé sélectionner la station. En changeant l'affichage d'une station à l'autre, on s'aperçoit que la
+        variation due au week-end est plus importante à certains endroits de Grenoble qu'à d'autres. Ainsi, la pollution à "Fontaine les Balmes", qui est une zone principalement
         résidentielle, varie moins le week-end que celle à "Grenoble Rocade sud".
         <br/><br/>
-<<<<<<< HEAD
         Grâce à divers affichages, notamment celui en périodes, nous avons également pu remarquer que Grenoble est, de manière générale, moins pollué en été qu'en hiver avec des variations beaucoup moins grandes. On peut également visualiser ce phénomène en affichant en ligne les années par stations. Ce phénomène pourrait, en partie, s'expliquer par le fait qu'il y a moins d'habitants à Grenoble en été qu'en hiver.
-=======
-        Grâce à divers affichages, notamment celui en périodes, nous avons également pu remarquer que Grenoble est, de manière générale, moins pollué en été qu'en hiver avec des 
-        variations beaucoup moins grandes. On peut également visualiser ce phénomène en affichant en ligne les années par stations. Ce phénomène pourrait, en partie, 
-        s'expliquer par le fait qu'il y a moins d'habitants à Grenoble en été qu'en hiver. 
->>>>>>> Add some corrections in report
         <br/><br/>
-        En observant les données récoltées sur 10 ans, nous avons également pu nous rendre compte que la pollution en PM10 était plus importante il y a 10 ans que maintenant. 
+        En observant les données récoltées sur 10 ans, nous avons également pu nous rendre compte que la pollution en PM10 était plus importante il y a 10 ans que maintenant.
         Cela pourrait être dû au fait que les voitures modernes émettent moins de ce type de particules. En tout cas, il s'agit là d'un signe encourageant.
         <br/><br/>
-        Lorsque l'on visualise les données par mois par stations ainsi que sur la carte, on peut s'apercevoir que certains endroit de Grenoble sont systématiquement plus pollués que d'autres. 
-        Ainsi, le centre de Grenoble a tendance à être plus pollué que sa périphérie. 
+        Lorsque l'on visualise les données par mois par stations ainsi que sur la carte, on peut s'apercevoir que certains endroit de Grenoble sont systématiquement plus pollués que d'autres.
+        Ainsi, le centre de Grenoble a tendance à être plus pollué que sa périphérie.
         La seule exception correspond à "Grenoble Rocade sud" qui peut s'expliquer par le fait que, de par le trafic, les rocades et autoroutes sont plus polluées que les zones urbaines.
         <br/><br/>
-        Grâce à l'affichage de Stations par jours, on s'aperçoit que, dans une journée, la pollution commence à monter aux environs de 6~7h, peut grandement varier au cours 
+        Grâce à l'affichage de Stations par jours, on s'aperçoit que, dans une journée, la pollution commence à monter aux environs de 6~7h, peut grandement varier au cours
         de la journée mais redescend toujours le soir, la plupart du temps à partir de 19h.
       </p>
     </div>
