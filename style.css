@@ -24,6 +24,7 @@
   border-radius: 0;
   margin: 0;
 }
+#filters #colors button,
 #filters select {
   width: 98%;
 }
@@ -40,6 +41,7 @@
   padding: 5px;
 }
 
+#filters #colors button,
 #filters input,
 #filters select {
   margin: 3px;

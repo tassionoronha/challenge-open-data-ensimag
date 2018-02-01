@@ -26,7 +26,6 @@ class MultiGraph extends Graphique {
     let values = this.dataReader.getStationByDates(this.station, this.begin, this.end);
     let length = this.end.diff(this.begin, 'days');
     let colors = super.getColorScale(length, 1);
-    console.log(colors)
     for (var i = 0; i < length; ++i) {
       let color = super.getRGBColor(colors[i]);
       let serieName = this.begin.clone().add(i, 'days').format(this.dataFormat);

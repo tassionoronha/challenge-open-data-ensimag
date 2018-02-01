@@ -1,5 +1,8 @@
 class DataLoader {
-  constructor(){
+  constructor(month, day, hour){
+    this.monthData = month;
+    this.dayData = day;
+    this.hourData = hour;
     this.dayMax = this._findMaxValue(this.dayData);
     this.monthMax = this._findMaxValue(this.monthData);
     this.hourMax = this._findMaxValue(this.dayData);
@@ -13,11 +16,6 @@ class DataLoader {
   getMonthMaxValue(){
     return this.monthMax;
   }
-  _loadFiles(){
-    this.monthData = this_loadJSON("datas/monthlyDatas2007.json");
-    this.dayData = this_loadJSON("datas/dailyDatas2007.json");
-    this.hourData = this_loadJSON("datas/hourlyDatas2013.json");
-  }
   //Return the biggest number of array
   _findMaxValue(array){
     var data = [];
@@ -28,15 +26,6 @@ class DataLoader {
 
     return Math.max.apply(null, data);
   }
-  _loadJSONFile(path){
-    return loadJSON(path, function(err, json){
-      if (err) {
-        console.log("Failed to load: " + path);
-        return;
-      }
-      return json;
-    }
-  };
 }
 
 export default DataLoader;
