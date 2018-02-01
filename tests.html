@@ -6,7 +6,74 @@
 </head>
 <body>
   <div id="mocha"></div>
-  <canvas id="multiradar" hidden></canvas>
+  <div id="filters" class="col-md-2 panel panel-info" hidden>
+    <div class="panel-heading">
+      <select id="type">
+        <option value="0">Année par stations</option>
+        <option value="1">Station par années</option>
+        <option value="2">Station par mois</option>
+        <option value="3">Mois par stations</option>
+        <option value="4">Station par jours</option>
+      </select>
+    </div>
+    <div class="panel-body">
+      <div class="filter" id="yearPanel">
+        <label for="year" class="col-sm-5">Année</label>
+        <input class="col-sm-6" type="number" name="year" id="year" value="2007" min="2007" max="2017"/>
+      </div>
+      <div class="filter" id="monthPanel" style="display: none">
+        <label for="month" class="col-sm-5">Mois</label>
+        <input class="col-sm-6" type="number" name="month" id="month" value="1" min="1" max="12"/>
+      </div>
+      <div id="datesPanel" style="display: none">
+        <div class="filter">
+          <label for="dateBegin" class="col-sm-5">Début</label>
+          <input type="date" name="dateBegin" id="dateBegin" class="col-sm-6"/>
+        </div>
+        <div class="filter">
+          <label for="dateEnd" class="col-sm-5">Fin</label>
+          <input type="date" name="dateEnd" id="dateEnd" class="col-sm-6"/>
+        </div>
+      </div>
+      <div class="filter" id="maxPanel">
+        <label for="max" class="col-sm-5">Maximum</label>
+        <input class="col-sm-6" type="number" name="max" id="max" value="0" min="0" max="150"/>
+      </div>
+      <select id="stations" style="display: none;"></select>
+    </div>
+    <div class="panel-heading choice">
+      <span>Radar</span>
+      <label class="switch">
+        <input id="graph" type="checkbox"/>
+        <span class="slider round"/>
+      </label>
+      <span>Ligne</span>
+    </div>
+    <select name="colorChoice" id="colorChoice">
+      <option value="1" selected="selected">Jaune -> rouge</option>
+      <option value="5">Rose -> Rouge</option>
+      <option value="9">Jaune -> vert claire</option>
+
+      <option value="3">Bleu claire -> Bleu foncé</option>
+      <option value="7">Bleu claire -> Vert claire</option>
+      <option value="11">Rose -> Bleu</option>
+
+      <option value="2">Vert claire -> Vert foncé</option>
+      <option value="6">Bleu -> Noir</option>
+      <option value="10">Rouge -> Noir</option>
+
+      <option value="0">Nuances de rose claire</option>
+      <option value="4">Nuances de jaune claire</option>
+      <option value="8">Nuances de bleu claire</option>
+    </select>
+    <div id="colors">
+      <button type="button" id="invertColors">Inverser les couleurs</button>
+      <button id="resetFilters" class="btn btn-warning">Réinitialiser les filtres</button>
+    </div>
+  </div>
+  <div id="charts" class="col-md-10" hidden>
+    <canvas id="multiradar"></canvas>
+  </div>
 
   <script src="https://cdn.rawgit.com/jquery/jquery/2.1.4/dist/jquery.min.js"></script>
   <script src="https://cdn.rawgit.com/Automattic/expect.js/0.3.1/index.js"></script>
@@ -15,43 +82,52 @@
   <script src="node_modules/expect.js/index.js"></script>
   <script type="text/javascript" src="data.json"></script>
   <script type="text/javascript" src="dataMonth.json"></script>
-  <script type="text/javascript" src="monthlyDatas2007.json"></script>
-  <script type="text/javascript" src="dailyDatas2007.json"></script>
+  <script type="text/javascript" src="datas/monthlyDatas2007.json"></script>
+  <script type="text/javascript" src="datas/dailyDatas2007.json"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment-with-locales.min.js"></script>
-  <script type="text/javascript" src="Functions.js"></script>
-  <script src="./classes/Factory.js" type="module"></script>
+  <script type="text/javascript" src="js/base.js"></script>
+  <script type="text/javascript" src="js/colors.js"></script>
+  <script type="text/javascript" src="js/base.js"></script>
+  <script src="./js/classes/Factory.js" type="module"></script>
+  <script type="text/javascript" src="js/Functions.js"></script>
+  <script src="./js/classes/DataLoader.js" type="module"></script>
   <script>mocha.setup('bdd')</script>
   <script type='module'>
-  import Factory from './classes/Factory.js';
+  import Factory from './js/classes/Factory.js';
+  import DataLoader from './js/classes/DataLoader.js';
+  moment.locale('fr');
 
   describe('Tests of Factory', function() {
+
+    var dataLoader = new DataLoader(1,2,3);
     var canvas = document.getElementById('multiradar').getContext('2d');
 
     var argsChart = {
-      year:2007,
+      year:2010,
       month: 1,
+      begin: "2013-01-01",
+      end: "2013-01-08",
       canvas:canvas,
-      station: 0,
+      station: 2,
       type: 0,
       state: []
     };
 
-    var preChart = new Factory('radar', argsChart);
-    var chart = new Factory('radar', argsChart).chart.generateChart();
+    var preChart = new Factory('radar', argsChart, dataLoader);
+    var chart = new Factory('radar', argsChart, dataLoader).chart.generateChart();
     describe('Factory.js', function() {
-
         var factory = new Factory('radar', argsChart);
         it('Test getChart', function() {
           expect(preChart.getChart()).to.be.a('object');
         });
         it('Check year', function() {
-          expect(chart.year).to.be(2007);
+          expect(chart.year).to.be(2010);
         });
         it('Check dataset', function() {
           expect(chart.datasets).to.be.a('array');
         });
-        it('Check colors', function() {
-          expect(chart.colors).to.have.length(12);
+        it('Check color', function() {
+          expect(chart).to.have.property('color');
         });
         it('Exists dataReader', function() {
           expect(chart.dataReader).to.be.a('object');
@@ -70,14 +146,6 @@
         });
     });
     describe('MultiGraph.js', function() {
-        it('Validate destroyChart', function() {
-          var testObj = chart;
-          testObj = testObj.destroyChart();
-          for (var i = 0; i < 6; i++) {
-            expect(testObj.state[i]).to.be(null);
-          }
-          expect(testObj.dataReader.faults).to.be.empty();
-        });
         it('getOptions', function() {
           var testObj = chart;
           expect(testObj.getOptions('line')).to.be.a('object');
@@ -85,10 +153,20 @@
           expect(testObj.getOptions('radar')).to.be.a('object');
           expect(testObj.getOptions('radar')).to.have.property('scale');
         });
+        it('Generate Chart', function() {
+          var testObj = preChart;
+          expect(testObj.chart.chart).to.be(null);
+          preChart.chart.generateChart();
+          expect(testObj.chart.chart).not.to.be(null);
+        });
+        it('resetFilters', function() {
+          var testObj = preChart;
+          testObj.chart.resetFilters();
+          expect(testObj.chart.station).equal(0);
+        });
 
     });
   });
-
     mocha.checkLeaks();
     mocha.globals(['jQuery']);
     mocha.run();
