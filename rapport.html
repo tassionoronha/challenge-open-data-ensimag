@@ -8,36 +8,36 @@
 	<h1>Pollution de l'air à Grenoble</h1>
 	<h2>Avant-propos</h2>
 	<p>
-		Afin de pouvoir utiliser la bibliothèque chart.js et permettre d'afficher certaines de nos graphiques, veuliez suivre les étapes suivantes:<br/>
+		Afin de pouvoir utiliser la bibliothèque chart.js et permettre d'afficher certains de nos graphiques, veulliez suivre les étapes suivantes:<br/>
 		- Rendez-vous à la page <a href="about:config">about:config</a> de votre navigateur Firefox.<br/>
 		- Cliquez sur "Je prends le risque".<br/>
 		- Dans la barre de recherche, tapez "modules".<br/>
 		- Trouvez la ligne "dom.moduleScripts.enabled".<br/>
-		- Double-cliquez dessus afin que la booleén prenne la valeur "true".<br/><br/>
+		- Double-cliquez dessus afin que le booleén prenne la valeur "true".<br/><br/>
 		Tous nos graphiques devraient désormais s'afficher correctement.
 	</p>
 
 	<h2>Démarche</h2>
 	<p>
-		Grenoble est une ville entourée de montagne. De part cette particularité géographique, l'air de cette ville connait souvent de forts piques de pollution. En effet, la pollution, notamment aux particules fînes PM10, est prise au piège et n'est pas disperessé par le vent.<br/>
-		Ainsi, la pollution de l'air à Grenoble est un enjeux de santé important et nous avons voulue en savoir plus à ce sujet.
+		Grenoble est une ville entourée de montagnes. De par cette particularité géographique, l'air de cette ville connaît souvent de fort piques de pollution. En effet, la pollution, notamment aux particules fines PM10, est prise au piège et n'est pas dispersée par le vent.<br/>
+		Ainsi, la pollution de l'air à Grenoble est un enjeu de santé important et nous avons voulu en savoir plus à ce sujet.
 	</p>
 
 	<h2>Sources des données</h2>
 	<p>
-		Toutes nos données son tirés de <a href="http://www.atmo-auvergnerhonealpes.fr/donnees/telecharger">http://www.atmo-auvergnerhonealpes.fr/donnees/telecharger</a>.<br/>
-		Atmo est un site contenant des données publiques sur la pollution de l'air en Auvergne-Rhône-Alpes. Il y est possible d'y visualiser sur une carte la qualité de l'air en temps réel ainsi d'en voir une synthèse annuel. En outre, les données récoltés par Atmo son disponibles au téléchargement.
+		Toutes nos données sont tirées de <a href="http://www.atmo-auvergnerhonealpes.fr/donnees/telecharger">http://www.atmo-auvergnerhonealpes.fr/donnees/telecharger</a>.<br/>
+		Atmo est un site contenant des données publiques sur la pollution de l'air en Auvergne-Rhône-Alpes. Il y est possible d'y visualiser sur une carte la qualité de l'air en temps réel ainsi d'en voir une synthèse annuelle. En outre, les données récoltées par Atmo sont disponibles au téléchargement.
 		<br/><br/>
-		Sur ce site, nous traitons les données concernant la pollution au particules fînes PM10 à Grenoble entre le 1er janvier 2007 et le 31 décembre 2017.
+		Sur ce site, nous traitons les données concernant la pollution aux particules fines PM10 à Grenoble entre le 1er janvier 2007 et le 31 décembre 2017.
 	</p>
 
-	<h2>Traitements opérées</h2>
+	<h2>Traitements opérés</h2>
 	<p>
-		Les données que nous récupérions étaient au format CSV. Afin de faciliter leur exploitation, nous avons commencé par les convertire en json à l'aide d'un convertisseur en ligne.
+		Les données que nous récupérions étaient au format CSV. Afin de faciliter leur exploitation, nous avons commencé par les convertir en json à l'aide d'un convertisseur en ligne.
 		<br/><br/>
-		Les données que nous récupérions étaient déjà classifié en fonction de la station qui avant enregistré ses données. Cependant, elle s'étallaient sur une grande période de temps. Avant de pouvoir réellement les exploiter, il nous faller donc les "découper" en période plus petites. Nous affichons ensuite soit une seule période (Année par station), soit plusieurs période simultanément (affichage en période).
+		Les données que nous récupérions étaient déjà classifié en fonction de la station qui avait enregistré ses données. Cependant, elles s'étalaient sur une grande période de temps. Avant de pouvoir réellement les exploiter, il nous fallait donc les "découper" en période plus petites. Nous affichons ensuite soit une seule période (Année par station), soit plusieurs périodes simultanément (affichage en période).
 		<br/><br/>
-		Afin de tirer le maximum des données que nous avions récupérés, nous avons également effectué des calcules de moyennes sur celles-ci. Ainsi, pour l'affichage en période, la moyenne pour chaque jour dans une période était calculé puis affiché. Par exemple, pour une période de 7 jours, cela nous donnait la moyenne pour tous les lundi dans l'interval puis tous les mardi, etc...
+		Afin de tirer le maximum des données que nous avions récupéré, nous avons également effectué des calculs de moyennes sur celles-ci. Ainsi, pour l'affichage en période, la moyenne pour chaque jour dans une période était calculée puis affichée. Par exemple, pour une période de 7 jours, cela nous donnait la moyenne pour tous les lundis dans l'intervalle puis tous les mardis, etc...
 		<br/><br/>
 		Afin de réaliser notre carte, nous avons également du placer géographiquement nos données.
 	</p>
@@ -45,17 +45,17 @@
 	<h2>Visualisation des données</h2>
 	<h3>Affichage des données par périodes</h3>
 	<p>
-		Le principe de l'affichage des données par période est de pouvoir déterminer si il y a une certaine rythmicité dans la pollution de l'air. On peut, par exemple, se demander si le fait d'être en week-end n'entrainerait pas une diminusion de la pollution de l'air. En effet, de nombreuses personnes sont en repos le week-end et n'ont donc pas à prendre la voiture pour aller travailler.
+		Le principe de l'affichage des données par période est de pouvoir déterminer s'il y a une certaine rythmicité dans la pollution de l'air. On peut, par exemple, se demander si le fait d'être en week-end n'entraînerait pas une diminution de la pollution de l'air. En effet, de nombreuses personnes sont en repos le week-end et n'ont donc pas à prendre la voiture pour aller travailler.
 		<br/><br/>
 		On pourrait également se demander si les saisons et le climat qui va avec n'auraient pas à un lien avec la pollution de l'air.
 		<br/><br/>
-		Les données sont affichés sur un tableau à deux dimensions :<br/>
-		L'axe des abscisses indique à quelle jour dans la période le point appartient.<br/>
-		L'axe des ordonnées nous informes sur le niveau de pollution en microgrammes par mètres cubes d'air (microg/m3). <br/>
+		Les données sont affichées sur un tableau à deux dimensions :<br/>
+		L'axe des abscisses nous indique à quel jour dans la période le point appartient.<br/>
+		L'axe des ordonnées nous informe sur le niveau de pollution en microgrammes par mètres cubes d'air (microg/m3). <br/>
 		Enfin, la couleur du point nous indique à quelle période celui-ci appartient. En outre, nous avons utilisé une échelle de teinte pour coloriser les périodes. Ainsi, plus la période est loin dans le passé, plus elle sera de couleur claire. Il est toutefois possible d'inverser l'échelle de teinte<br/>
 		Afin de rendre notre site accessible aux daltoniens, nous avons fait en sorte de pouvoir choisir l'échelle de teinte que l'on souhaite utilise.
 		<br/><br/>
-		Afin de pouvoir visualiser au mieux les données, de nombreuses options sont disponibles. Ainsi, il est possible d'avoir, au choix, un affichage en nuage de point ou en spline en cliquant sur le bouton "Changer l'affichage". La durée d'une période est configurable ainsi que la plage de données que l'on souhaite utiliser. De plus, il est possible de choisir la station pour laquelle nous observerons les données. Il est également possible de masquer la légende pour gagner de la place sur le graphique.
+		Afin de pouvoir visualiser au mieux les données, de nombreuses options sont disponibles. Ainsi, il est possible d'avoir, au choix, un affichage en nuage de points ou en spline en cliquant sur le bouton "Changer l'affichage". La durée d'une période est configurable ainsi que la plage de données que l'on souhaite utiliser. De plus, il est possible de choisir la station pour laquelle nous observerons les données. Il est également possible de masquer la légende pour gagner de la place sur le graphique.
 		<br/><br/>
 		Pour finir, une spline (ligne arrondit) représentant la moyenne des données est toujours affichée. C'est cette ligne moyenne qui nous permettra véritablement de faire ressortir une tendance.
 	</p>
