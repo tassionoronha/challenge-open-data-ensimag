@@ -1,0 +1,17 @@
+h1{
+	margin: 1.2em;
+}
+
+.maindiv{
+	background-color: #898989;
+	text-align: justify;
+}
+
+.subdiv{
+	background-color: #343a40;
+	margin-bottom: 1em;
+	padding-right: 1em;
+	padding-left: 1em;
+	padding-top: 0.3em;
+	padding-bottom: 0.3em;
+}
