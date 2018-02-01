@@ -178,6 +178,8 @@ class MultiGraph extends Graphique {
   }
   resetFilters(){
     this.year = this.dataReader.beginYear;
+    this.begin = moment([2013, 0, 1]);
+    this.end = moment([2013, 0, 8]);
     this.month = 0;
     this.station = 0;
     this.filterMax = this.max;
