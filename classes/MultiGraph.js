@@ -2,9 +2,9 @@ import Graphique from './Graphique.js';
 import DataReader from './DataReader.js';
 
 class MultiGraph extends Graphique {
-  constructor(graph, args){
+  constructor(graph, args, loader){
     super();
-    this.dataReader = new DataReader(dataLoader);
+    this.dataReader = new DataReader(loader);
     this.year = args.year;
     this.month = args.month-1;
     this.graph = graph;

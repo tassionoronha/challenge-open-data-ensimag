@@ -7,11 +7,6 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
     <script type="text/javascript" src="colors.js"></script>
-    <script type="text/javascript" src="data.json"></script>
-    <script type="text/javascript" src="dataMonth.json"></script>
-    <script type="text/javascript" src="monthlyDatas2007.json"></script>
-    <script type="text/javascript" src="dailyDatas2007.json"></script>
-    <script type="text/javascript" src="hourlyDatas2013.json"></script>
     <script src="./classes/Factory.js" type="module"></script>
     <script type="text/javascript" src="Functions.js"></script>
   </head>
@@ -92,6 +87,9 @@
     </script>
     <script type='module'>
       import Factory from './classes/Factory.js';
+      import DataLoader from './classes/DataLoader.js';
+      moment.locale('fr');
+      let dataLoader = new DataLoader();
 
       var canvas = document.getElementById('multiradar').getContext('2d');
 
@@ -106,7 +104,7 @@
         state: []
       };
 
-      var chart = new Factory('radar', argsChart).chart.generateChart();
+      var chart = new Factory('radar', argsChart, dataLoader).chart.generateChart();
 
       showErrors(chart);
       getStations(chart);
@@ -186,10 +184,10 @@
           state: chart.state
         };
         if (this.checked){
-          chart = new Factory('line', argsChart).chart.generateChart();
+          chart = new Factory('line', argsChart, dataLoader).chart.generateChart();
 
         }else{
-          chart = new Factory('radar', argsChart).chart.generateChart();
+          chart = new Factory('radar', argsChart, dataLoader).chart.generateChart();
         }
         getMax(chart);
       });

@@ -1,9 +1,9 @@
 import MultiGraph from './MultiGraph.js';
 
 class Factory{
-  constructor(type, args){
+  constructor(type, args, loader){
     if(this.validateArgs(type, args)){
-      this.chart = new MultiGraph(type, args);
+      this.chart = new MultiGraph(type, args, loader);
     }
 
     return this;
