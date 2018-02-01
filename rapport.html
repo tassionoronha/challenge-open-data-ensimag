@@ -32,7 +32,15 @@
 	</p>
 
 	<h2>Traitements opérées</h2>
-	<p>TODO !!!</p>
+	<p>
+		Les données que nous récupérions étaient au format CSV. Afin de faciliter leur exploitation, nous avons commencé par les convertire en json à l'aide d'un convertisseur en ligne.
+		<br/><br/>
+		Les données que nous récupérions étaient déjà classifié en fonction de la station qui avant enregistré ses données. Cependant, elle s'étallaient sur une grande période de temps. Avant de pouvoir réellement les exploiter, il nous faller donc les "découper" en période plus petites. Nous affichons ensuite soit une seule période (Année par station), soit plusieurs période simultanément (affichage en période).
+		<br/><br/>
+		Afin de tirer le maximum des données que nous avions récupérés, nous avons également effectué des calcules de moyennes sur celles-ci. Ainsi, pour l'affichage en période, la moyenne pour chaque jour dans une période était calculé puis affiché. Par exemple, pour une période de 7 jours, cela nous donnait la moyenne pour tous les lundi dans l'interval puis tous les mardi, etc... 
+		<br/><br/>
+		Afin de réaliser notre carte, nous avons également du placer géographiquement nos données.
+	</p>
 
 	<h2>Visualisation des données</h2>
 	<h3>Affichage des données par périodes</h3>
@@ -80,13 +88,16 @@
 	</p>
 	<h2>Résultats observés</h2>
 	<p>
-		Grâce à l'affichage des données par périodes, nous nous sommes rendus compte que la pollutions baissait le week-end et, plus particulièrement, le dimanche. Si vous souhaitez observer ce phénomène au mieux, nous vous conseillons de commencer par masquer la légende puis de choisir une période de 28 jours pour un interval de données allant du 1er janvier 2007 au 31 décembre 2017. Enfin, après avoir cliqué sur "Changer l'intervale", vous pourrez sélectionner une station autre que "Fontaine les Balmes" pour un résultat plus impréssionnant ("Grenoble Rocade sud" ou "Grenoble Grands Boulevards" par exemple).
+		Grâce à l'affichage des données par périodes, nous nous sommes rendus compte que la pollutions baissait le week-end et, plus particulièrement, le dimanche. Si vous souhaitez observer ce phénomène au mieux, nous vous conseillons de commencer par masquer la légende puis de choisir une période de 28 jours pour un interval de données allant du 1er janvier 2007 au 31 décembre 2017. Enfin, cliquez sur "Changer l'intervale".
+		<br/><br/>
+		Sur le même affichage des données par période, il vous est proposé séléctionner la station. En changeant l'affichage d'une station à l'autre, on s'apperçoit que la variation dû au week-end est plus importante à certains endroits de Grenoble qu'à d'autres. Ainsi, la pollution à "Fontaine les Balmes", qui est une zone principalement résidentielle, varie moins le week-end que celle à "Grenoble Rocade sud".
 		<br/><br/>
 		Grâce à divers affichages, notemment celui en périodes, nous avons également pu remarquer que Grenoble est moins pollué en été qu'en hiver avec des variations beaucoup moins grande. Cela pourrait, en partie, s'expliquer par le fait qu'il y a moins d'habitants à Grenoble en été qu'en hiver.
 		<br/><br/>
 		En observant les données récoltés sur 10 ans, nous avons également pu nous rendre compte que la pollution en PM10 était plus importe il y a 10 ans que maintenant. Cela pourrait être dû au fait que les voitures modernes émettent moins de ce type de particules. En tous cas, il s'agit là d'un signe encourageans.
 		<br/><br/>
-		A COMPLETER !!!
+		Lorsque l'on visualise les données par mois par stations ainsi que sur la carte, on peut s'appercevoir que certains endroit de Grenoble sont systématiquement plus pollués que d'autres. Ainsi, le centre de Grenoble à tendance à être plus pollué que sa périphérie. La seule exception correspond à "Grenoble Rocade sud" qui peut s'expliquer par le fait que, de part le trafic, les rocades et autoroutes sont plus pollués que les zones urbaines.
+		<b>A COMPLETER !!!</b>
 	</p>
 </body>
 </html>
