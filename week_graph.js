@@ -181,7 +181,7 @@ function draw_linear_week_graph() {
 				title: function(d) { return 'Jour ' + d},
 				name: function(value, ratio, id, index) {
 					let idx = periods.indexOf(id);
-					return idx + " - " + keysJour[decalage+idx*dureePeriode+index];
+					return idx + " - " + keysJour[(decalage+idx*dureePeriode+index) - dureePeriode];
 				}
 			}
 		}
