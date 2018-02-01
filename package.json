@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "firefox tests.html || echo 'Ouvrez tests.html dans votre navigateur'"
   },
   "repository": {
     "type": "git",
