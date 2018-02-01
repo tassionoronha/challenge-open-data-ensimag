@@ -42,13 +42,14 @@ function loadJSON(paths, callback) {
   var promises = paths.map(function (x) {
     return $.ajax({
       url: x,
+      mimeType: "application/json",
       dataType: "json"
     });
   });
-  $.when(...promises).then(function () {
+  $.when(...promises).then(function (res) {
     var datas = Array.prototype.map.call(arguments, x => x[0]);
     if (!isArray) {
-      datas = datas[0];
+      datas = res;
     }
     callback(null, datas);
   }, function (err) {

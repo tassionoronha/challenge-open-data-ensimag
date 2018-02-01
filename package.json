@@ -1,0 +1,25 @@
+{
+  "name": "challenge-open-data-ensimag",
+  "version": "1.0.0",
+  "description": "Challenge Open Data Visualisation in Ensimag INP",
+  "main": "Functions.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tassionoronha/challenge-open-data-ensimag.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tassionoronha/challenge-open-data-ensimag/issues"
+  },
+  "homepage": "https://github.com/tassionoronha/challenge-open-data-ensimag#readme",
+  "dependencies": {
+    "expect.js": "^0.3.1"
+  }
+}
