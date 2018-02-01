@@ -49,7 +49,7 @@ function loadJSON(paths, callback) {
   $.when(...promises).then(function () {
     var datas = Array.prototype.map.call(arguments, x => x[0]);
     if (!isArray) {
-      datas = datas[0];
+      datas= datas[0];
     }
     callback(null, datas);
   }, function (err) {
