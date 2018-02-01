@@ -41,7 +41,7 @@ function loadJSON(paths, callback) {
   }
   var promises = paths.map(function (x) {
     return $.ajax({
-      path: x,
+      url: x,
       dataType: "json"
     });
   });
