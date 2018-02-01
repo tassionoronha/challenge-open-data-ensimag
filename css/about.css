@@ -15,3 +15,8 @@ h1{
 	padding-top: 0.3em;
 	padding-bottom: 0.3em;
 }
+
+hr{
+	height: 0.5em;
+	background-color: #555;
+}
