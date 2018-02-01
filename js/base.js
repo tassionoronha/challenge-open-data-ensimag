@@ -33,3 +33,24 @@ function highlightNavbar(hash) {
   }
   links.removeClass("active");
 }
+
+function loadJSON(paths, callback) {
+  var isArray = Array.isArray(paths);
+  if (!isArray) {
+    paths = [paths];
+  }
+  var promises = paths.map(function (x) {
+    return $.ajax({
+      path: x,
+      dataType: "json"
+    });
+  });
+  $.when(...promises).then(function (datas) {
+    if (!isArray) {
+      datas = datas[0];
+    }
+    callback(null, datas);
+  }, function (err) {
+    callback(err);
+  });
+}
